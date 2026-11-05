@@ -97,6 +97,96 @@ h1 .w{display:inline-block;animation:rise 1s both cubic-bezier(.2,.7,.2,1);anima
 details[open]>div{animation:fade .4s both}
 .contact a.mail{text-decoration:none;background:linear-gradient(var(--ink),var(--ink)) 0 100%/0 3px no-repeat;transition:background-size .4s}.contact a.mail:hover,.contact a.mail:focus-visible{background-size:100% 3px}
 }
+.cd{max-width:980px;min-width:0;margin:0 auto 32px}
+.cd h3{font-size:clamp(30px,6vw,52px);letter-spacing:-.03em;line-height:1.05;margin:0 0 10px}
+.cd .cd-sub{color:var(--muted);margin:0 0 24px;max-width:52ch}
+.cd-win{position:relative;background:#14161B;border:1px solid #2B2E35;border-radius:16px;padding:10px;color:#F4F3EE;font-size:11px;overflow:hidden;user-select:none}
+.cd-top{display:flex;align-items:center;gap:6px;padding:2px 4px 10px}
+.cd-top i{flex:none;width:9px;height:9px;border-radius:50%;background:#3A3E47}
+.cd-tab{margin-left:8px;padding:4px 10px;border-radius:6px 6px 0 0;background:#0B0C0F;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#F4F3EE}
+.cd-tab.dim{margin-left:0;background:none;color:#6B717D}
+.cd-top .sp{flex:1}
+.cd-run{background:#C6FF3D;color:#0E0F12;font-weight:700;border-radius:6px;padding:5px 12px;min-width:84px;text-align:center}
+.cd-run.busy{background:#9AA0AC}
+.cd-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:10px}
+.cd-code{background:#0B0C0F;border-radius:10px;padding:10px 6px 10px 0;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;height:calc(17*1.55em + 20px);overflow:hidden;white-space:pre;counter-reset:n;color:#D5D8DE}
+.cd-code .l{display:block;min-height:1.55em;counter-increment:n;padding-left:34px;position:relative}
+.cd-code .l::before{content:counter(n);position:absolute;left:0;width:24px;text-align:right;color:#4A4F59}
+.cd-code i{font-style:normal}.c{color:#6B717D}.s{color:#C6FF3D}.k{color:#7FB0FF}.f{color:#FFB86B}.n{color:#FF8FA3}
+.cd-caret{display:inline-block;width:2px;height:1.1em;background:#C6FF3D;vertical-align:text-bottom;margin-left:1px;animation:cd-b 1s steps(1) infinite}
+@keyframes cd-b{50%{opacity:0}}
+.cd-prev{position:relative;background:#F4F3EE;color:#0E0F12;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:190px}
+.cd-prev>*{transition:opacity .35s,transform .35s}
+.cd-pop{opacity:0;transform:translateY(8px)}.cd-pop.in{opacity:1;transform:none}
+.cd-nav{display:flex;align-items:center;gap:6px;font-weight:800;font-size:12px}
+.cd-nav b{width:18px;height:18px;border-radius:5px;background:#0E0F12;color:#C6FF3D;display:grid;place-items:center;font-size:11px}
+.cd-live{position:absolute;right:8px;top:8px;background:#0E0F12;color:#C6FF3D;font-weight:800;border-radius:999px;padding:2px 8px;font-size:10px}
+.cd-h{font-weight:800;font-size:clamp(17px,4.4vw,24px);line-height:1.05;letter-spacing:-.03em;margin:6px 0 0}
+.cd-chips{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.cd-chips span{background:#fff;border:1px solid #C9C7BD;border-radius:6px;padding:5px 6px;font-weight:700;font-size:10px;transition:opacity .35s,transform .35s;opacity:0;transform:translateY(8px)}
+.cd-chips.in span{opacity:1;transform:none}.cd-chips.in span:nth-child(2){transition-delay:.1s}.cd-chips.in span:nth-child(3){transition-delay:.2s}.cd-chips.in span:nth-child(4){transition-delay:.3s}
+.cd-btn{align-self:flex-start;background:#0E0F12;color:#C6FF3D;font-weight:800;border-radius:7px;padding:6px 12px}
+.cd-wait{position:absolute;left:0;right:0;top:45%;text-align:center;color:#6B717D;font-weight:600;transition:opacity .3s}
+.cd-term{margin-top:10px;background:#0B0C0F;border-radius:10px;padding:8px 10px;font:11px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;height:calc(4*1.6em + 16px);overflow:hidden;color:#A8ADB7}
+.cd-term div{opacity:0;transition:opacity .3s}.cd-term div.in{opacity:1}.cd-term .ok{color:#C6FF3D}
+.cd-cursor{position:absolute;left:0;top:0;z-index:9;pointer-events:none;width:0;height:0;opacity:0}
+.cd-cursor svg{position:absolute;width:20px;height:20px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+.cd-ring{position:absolute;left:-12px;top:-12px;width:24px;height:24px;border-radius:50%;border:2px solid #C6FF3D;opacity:0}
+.cd-ring.go{animation:cd-r .5s ease-out}
+@keyframes cd-r{from{opacity:1;transform:scale(.3)}to{opacity:0;transform:scale(1.8)}}
+.cd-pause{margin-top:14px;min-height:44px;padding:10px 18px;border-radius:10px;border:2px solid var(--ink);background:transparent;color:var(--ink);font:700 15px system-ui,sans-serif;cursor:pointer}
+@media (max-width:620px){.cd-tab.dim{display:none}.cd-body{grid-template-columns:minmax(0,1fr)}.cd-code{font-size:11px}}
+@media (prefers-reduced-motion:reduce){.cd-caret{animation:none}.cd-prev>*,.cd-chips span,.cd-term div{transition:none}.cd-pause{display:none}}
+.cc{max-width:980px;min-width:0;margin:0 auto 32px}
+.cc h3{font-size:clamp(30px,6vw,52px);letter-spacing:-.03em;line-height:1.05;margin:0 0 10px}
+.cc .cc-sub{color:var(--muted);margin:0 0 24px;max-width:52ch}
+.cc-win{position:relative;background:#14161B;border:1px solid #2B2E35;border-radius:16px;padding:10px;color:#F4F3EE;font-size:11px;overflow:hidden;user-select:none}
+.cc-top{display:flex;align-items:center;gap:6px;padding:2px 4px 10px}
+.cc-top i{width:9px;height:9px;border-radius:50%;background:#3A3E47}
+.cc-top b{margin-left:6px;font-weight:600;letter-spacing:.04em;color:#A8ADB7;flex:1}
+.cc-exp{position:relative;overflow:hidden;background:#C6FF3D;color:#0E0F12;font-weight:700;border-radius:6px;padding:5px 12px;min-width:76px;text-align:center}
+.cc-exp u{position:absolute;inset:0 auto 0 0;width:0;background:#0E0F12;opacity:.22}
+.cc-main{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:10px}
+.cc-prev{background:#0B0C0F;border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:6px}
+.cc-screen{position:relative;aspect-ratio:16/9;border-radius:6px;overflow:hidden;display:grid;place-items:center;background:#1B1E25;transition:background .3s}
+.cc-screen em{font-style:normal;font-weight:800;font-size:clamp(20px,6vw,44px);letter-spacing:-.03em;color:#C6FF3D;transition:color .3s}
+.cc-screen.s1{background:#C6FF3D}.cc-screen.s1 em{color:#0E0F12}
+.cc-screen.s2{background:#0E0F12}.cc-screen.s2 em{color:#F4F3EE}
+.cc-screen.s3{background:#F4F3EE}.cc-screen.s3 em{color:#0E0F12}
+.cc-screen .cc-title{position:absolute;left:8%;bottom:10%;background:#C6FF3D;color:#0E0F12;font-weight:800;letter-spacing:.12em;padding:3px 8px;border-radius:4px;transform:translateY(14px);opacity:0;transition:.35s}
+.cc-screen .cc-title.on{transform:none;opacity:1}
+.cc-ctl{display:flex;align-items:center;gap:8px;color:#A8ADB7}
+.cc-play{width:22px;height:22px;border-radius:50%;background:#F4F3EE;display:grid;place-items:center}
+.cc-play svg{width:9px;height:9px;fill:#0E0F12}
+.cc-bin{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;align-content:start}
+.cc-bin div{aspect-ratio:16/10;border-radius:6px;display:flex;align-items:flex-end;padding:4px 5px;font-weight:700;font-size:10px;color:#0E0F12}
+.cc-t0{background:#C6FF3D}.cc-t1{background:#9AA0AC}.cc-t2{background:#F4F3EE}
+.cc-bin .cc-tool{grid-column:1/-1;aspect-ratio:auto;padding:7px;background:#242730;color:#F4F3EE;justify-content:center;border:1px dashed #4A4F59}
+.cc-tl{margin-top:10px;background:#0B0C0F;border-radius:10px;padding:8px 8px 8px 0}
+.cc-ruler{margin:0 0 6px 34px;height:10px;background:repeating-linear-gradient(90deg,#3A3E47 0 1px,transparent 1px 8.33%)}
+.cc-lanes{position:relative;margin-left:34px}
+.cc-lane{position:relative;height:30px;margin-bottom:6px;background:#15171C;border-radius:5px}
+.cc-lane>span{position:absolute;left:-30px;top:8px;color:#6B717D;font-weight:700}
+.cc-clip{font-style:normal;position:absolute;top:3px;bottom:3px;border-radius:5px;opacity:0;transform:scale(.7);transition:opacity .25s,transform .25s,width .5s}
+.cc-clip.in{opacity:1;transform:none}
+.cc-v0{background:#C6FF3D}.cc-v1{background:#9AA0AC}.cc-v2{background:#F4F3EE}
+.cc-txt{background:#7FB0FF;color:#0E0F12;font-weight:800;padding:5px 6px;font-size:10px;letter-spacing:.08em}
+.cc-aud{background:#242730;display:flex;align-items:center;gap:2px;padding:0 4px;overflow:hidden}
+.cc-aud s{height:100%;flex:1;min-width:1px;background:#C6FF3D;border-radius:2px;transform:scaleY(var(--h));opacity:.8}
+.cc-lanes.play .cc-aud s{animation:cc-w .5s ease-in-out infinite alternate;animation-delay:calc(var(--i)*30ms)}
+@keyframes cc-w{to{transform:scaleY(calc(var(--h)*.45))}}
+.cc-head{position:absolute;top:-4px;bottom:0;left:0;width:2px;background:#FF4D6A;z-index:3}
+.cc-head::before{content:"";position:absolute;top:0;left:-4px;border:5px solid transparent;border-top-color:#FF4D6A}
+.cc-cursor{position:absolute;left:0;top:0;z-index:9;pointer-events:none;width:0;height:0;transform:translate(60%,110%)}
+.cc-cursor svg{position:absolute;left:0;top:0;width:20px;height:20px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+.cc-ghost{position:absolute;left:10px;top:10px;width:54px;height:34px;border-radius:5px;opacity:0;transform:scale(.8);transition:.15s}
+.cc-ghost.on{opacity:.9;transform:rotate(-4deg)}
+.cc-ring{position:absolute;left:-12px;top:-12px;width:24px;height:24px;border-radius:50%;border:2px solid #C6FF3D;opacity:0}
+.cc-ring.go{animation:cc-r .5s ease-out}
+@keyframes cc-r{from{opacity:1;transform:scale(.3)}to{opacity:0;transform:scale(1.8)}}
+.cc-pause{margin-top:14px;min-height:44px;padding:10px 18px;border-radius:10px;border:2px solid var(--ink);background:transparent;color:var(--ink);font:700 15px system-ui,sans-serif;cursor:pointer}
+@media (max-width:560px){.cc-main{grid-template-columns:minmax(0,1fr)}.cc-bin{grid-template-columns:repeat(4,1fr)}.cc-bin .cc-tool{grid-column:auto;aspect-ratio:16/10}}
+@media (prefers-reduced-motion:reduce){.cc-clip,.cc-screen,.cc-title{transition:none}.cc-pause{display:none}}
 </style>
 </head>
 <body>
@@ -139,7 +229,27 @@ SCALIFY <small>WPD</small></a>
 </div></section>
 
 <section id="process" class="alt-bg"><div class="wrap">
-<h2>How we work</h2>
+<div class="cd" role="group" aria-labelledby="cd-h">
+<h3 id="cd-h">Built line by line.</h3>
+<p class="cd-sub">A peek at how a Scalify site goes from an empty file to live.</p>
+<div class="cd-win" role="img" aria-label="Animated demo of a code editor: JavaScript is typed line by line, a preview of the website builds up beside it, then the project is run and deployed.">
+<div aria-hidden="true">
+<div class="cd-top"><i></i><i></i><i></i><span class="cd-tab">scalify.config.js</span><span class="cd-tab dim">styles.css</span><span class="sp"></span><span class="cd-run">▶ Run</span></div>
+<div class="cd-body">
+<div class="cd-code"></div>
+<div class="cd-prev"><span class="cd-wait">Waiting for code…</span>
+<div class="cd-nav cd-pop" data-s="brand"><b>S</b><span>SCALIFY WPD</span></div>
+<span class="cd-live cd-pop" data-s="live">● Live</span>
+<div class="cd-h cd-pop" data-s="hero">We design and build the web.</div>
+<div class="cd-chips" data-s="cards"><span>Web design</span><span>Web development</span><span>Social media</span><span>Media production</span></div>
+<div class="cd-btn cd-pop" data-s="btn">Start a project</div></div>
+</div>
+<div class="cd-term"><div>$ scalify build</div><div>▸ bundling pages…</div><div class="ok">✓ built in 1.2s</div><div class="ok">✓ deployed</div></div>
+<div class="cd-cursor"><div class="cd-ring"></div><svg viewBox="0 0 20 20"><path d="M2 1l14 8-6 1.5L7 17z" fill="#fff" stroke="#0E0F12" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+</div></div>
+<button class="cd-pause" type="button" aria-pressed="false">Pause animation</button>
+</div>
+<h2>The playbook</h2>
 <p class="sub">A simple process, with a written quote before any work begins.</p>
 <ol class="grid steps" style="list-style:none;padding:0">
 <li class="card"><h3>Brief</h3><p>You tell us your goals, audience and timeline.</p></li>
@@ -150,7 +260,29 @@ SCALIFY <small>WPD</small></a>
 </div></section>
 
 <section id="about"><div class="wrap">
-<h2>About us</h2>
+<div class="cc" role="group" aria-labelledby="cc-h">
+<h3 id="cc-h">From raw clips to finished content.</h3>
+<p class="cc-sub">A look at how we cut social and media content: drag, trim, title, export.</p>
+<div class="cc-win" role="img" aria-label="Animated demo of a video editor: three clips are dragged onto a timeline, trimmed, given a title, played back and exported.">
+<div aria-hidden="true">
+<div class="cc-top"><i></i><i></i><i></i><b>SCALIFY STUDIO</b><span class="cc-exp"><u></u><span class="cc-exp-t">Export</span></span></div>
+<div class="cc-main">
+<div class="cc-prev"><div class="cc-screen"><em>WEB</em><span class="cc-title">SCALIFY WPD</span></div>
+<div class="cc-ctl"><span class="cc-play"><svg viewBox="0 0 10 10"><path d="M1 0l9 5-9 5z"/></svg></span><span>Preview</span></div></div>
+<div class="cc-bin"><div class="cc-t0">Clip 1</div><div class="cc-t1">Clip 2</div><div class="cc-t2">Clip 3</div><div class="cc-tool">+ Text</div></div>
+</div>
+<div class="cc-tl"><div class="cc-ruler"></div>
+<div class="cc-lanes">
+<div class="cc-lane" data-lane="v"><span>V1</span>
+<i class="cc-clip cc-v0" style="left:0;width:32%"></i><i class="cc-clip cc-v1" style="left:32%;width:30%"></i><i class="cc-clip cc-v2" style="left:62%;width:30%"></i></div>
+<div class="cc-lane" data-lane="t"><span>T1</span><i class="cc-clip cc-txt" style="left:18%;width:44%">SCALIFY WPD</i></div>
+<div class="cc-lane"><span>A1</span><i class="cc-clip cc-aud in" style="left:0;width:92%;opacity:1;transform:none"></i></div>
+<div class="cc-head"></div></div></div>
+<div class="cc-cursor"><div class="cc-ghost"></div><div class="cc-ring"></div><svg viewBox="0 0 20 20"><path d="M2 1l14 8-6 1.5L7 17z" fill="#fff" stroke="#0E0F12" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+</div></div>
+<button class="cc-pause" type="button" aria-pressed="false">Pause animation</button>
+</div>
+<h2>The people behind it</h2>
 <p class="sub">SCALIFY WPD (Web Production &amp; Design) is a team of web designers, developers and media creators. We’re a team of 3 founders based in Bole, Addis Ababa, Ethiopia.</p>
 </div></section>
 
@@ -214,6 +346,77 @@ function upd(){var h=r.scrollHeight-innerHeight;bar.style.setProperty('--p',h>0?
 addEventListener('scroll',function(){if(!busy){busy=true;requestAnimationFrame(upd);}},{passive:true});upd();
 var hero=d.querySelector('.hero'),g=d.querySelector('.glow');
 if(hero&&g&&matchMedia('(pointer:fine)').matches){hero.addEventListener('pointermove',function(e){var b=hero.getBoundingClientRect();g.style.setProperty('--mx',(e.clientX-b.left)+'px');g.style.setProperty('--my',(e.clientY-b.top)+'px');});}
+})();
+</script>
+<script>
+(function(){
+var demo=document.querySelector(".cd");
+var q=function(s,r){return(r||demo).querySelector(s)},qa=function(s,r){return Array.prototype.slice.call((r||demo).querySelectorAll(s))};
+var win=q('.cd-win'),codeEl=q('.cd-code'),cur=q('.cd-cursor'),ring=q('.cd-ring'),runBtn=q('.cd-run'),btn=q('.cd-pause'),wait=q('.cd-wait'),terms=qa('.cd-term div');
+var L=[["// scalify.config.js",0],["const studio = \"SCALIFY WPD\";","brand"],["",0],["const services = [",0],["  \"Web design\",",0],["  \"Web development\",",0],["  \"Social media\",",0],["  \"Media production\",",0],["];",0],["",0],["const site = build({ mobileFirst: true });",0],["",0],["site.hero(\"We design and build the web.\");","hero"],["site.cards(services);","cards"],["site.button(\"Start a project\");","btn"],["",0],["await site.deploy();  // live in seconds",0]];
+var userPaused=false,visible=true,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function sleep(ms){return new Promise(function(r){var t=0,i=setInterval(function(){if(!userPaused&&visible){t+=20;if(t>=ms){clearInterval(i);r()}}},20)})}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function hl(line){return esc(line).replace(/(\/\/.*$)|("[^"]*"?)|\b(const|await|true|false)\b|\b([a-zA-Z_]\w*)(?=\()/g,function(m,c,s,k,f){return c?'<i class="c">'+m+'</i>':s?'<i class="s">'+m+'</i>':k?'<i class="k">'+m+'</i>':'<i class="f">'+m+'</i>'})}
+function render(text,caret){var ls=text.split('\n');codeEl.innerHTML=ls.map(function(l,i){return'<span class="l">'+hl(l)+(caret&&i===ls.length-1?'<b class="cd-caret"></b>':'')+'</span>'}).join('')}
+function show(s){qa('[data-s="'+s+'"]').forEach(function(e){e.classList.add('in')});wait.style.opacity=0}
+function reset(){qa('.in',win).forEach(function(e){e.classList.remove('in')});wait.style.opacity=1;runBtn.className='cd-run';runBtn.textContent='▶ Run';cur.style.opacity=0;render('',true)}
+function pt(el){var w=win.getBoundingClientRect(),r=el.getBoundingClientRect();return[r.left-w.left+r.width*.5,r.top-w.top+r.height*.5]}
+function move(p,ms){cur.style.transition='transform '+ms+'ms cubic-bezier(.5,0,.2,1)';cur.style.transform='translate('+p[0]+'px,'+p[1]+'px)';return sleep(ms)}
+function click(){ring.classList.remove('go');void ring.offsetWidth;ring.classList.add('go');return sleep(220)}
+function finalState(){render(L.map(function(l){return l[0]}).join('\n'),false);['brand','hero','cards','btn','live'].forEach(show);terms.forEach(function(t){t.classList.add('in')})}
+async function run(){
+reset();await sleep(700);var out='';
+for(var i=0;i<L.length;i++){var line=L[i][0];
+for(var c=0;c<line.length;c++){out+=line[c];render(out,true);await sleep(24+Math.random()*30)}
+if(i<L.length-1)out+='\n';render(out,true);if(L[i][1])show(L[i][1]);await sleep(line?260:120)}
+await sleep(500);
+cur.style.transition='none';cur.style.transform='translate('+(win.clientWidth*.6)+'px,'+(win.clientHeight*.55)+'px)';cur.style.opacity=1;
+await move(pt(runBtn),800);await click();runBtn.className='cd-run busy';runBtn.textContent='Running…';
+for(var t=0;t<terms.length;t++){terms[t].classList.add('in');await sleep(t===1?900:450)}
+runBtn.className='cd-run';runBtn.textContent='✓ Done';show('live');cur.style.opacity=0;await sleep(3500)}
+async function loop(){while(true){await run()}}
+if(reduce){finalState();btn.hidden=true;return}
+btn.addEventListener('click',function(){userPaused=!userPaused;btn.setAttribute('aria-pressed',userPaused);btn.textContent=userPaused?'Play animation':'Pause animation'});
+if('IntersectionObserver' in window){new IntersectionObserver(function(e){visible=e[0].isIntersecting},{threshold:.2}).observe(win)}
+loop();
+})();
+</script>
+<script>
+(function(){
+var demo=document.querySelector(".cc");
+var q=function(s,r){return(r||demo).querySelector(s)},qa=function(s,r){return Array.prototype.slice.call((r||demo).querySelectorAll(s))};
+var win=q('.cc-win'),cur=q('.cc-cursor'),ghost=q('.cc-ghost'),ring=q('.cc-ring'),lanes=q('.cc-lanes'),head=q('.cc-head'),screen=q('.cc-screen'),word=q('.cc-screen em'),title=q('.cc-title'),btn=q('.cc-pause'),expT=q('.cc-exp-t'),expU=q('.cc-exp u');
+var vl=q('[data-lane=v]'),tl=q('[data-lane=t]'),clips=qa('.cc-clip:not(.cc-txt):not(.cc-aud)',vl),txt=q('.cc-txt'),thumbs=qa('.cc-bin div'),aud=q('.cc-aud'),play=q('.cc-play');
+var words=['WEB','DESIGN','MEDIA'],hs=[10,24,16,28,12,30,18,26,14,22,30,12,20,28,16,24,10,26,18,30,14,22,28,16,12,24,20,30];
+hs.forEach(function(h,i){var s=document.createElement('s');s.style.setProperty('--h',(h/30).toFixed(2));s.style.setProperty('--i',i);aud.appendChild(s)});
+var userPaused=false,visible=true,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function sleep(ms){return new Promise(function(r){var t=0,i=setInterval(function(){if(!userPaused&&visible){t+=40;if(t>=ms){clearInterval(i);r()}}},40)})}
+function pt(el,fx,fy){var w=win.getBoundingClientRect(),r=el.getBoundingClientRect();return[r.left-w.left+r.width*fx,r.top-w.top+r.height*fy]}
+function lanePt(l,p){return pt(l,p/100,.5)}
+function move(p,ms){cur.style.transition='transform '+ms+'ms cubic-bezier(.5,0,.2,1)';cur.style.transform='translate('+p[0]+'px,'+p[1]+'px)';return sleep(ms)}
+function click(){ring.classList.remove('go');void ring.offsetWidth;ring.classList.add('go');return sleep(220)}
+function grab(i){ghost.className='cc-ghost on cc-t'+i}
+function drop(){ghost.className='cc-ghost'}
+function scene(i){screen.className='cc-screen s'+(i+1);word.textContent=words[i]}
+function reset(){clips.forEach(function(c){c.classList.remove('in')});clips[2].style.width='30%';txt.classList.remove('in');title.classList.remove('on');head.style.transition='none';head.style.left='0';lanes.classList.remove('play');screen.className='cc-screen';word.textContent='WEB';expT.textContent='Export';expU.style.transition='none';expU.style.width='0';drop()}
+function finalState(){clips.forEach(function(c){c.classList.add('in')});clips[2].style.width='22%';txt.classList.add('in');title.classList.add('on');head.style.left='45%';scene(1);cur.style.display='none'}
+async function run(){
+reset();cur.style.transition='none';cur.style.transform='translate('+(win.clientWidth-40)+'px,'+(win.clientHeight-20)+'px)';await sleep(500);
+var dest=[16,47,77];
+for(var i=0;i<3;i++){await move(pt(thumbs[i],.5,.5),700);await click();grab(i);await move(lanePt(vl,dest[i]),800);drop();clips[i].classList.add('in');await sleep(300)}
+await move(lanePt(vl,92),600);await click();clips[2].style.width='22%';await move(lanePt(vl,84),500);await sleep(300);
+await move(pt(thumbs[3],.5,.5),700);await click();await move(lanePt(tl,40),800);txt.classList.add('in');title.classList.add('on');await sleep(400);
+await move(pt(play,.5,.5),600);await click();lanes.classList.add('play');
+var stops=[32,62,84],from=0,w=lanes.clientWidth;
+for(var k=0;k<3;k++){scene(k);var ms=1100;head.style.transition='left '+ms+'ms linear';head.style.left=stops[k]+'%';await sleep(ms);from=stops[k]}
+lanes.classList.remove('play');await sleep(300);
+await move(pt(q('.cc-exp'),.5,.5),800);await click();expU.style.transition='width 1.4s linear';expU.style.width='100%';await sleep(1500);expT.textContent='Done \u2713';await sleep(1600)}
+async function loop(){while(true){await run()}}
+if(reduce){finalState();btn.hidden=true;return}
+btn.addEventListener('click',function(){userPaused=!userPaused;btn.setAttribute('aria-pressed',userPaused);btn.textContent=userPaused?'Play animation':'Pause animation'});
+if('IntersectionObserver' in window){new IntersectionObserver(function(e){visible=e[0].isIntersecting},{threshold:.2}).observe(win)}
+loop();
 })();
 </script>
 </body>
