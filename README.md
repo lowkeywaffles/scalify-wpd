@@ -1,6 +1,6 @@
-# Skelify WPD website
+# SCALIFY WPD website
 
-One-page site for Skelify WPD (Web Production & Design).
+One-page site for SCALIFY WPD (Web Production & Design).
 
 - Plain HTML, CSS and a small script in `index.html`. No build step, no dependencies, no trackers.
 - Animations respect `prefers-reduced-motion`.
