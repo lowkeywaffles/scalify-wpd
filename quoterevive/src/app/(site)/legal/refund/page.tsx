@@ -7,7 +7,7 @@ export default function Refund() {
       <h2>What you pay</h2>
       <p>{PRICE.name}: {PRICE.display}. {PRICE.summary} There are no hidden fees, add-ons or renewals.</p>
       <h2>14-day refund</h2>
-      <p>If you&apos;re not happy, ask for a full refund within <strong>14 days</strong> of purchase — no reason needed. [OWNER: confirm this window; it also covers the EU/UK 14-day withdrawal right for consumers.]</p>
+      <p>If you&apos;re not happy, ask for a full refund within <strong>14 days</strong> of purchase — no reason needed. This also covers the EU/UK 14-day right of withdrawal for consumers.</p>
       <h2>How to ask</h2>
       <p>Request it through your Whop purchase page, or email [SUPPORT EMAIL] with the email you bought with. We aim to approve within 3 business days. Whop returns the money to your original payment method; how long it takes to appear depends on your bank or card provider [VERIFY typical Whop timelines]. We do not charge a fee for refunds. [VERIFY whether Whop retains any processing fee on refunded payments — if so, we absorb it.]</p>
       <h2>After 14 days</h2>

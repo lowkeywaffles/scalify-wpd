@@ -8,8 +8,8 @@ This is an engineering checklist, not legal advice. Have a qualified lawyer revi
 | L1 | Legal pages are drafts with `[PLACEHOLDERS]` | Open | **Needs your info + needs lawyer** |
 | L2 | Governing law/venue not chosen | Open | Needs your info |
 | L3 | Liability cap and "as is" disclaimer may be unenforceable for consumers in EU/UK/AU etc. | Mitigated by "doesn't limit statutory rights" wording | Needs lawyer |
-| L4 | Founding Access term ("as long as we operate, min. 24 months, 60 days' notice") is a binding promise | Open — your business decision | Confirm or change in `src/lib/offer.ts` |
-| L5 | 14-day refund window — confirm you will honour it; it also covers EU/UK digital-content withdrawal rights | Open | Needs your decision |
+| L4 | Founding Access term ("as long as we operate, min. 24 months, 60 days' notice") is a binding promise | Confirmed by owner 2026-11-09 | — |
+| L5 | 14-day no-questions refund window | Confirmed by owner 2026-11-09 | Honour it in Whop |
 | L6 | Whop's role (merchant of record? who collects sales tax/VAT?) affects your tax duties and policy wording | Open | Verify in Whop docs/contract |
 | L7 | Users store their customers' data → you are a processor; a DPA for business users may be expected (GDPR Art. 28) | Open | Needs lawyer; consider publishing a DPA |
 | L8 | Users contacting customers via WhatsApp/email must follow anti-spam laws and Meta's policies | Mitigated (no automation; terms put responsibility on user; opt-out flag) | — |
