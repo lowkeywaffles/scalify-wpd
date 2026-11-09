@@ -15,8 +15,9 @@ import { rateLimit } from "@/lib/rate-limit";
 
 export type ActionState = { ok?: boolean; error?: string; fieldErrors?: Record<string, string[]>; message?: string };
 
-function friendly(err: { message: string } | null): string | undefined {
+function friendly(err: { message: string; code?: string } | null, where = "db"): string | undefined {
   if (!err) return undefined;
+  console.error(`[${where}] ${err.code ?? ""} ${err.message}`);
   if (err.message.includes("FREE_LIMIT") || err.message.includes("PLAN_LIMIT")) return err.message.replace(/^.*?_LIMIT: /, "");
   return "Something went wrong saving your changes. Please try again.";
 }
@@ -29,14 +30,16 @@ export async function saveOnboarding(_: ActionState, fd: FormData): Promise<Acti
   const parsed = onboardingSchema.safeParse(formObject(fd));
   if (!parsed.success) return { fieldErrors: z.flattenError(parsed.error).fieldErrors };
   const { supabase, business } = await requireBusiness();
-  const { error } = await supabase.from("businesses").update({ ...parsed.data, onboarded_at: new Date().toISOString() }).eq("id", business.id);
-  if (error) return { error: friendly(error) };
+  const { business_name, ...rest } = parsed.data; // form field "business_name" maps to column "name"
+  const { error } = await supabase.from("businesses").update({ ...rest, name: business_name, onboarded_at: new Date().toISOString() }).eq("id", business.id);
+  if (error) return { error: friendly(error, "onboarding") };
   redirect(fd.get("create_first") === "yes" ? "/app/quotes/new" : "/app");
 }
 
 export async function skipOnboarding() {
   const { supabase, business } = await requireBusiness();
-  await supabase.from("businesses").update({ onboarded_at: new Date().toISOString() }).eq("id", business.id);
+  const { error } = await supabase.from("businesses").update({ onboarded_at: new Date().toISOString() }).eq("id", business.id);
+  friendly(error, "skip-onboarding");
   redirect("/app");
 }
 
@@ -50,9 +53,10 @@ export async function saveQuote(_: ActionState, fd: FormData): Promise<ActionSta
   if (typeof id === "string" && id) {
     const { data: prev } = await supabase.from("quotes").select("status").eq("id", id).single();
     const { error } = await supabase.from("quotes").update(data).eq("id", id);
-    if (error) return { error: friendly(error) };
+    if (error) return { error: friendly(error, "update-quote") };
     if (prev && prev.status !== data.status) {
-      await supabase.from("activities").insert({ business_id: business.id, quote_id: id, kind: "status_change", from_status: prev.status, to_status: data.status });
+      const { error: actErr } = await supabase.from("activities").insert({ business_id: business.id, quote_id: id, kind: "status_change", from_status: prev.status, to_status: data.status });
+      friendly(actErr, "status-activity");
     }
     revalidatePath("/app", "layout");
     return { ok: true, message: "Quote saved." };
@@ -66,7 +70,7 @@ export async function saveQuote(_: ActionState, fd: FormData): Promise<ActionSta
     data.next_follow_up_at = rec.date;
   }
   const { data: row, error } = await supabase.from("quotes").insert({ ...data, business_id: business.id }).select("id").single();
-  if (error || !row) return { error: friendly(error) };
+  if (error || !row) return { error: friendly(error ?? { message: "no row returned" }, "insert-quote") };
   revalidatePath("/app", "layout");
   redirect(`/app/quotes/${row.id}?created=1`);
 }
@@ -75,14 +79,16 @@ export async function setQuoteFlags(id: string, flags: { archived?: boolean; opt
   z.string().uuid().parse(id);
   const clean = z.object({ archived: z.boolean().optional(), opted_out: z.boolean().optional() }).parse(flags);
   const { supabase } = await requireBusiness();
-  await supabase.from("quotes").update(clean).eq("id", id);
+  const { error } = await supabase.from("quotes").update(clean).eq("id", id);
+  friendly(error, "quote-flags");
   revalidatePath("/app", "layout");
 }
 
 export async function deleteQuote(id: string) {
   z.string().uuid().parse(id);
   const { supabase } = await requireBusiness();
-  await supabase.from("quotes").delete().eq("id", id);
+  const { error } = await supabase.from("quotes").delete().eq("id", id);
+  if (error) { friendly(error, "delete-quote"); throw new Error("Could not delete quote"); }
   revalidatePath("/app", "layout");
   redirect("/app/quotes?deleted=1");
 }
@@ -107,7 +113,7 @@ export async function recordActivity(input: z.input<typeof activitySchema>): Pro
     rows.push({ business_id: business.id, quote_id: a.quote_id, kind: "status_change", from_status: quote.status, to_status: "awaiting_response" });
   }
   const { error } = await supabase.from("activities").insert(rows);
-  if (error) return { error: friendly(error) };
+  if (error) return { error: friendly(error, "insert-activity") };
 
   if (a.next_follow_up_at !== null) update.next_follow_up_at = a.next_follow_up_at;
   else {
@@ -116,7 +122,8 @@ export async function recordActivity(input: z.input<typeof activitySchema>): Pro
       firstFollowUpDays: business.first_follow_up_days, followUpIntervalDays: business.follow_up_interval_days, maxFollowUps: business.max_follow_ups,
     }).date;
   }
-  await supabase.from("quotes").update(update).eq("id", a.quote_id);
+  const { error: upErr } = await supabase.from("quotes").update(update).eq("id", a.quote_id);
+  if (upErr) return { error: friendly(upErr, "activity-quote-update") };
   revalidatePath("/app", "layout");
   return { ok: true, message: a.kind === "follow_up" ? "Follow-up recorded." : "Saved." };
 }
