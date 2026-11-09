@@ -37,7 +37,7 @@ export async function signUp(_: AuthState, fd: FormData): Promise<AuthState> {
   const { error } = await supabase.auth.signUp({
     email: p.data.email,
     password: p.data.password,
-    options: { emailRedirectTo: `${publicEnv.siteUrl}/auth/callback?next=/app/onboarding`, data: { terms_accepted_at: new Date().toISOString(), terms_version: "2026-11-09" } },
+    options: { emailRedirectTo: `${publicEnv.siteUrl}/auth/confirm?next=/app/onboarding`, data: { terms_accepted_at: new Date().toISOString(), terms_version: "2026-11-09" } },
   });
   if (error) return { error: "Couldn't create the account. If you already have one, sign in or reset your password." };
   return { message: "Check your inbox to confirm your email, then sign in." };
@@ -48,7 +48,7 @@ export async function requestReset(_: AuthState, fd: FormData): Promise<AuthStat
   if (!p.success) return { fieldErrors: { email: ["Enter a valid email"] } };
   if (!rateLimit(await ipKey("reset"), 5, 60 * 60_000)) return { error: "Too many requests. Try again later." };
   const supabase = await supabaseServer();
-  await supabase.auth.resetPasswordForEmail(p.data, { redirectTo: `${publicEnv.siteUrl}/auth/callback?next=/reset-password` });
+  await supabase.auth.resetPasswordForEmail(p.data, { redirectTo: `${publicEnv.siteUrl}/auth/confirm?next=/reset-password` });
   // Same answer whether or not the account exists (prevents account enumeration).
   return { message: "If an account exists for that email, a reset link is on its way." };
 }

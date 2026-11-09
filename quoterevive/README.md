@@ -20,7 +20,11 @@ npm run dev                  # http://localhost:3000  (the /demo page works with
 ### Supabase
 1. Create a project at supabase.com (choose a region close to your users and note it in the Privacy Policy).
 2. SQL editor → run `supabase/migrations/0001_init.sql`.
-3. Auth → URL configuration: Site URL = your domain; add `https://YOUR-DOMAIN/auth/callback` to redirect URLs.
+3. Auth → URL configuration: Site URL = your domain; add `https://YOUR-DOMAIN/auth/confirm` and `https://YOUR-DOMAIN/auth/callback` to redirect URLs.
+   Auth → Email Templates — change the link in these templates so email links work in any browser (e.g. Gmail's in-app browser):
+   - Confirm signup: `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/app/onboarding`
+   - Reset password: `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/reset-password`
+   - Change email address: `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email_change&next=/app/settings`
 4. Auth → Email: keep "Confirm email" ON. Set up custom SMTP before launch (Supabase's built-in sender is rate-limited and for testing only).
 5. Copy URL, anon key and service-role key into env vars. **The service-role key is server-only.**
 
