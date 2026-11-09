@@ -23,7 +23,7 @@ for (const scheme of ["light", "dark"]) {
     const page = await ctx.newPage();
     const errors = [];
     page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
-    for (const path of ["/", "/demo", "/legal/privacy", "/legal/terms", "/legal/cookies", "/legal/refund", "/contact", "/login", "/signup"]) {
+    for (const path of ["/", "/demo", "/guide", "/legal/privacy", "/legal/terms", "/legal/cookies", "/legal/refund", "/contact", "/login", "/signup"]) {
       const r = await page.goto(base + path, { waitUntil: "networkidle" });
       if (r.status() !== 200) fail(`${path} status ${r.status()}`);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);

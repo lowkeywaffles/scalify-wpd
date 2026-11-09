@@ -41,6 +41,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
                 </button>
               </form>
             ) : null}
+            <Link href="/guide" className="hidden rounded-full px-3 py-2 text-sm hover:bg-surface-2 sm:inline">Help</Link>
             <ThemeToggle initial={theme ?? null} />
             <form action={signOut}><button className="btn btn-ghost">Sign out</button></form>
           </div>

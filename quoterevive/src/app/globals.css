@@ -85,6 +85,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-sans); 
 .prose-legal h3 { font-weight: 700; margin: 1.3rem 0 .4rem; }
 .prose-legal p, .prose-legal li { color: var(--ink); line-height: 1.7; margin: .5rem 0; }
 .prose-legal ul { list-style: disc; padding-left: 1.4rem; }
+.prose-legal ol { list-style: decimal; padding-left: 1.4rem; }
 .prose-legal table { display: block; overflow-x: auto; width: 100%; border-collapse: collapse; font-size: .9rem; margin: 1rem 0; }
 .prose-legal th, .prose-legal td { border: 1px solid var(--line); padding: .5rem; text-align: left; vertical-align: top; }
 .prose-legal a { color: var(--accent); text-decoration: underline; }

@@ -37,7 +37,7 @@ export function SiteFooter() {
           <p className="text-xs text-muted">© {new Date().getFullYear()} [LEGAL BUSINESS NAME]. QuoteRevive is not affiliated with WhatsApp, Meta, Instagram or Whop.</p>
         </div>
         <nav aria-label="Product"><h2 className="mb-2 text-sm font-semibold">Product</h2><ul className="space-y-2 text-sm text-muted">
-          <li><Link href="/demo">Demo</Link></li><li><Link href="/#pricing">Pricing</Link></li><li><Link href="/#security">Privacy & security</Link></li><li><Link href="/contact">Contact & support</Link></li></ul></nav>
+          <li><Link href="/demo">Demo</Link></li><li><Link href="/guide">How to use it</Link></li><li><Link href="/#pricing">Pricing</Link></li><li><Link href="/#security">Privacy & security</Link></li><li><Link href="/contact">Contact & support</Link></li></ul></nav>
         <nav aria-label="Legal"><h2 className="mb-2 text-sm font-semibold">Legal</h2><ul className="space-y-2 text-sm text-muted">
           <li><Link href="/legal/privacy">Privacy Policy</Link></li><li><Link href="/legal/terms">Terms & Conditions</Link></li><li><Link href="/legal/cookies">Cookie Policy & settings</Link></li><li><Link href="/legal/refund">Refund Policy</Link></li><li><Link href="/contact">Business details</Link></li></ul></nav>
       </div>

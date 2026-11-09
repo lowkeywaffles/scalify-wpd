@@ -17,6 +17,7 @@ let failures = 0;
 const ok = (m) => console.log("ok  ", m);
 const fail = (m) => { failures++; console.log("FAIL", m); };
 const check = (cond, m) => (cond ? ok(m) : fail(m));
+const vis = async (loc) => { try { await loc.first().waitFor({ state: "visible", timeout: 10000 }); return true; } catch { return false; } };
 
 const browser = await chromium.launch();
 
@@ -53,8 +54,8 @@ try {
   await page.getByLabel("Email", { exact: true }).check();
   await page.getByRole("button", { name: "Finish setup" }).click();
   await page.waitForURL(`${base}/app`, { timeout: 15000 });
-  check(await page.getByText("E2E Test Studio").isVisible(), "onboarding saved (business name shown on dashboard)");
-  check(await page.getByText("No quotes yet").isVisible(), "empty state on dashboard");
+  check(await vis(page.getByText("E2E Test Studio")), "onboarding saved (business name shown on dashboard)");
+  check(await vis(page.getByText("No quotes yet")), "empty state on dashboard");
 
   // Create quote
   await page.goto(`${base}/app/quotes/new`);
@@ -67,13 +68,13 @@ try {
   await page.getByRole("button", { name: "Save quote" }).click();
   await page.waitForURL(/\/app\/quotes\/[0-9a-f-]{36}/, { timeout: 15000 });
   const quoteUrl = page.url().split("?")[0];
-  check(await page.getByText(/Quote saved/).isVisible(), "quote created");
+  check(await vis(page.getByText(/Quote saved/)), "quote created");
   await page.reload();
-  check(await page.getByRole("heading", { name: "Test Customer Sarah" }).isVisible(), "quote persists after refresh");
+  check(await vis(page.getByRole("heading", { name: "Test Customer Sarah" })), "quote persists after refresh");
 
   // Queue
   await page.goto(`${base}/app/queue`);
-  check(await page.getByText("Test Customer Sarah").isVisible(), "quote appears in today's queue");
+  check(await vis(page.getByText("Test Customer Sarah")), "quote appears in today's queue");
   await page.getByText("Test Customer Sarah").click();
   await page.waitForURL(/#follow-up/);
   const msg = await page.locator("#fua-msg").inputValue();
@@ -88,10 +89,10 @@ try {
   await page.getByRole("button", { name: "Save follow-up" }).click();
   await page.getByText("Follow-up recorded.").waitFor({ timeout: 15000 });
   await page.reload();
-  check(await page.getByText("Follow-up recorded").first().isVisible(), "follow-up in timeline");
-  check(await page.getByText("Awaiting response").first().isVisible(), "status moved to Awaiting response");
+  check(await vis(page.getByText("Follow-up recorded")), "follow-up in timeline");
+  check(await vis(page.getByText("Awaiting response")), "status moved to Awaiting response");
   await page.goto(`${base}/app/queue`);
-  check(await page.getByText("All caught up").isVisible(), "quote left the queue after follow-up (rescheduled)");
+  check(await vis(page.getByText("All caught up")), "quote left the queue after follow-up (rescheduled)");
 
   // Record response: accepted
   await page.goto(quoteUrl);
@@ -102,7 +103,7 @@ try {
   await page.getByRole("button", { name: "Save response" }).click();
   await page.getByText("Saved.").waitFor({ timeout: 15000 });
   await page.reload();
-  check(await page.getByText("Accepted").first().isVisible(), "status Accepted");
+  check(await vis(page.getByText("Accepted")), "status Accepted");
 
   // Dashboard maths
   await page.goto(`${base}/app`);
@@ -124,16 +125,16 @@ try {
   await page.goto(`${base}/app/import`);
   const csv = `Client,Project,Amount,Date Sent\nImported Ana,Banner,"2,000",${daysAgo(20)}\n,Bad row,abc,02/01/2026\n`;
   await page.getByLabel("1. Choose a CSV file").setInputFiles({ name: "q.csv", mimeType: "text/csv", buffer: Buffer.from(csv) });
-  check(await page.getByText("1 row ready · 1 with errors").isVisible(), "import preview shows row-level errors");
+  check(await vis(page.getByText("1 row ready · 1 with errors")), "import preview shows row-level errors");
   await page.getByRole("button", { name: "Import 1 valid row" }).click();
   await page.getByText(/Imported 1 new quotes/).waitFor({ timeout: 15000 });
   ok("CSV import");
 
   // Quotes list + pipeline + export
   await page.goto(`${base}/app/quotes`);
-  check(await page.getByText("Imported Ana").isVisible(), "imported quote in list");
+  check(await vis(page.getByText("Imported Ana")), "imported quote in list");
   await page.getByRole("button", { name: "pipeline" }).click();
-  check(await page.getByRole("region", { name: /Accepted: 1/ }).isVisible(), "pipeline view groups by status");
+  check(await vis(page.getByRole("region", { name: /Accepted: 1/ })), "pipeline view groups by status");
   const exp = await page.request.get(`${base}/api/export`);
   const body = await exp.text();
   check(exp.status() === 200 && body.includes("Test Customer Sarah") && body.includes("Imported Ana"), "CSV export contains both quotes");
@@ -146,17 +147,17 @@ try {
   await page.getByRole("button", { name: "Save settings" }).click();
   await page.getByText("Settings saved.").waitFor();
   ok("settings saved");
-  const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAFklEQVR4nGNkYPj/n4GBgYGJAQoAAAD//wMAEQUCAJmlGLsAAAAASUVORK5CYII=", "base64");
+  const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAFklEQVR4nGNQ9nhAEmIY1TCqYfhqAAA7tksQoDvfIgAAAABJRU5ErkJggg==", "base64");
   await page.locator('input[type=file]').setInputFiles({ name: "a.png", mimeType: "image/png", buffer: png });
   await page.getByText("Photo updated.").waitFor({ timeout: 15000 });
-  check(await page.getByRole("img", { name: "Your profile photo" }).isVisible(), "avatar uploaded");
+  check(await vis(page.getByRole("img", { name: "Your profile photo" })), "avatar uploaded");
   await page.getByRole("button", { name: "Remove photo" }).click();
   await page.getByText("Photo removed.").waitFor({ timeout: 15000 });
   ok("avatar removed");
 
   // Access page
   await page.goto(`${base}/app/billing`);
-  check(await page.getByText(/free trial workspace: up to 10 quotes \(2 used\)/).isVisible(), "access page shows free usage 2/10");
+  check(await vis(page.getByText(/free trial workspace: up to 10 quotes \(2 used\)/)), "access page shows free usage 2/10");
 
   // ---------- Direct database checks with A's session ----------
   const sbA = createClient(sbUrl, sbKey, { auth: { persistSession: false } });
@@ -177,9 +178,10 @@ try {
   await b.page.waitForURL(`${base}/app`);
   ok("B skipped onboarding");
   await b.page.goto(`${base}/app/quotes`);
-  check(await b.page.getByText("No quotes yet").isVisible(), "B sees none of A's quotes in the list");
-  const r = await b.page.goto(quoteUrl);
-  check(r.status() === 404, `B opening A's quote URL gets 404 (got ${r.status()})`);
+  check(await vis(b.page.getByText("No quotes yet")), "B sees none of A's quotes in the list");
+  await b.page.goto(quoteUrl);
+  // Next.js streams /app pages (loading skeleton), so a not-found renders with HTTP 200; check the content instead.
+  check(await vis(b.page.getByRole("heading", { name: "Page not found" })) && !(await b.page.getByText("Test Customer Sarah").count()), "B opening A's quote URL sees 'Page not found' and no data");
   const sbB = createClient(sbUrl, sbKey, { auth: { persistSession: false } });
   await sbB.auth.signInWithPassword(B);
   const seen = await sbB.from("quotes").select("id");
