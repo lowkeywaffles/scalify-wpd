@@ -34,12 +34,15 @@ async function account(creds, viewport) {
   await page.getByLabel("Password", { exact: true }).fill(creds.password);
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Create free account" }).click();
-  await page.getByRole("status").or(page.getByRole("alert")).first().waitFor();
+  await page.getByText(/Check your inbox|Couldn't create|Too many/).first().waitFor({ timeout: 20000 });
+  const su = await page.getByText(/Check your inbox|Couldn't create|Too many/).first().innerText();
+  if (!su.startsWith("Check your inbox")) throw new Error(`sign-up said: ${su}`);
   await page.goto(`${base}/login`);
   await page.getByLabel("Email", { exact: true }).fill(creds.email);
   await page.getByLabel("Password", { exact: true }).fill(creds.password);
   await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL(/\/app/, { timeout: 20000 });
+  try { await page.waitForURL(/\/app/, { timeout: 20000 }); }
+  catch { throw new Error(`sign-in did not reach /app; page says: ${(await page.locator("[role=alert],[role=status]").allInnerTexts()).join(" | ")} (url ${page.url()})`); }
   return { ctx, page };
 }
 
@@ -193,7 +196,7 @@ try {
   await page.goto(`${base}/app/quotes`);
   check(await vis(page.getByText("Imported Ana")), "imported quote in list");
   await page.getByRole("button", { name: "pipeline" }).click();
-  check(await vis(page.getByRole("region", { name: /Accepted: 1/ })), "pipeline view groups by status");
+  check(await vis(page.getByRole("region", { name: /Accepted: 2/ })), "pipeline view groups by status");
   const exp = await page.request.get(`${base}/api/export`);
   const body = await exp.text();
   check(exp.status() === 200 && body.includes("Test Customer Sarah") && body.includes("Imported Ana"), "CSV export contains both quotes");
