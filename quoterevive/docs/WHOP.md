@@ -1,21 +1,42 @@
 # Whop integration
 
-Verified against docs.whop.com on 2026-11-09 (webhooks follow the Standard Webhooks spec; `GET /api/v1/memberships/{id}`; membership statuses `active`, `trialing` and `completed` grant access). **Re-check before launch, test in Whop sandbox (`WHOP_API_BASE=https://sandbox-api.whop.com`).**
+Checked against Whop's OpenAPI spec (https://api.whop.com/api/v1/openapi.json) on 2026-11-10.
 
-## Flow
-1. Buyer pays **$39 one-time** on Whop (create a one-time plan — *not* recurring).
-2. Buyer signs up / signs in to QuoteRevive → **Access** page → pastes their Whop membership ID (`mem_…`).
-3. Server calls Whop API with `WHOP_API_KEY`, checks `product_id === WHOP_PRODUCT_ID` and status grants access, ensures the membership isn't linked to another account, then writes `entitlements` with the service role.
-4. Webhook `/api/webhooks/whop`: verifies signature + 5-min timestamp tolerance, de-duplicates by `webhook-id`, re-reads membership from the API, and sets linked entitlements `active`/`revoked`. `refund.*` events always revoke. Failed API verification returns 502 so Whop retries.
-5. Never trusted: checkout redirects, query strings, client flags.
+## How a purchase works
+1. A signed-in user opens **Access** → **Buy Founding Access**.
+2. The server creates a Whop *checkout configuration* (`POST /api/v1/checkout_configurations`) for the $39 one-time plan, with
+   `metadata.qr_business_id = <their QuoteRevive business id>` and `redirect_url = /app/billing?checkout=done`, then redirects to its `purchase_url`.
+3. The buyer pays on Whop (Whop may show local currency via adaptive pricing and adds any tax).
+4. Whop sends `payment.succeeded` / `membership.activated` to `/api/webhooks/whop`. The handler:
+   - verifies the Standard Webhooks signature (5-minute tolerance) and ignores duplicate `webhook-id`s;
+   - **re-reads** the payment/membership from the Whop API (the webhook body is never trusted);
+   - checks product, `paid` status and the `qr_business_id` tag, then activates the entitlement.
+5. `membership.updated` re-checks status (`active`/`trialing`/`completed` keep access). `refund.created`/`refund.updated`
+   revoke access once the payment shows `refunded_at`.
+6. If the Whop API can't be reached the handler returns 502 so Whop retries.
 
-## Setup
-- Whop dashboard → create product + one-time $39 plan → copy product ID (`prod_…`) and the checkout link.
-- Developer → API key with `member:basic:read` → `WHOP_API_KEY`.
-- Webhooks → URL `https://YOUR-DOMAIN/api/webhooks/whop`, events: `membership.activated`, `membership.updated`, `payment.succeeded`, `refund.created`, `refund.updated` → copy `ws_…` secret → `WHOP_WEBHOOK_SECRET`.
-- VERIFY in sandbox: where the membership ID lives in each event's `data` (the handler checks `data.membership_id`, `data.membership.id`, then `data.id`) and that refunds move the membership out of a granting status.
+Fallbacks: buyers who bought from the store page directly (no tag) can paste their `mem_` ID on the Access page,
+and `supabase/manual_provisioning.sql` activates anyone by email.
 
-## Manual provisioning (fallback, works today)
-1. Confirm the payment in the Whop dashboard.
-2. Run `supabase/manual_provisioning.sql` with the customer's login email.
-3. On refund, run the revoke statement in the same file.
+## Setup (repeat separately for sandbox and for live whop.com — nothing carries over)
+1. **Product + plan:** product "QuoteRevive Founding Access" with a **one-time $39** pricing option. Note the product ID (`prod_…`) and plan ID (`plan_…`).
+2. **Company API key** (Developer → API keys → Create API key) with scopes:
+   `checkout_configuration:create`, `member:basic:read`, `payment:basic:read`.
+3. **Webhook** (Developer → Webhooks): URL `https://YOUR-DOMAIN/api/webhooks/whop`; events
+   `payment.succeeded`, `membership.activated`, `membership.updated`, `refund.created`, `refund.updated`. Copy the `ws_…` secret.
+4. **Vercel env vars (Production):**
+   | Name | Sandbox | Live |
+   |---|---|---|
+   | `WHOP_API_BASE` | `https://sandbox-api.whop.com` | `https://api.whop.com` |
+   | `WHOP_ACCOUNT_ID` | sandbox `biz_…` | live `biz_…` |
+   | `WHOP_PRODUCT_ID` | sandbox `prod_…` | live `prod_…` |
+   | `WHOP_PLAN_ID` | sandbox `plan_…` | live `plan_…` |
+   | `WHOP_API_KEY` (Sensitive) | sandbox key | live key |
+   | `WHOP_WEBHOOK_SECRET` (Sensitive) | sandbox `ws_…` | live `ws_…` |
+5. Redeploy. The Buy button appears only when all of these are set.
+
+## Test checklist
+- Buy with a test card → redirected to Access → refresh → "Founding Access is active".
+- Whop dashboard → Developer → Webhooks / API logs: deliveries return HTTP 200.
+- Refund in Whop → Access returns to free within a minute or two.
+- Re-send a webhook from Whop → handled as duplicate.

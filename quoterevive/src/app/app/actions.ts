@@ -10,7 +10,8 @@ import { recommendFollowUp } from "@/lib/engine";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import { Activity, Quote } from "@/lib/types";
 import { GRANTING_STATUSES } from "@/lib/webhook";
-import { fetchWhopMembership } from "@/lib/whop";
+import { createCheckout, fetchWhopMembership, whopConfigured } from "@/lib/whop";
+import { publicEnv } from "@/lib/env";
 import { rateLimit } from "@/lib/rate-limit";
 
 export type ActionState = { ok?: boolean; error?: string; fieldErrors?: Record<string, string[]>; message?: string };
@@ -231,4 +232,16 @@ export async function linkWhopMembership(_: ActionState, fd: FormData): Promise<
   if (error) return { error: "Could not activate access. Contact support." };
   revalidatePath("/app", "layout");
   return { ok: true, message: "Founding Access is active. Thank you!" };
+}
+
+/** Starts a Whop checkout tagged with this business, so payment activates access automatically via webhook. */
+export async function startCheckout() {
+  const { user, business, supabase } = await requireBusiness();
+  const { data: ent } = await supabase.from("entitlements").select("status").maybeSingle();
+  if (ent?.status === "active") redirect("/app/billing");
+  if (!whopConfigured()) redirect("/app/billing?checkout=unavailable");
+  if (!rateLimit(`checkout:${user.id}`, 10, 60 * 60_000)) redirect("/app/billing?checkout=busy");
+  const r = await createCheckout(business.id, `${publicEnv.siteUrl}/app/billing?checkout=done`);
+  if (!r.ok || !r.value.purchase_url) redirect("/app/billing?checkout=error");
+  redirect(r.value.purchase_url);
 }

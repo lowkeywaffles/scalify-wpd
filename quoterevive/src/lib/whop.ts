@@ -1,32 +1,71 @@
 import "server-only";
 
-export interface WhopMembership { id: string; status: string; product_id: string | null; user_id: string | null }
+/**
+ * Whop REST API (v1). Endpoints/fields checked against https://api.whop.com/api/v1/openapi.json (2026-11-10).
+ * Key scopes needed: checkout_configuration:create, member:basic:read, payment:basic:read.
+ */
+export interface WhopMembership { id: string; status: string; product_id: string | null; metadata?: Record<string, unknown> | null }
+export interface WhopPayment {
+  id: string; status: string; product_id: string | null; membership_id: string | null;
+  metadata?: Record<string, unknown> | null; refunded_at: string | null;
+}
+type Result<T> = { ok: true; value: T } | { ok: false; status: number; error: string };
 
-/** Reads authoritative membership state from Whop (GET /api/v1/memberships/{id}). Verify endpoint against current docs. */
-export async function fetchWhopMembership(id: string): Promise<{ ok: true; membership: WhopMembership } | { ok: false; error: string }> {
-  const key = process.env.WHOP_API_KEY;
-  const product = process.env.WHOP_PRODUCT_ID;
-  const base = process.env.WHOP_API_BASE ?? "https://api.whop.com";
-  if (!key || !product) return { ok: false, error: "Purchases can't be verified yet. Contact support for manual activation." };
+function config() {
+  return {
+    key: process.env.WHOP_API_KEY ?? "",
+    base: process.env.WHOP_API_BASE ?? "https://api.whop.com",
+    product: process.env.WHOP_PRODUCT_ID ?? "",
+    plan: process.env.WHOP_PLAN_ID ?? "",
+    account: process.env.WHOP_ACCOUNT_ID ?? "",
+  };
+}
+export const whopConfigured = () => { const c = config(); return Boolean(c.key && c.product && c.plan && c.account); };
+export const whopProductId = () => config().product;
+
+async function whop<T>(path: string, init?: RequestInit): Promise<Result<T>> {
+  const c = config();
+  if (!c.key) return { ok: false, status: 0, error: "WHOP_API_KEY not set" };
   try {
-    const res = await fetch(`${base}/api/v1/memberships/${encodeURIComponent(id)}`, {
-      headers: { Authorization: `Bearer ${key}` },
+    const res = await fetch(`${c.base}/api/v1${path}`, {
+      ...init,
+      headers: { Authorization: `Bearer ${c.key}`, "Content-Type": "application/json", ...(init?.headers ?? {}) },
       cache: "no-store",
     });
     if (!res.ok) {
-      // Log Whop's status + error text (no secrets, no buyer data) so failures can be diagnosed in Vercel logs.
       const detail = (await res.text().catch(() => "")).slice(0, 300);
-      console.error(`[whop] GET membership failed: HTTP ${res.status} ${detail}`);
-      if ([400, 404, 422].includes(res.status)) return { ok: false, error: "We couldn't find that membership. Check the ID starts with mem_ and was copied in full." };
-      if (res.status === 401 || res.status === 403) return { ok: false, error: "Purchase verification is misconfigured on our side. Please contact support — we'll activate you manually." };
-      return { ok: false, error: "Couldn't reach Whop to verify. Please try again in a few minutes." };
+      console.error(`[whop] ${init?.method ?? "GET"} ${path.split("?")[0].replace(/(mem|pay)_\w+/, "$1_…")} -> HTTP ${res.status} ${detail}`);
+      return { ok: false, status: res.status, error: detail };
     }
-    const m = (await res.json()) as WhopMembership;
-    if (m.product_id !== product) console.error(`[whop] product mismatch: membership is for ${m.product_id}`);
-    if (m.product_id !== product) return { ok: false, error: "That membership is for a different product." };
-    return { ok: true, membership: m };
+    return { ok: true, value: (await res.json()) as T };
   } catch (e) {
     console.error(`[whop] network error: ${e instanceof Error ? e.message : "unknown"}`);
+    return { ok: false, status: 0, error: "network" };
+  }
+}
+
+export const getMembership = (id: string) => whop<WhopMembership>(`/memberships/${encodeURIComponent(id)}`);
+export const getPayment = (id: string) => whop<WhopPayment>(`/payments/${encodeURIComponent(id)}`);
+
+/** Creates a one-off Whop checkout tagged with the buyer's QuoteRevive business id, so the webhook can activate them. */
+export async function createCheckout(businessId: string, redirectUrl: string) {
+  const c = config();
+  return whop<{ id: string; purchase_url: string | null }>("/checkout_configurations", {
+    method: "POST",
+    body: JSON.stringify({ account_id: c.account, variant_id: c.plan, redirect_url: redirectUrl, metadata: { qr_business_id: businessId } }),
+  });
+}
+
+/** Back-compat helper used by the manual "link membership ID" fallback. */
+export async function fetchWhopMembership(id: string): Promise<{ ok: true; membership: WhopMembership } | { ok: false; error: string }> {
+  const c = config();
+  if (!c.key || !c.product) return { ok: false, error: "Purchases can't be verified yet. Contact support for manual activation." };
+  const r = await getMembership(id);
+  if (!r.ok) {
+    if ([400, 404, 422].includes(r.status)) return { ok: false, error: "We couldn't find that membership. Check the ID starts with mem_ and was copied in full." };
+    if (r.status === 401 || r.status === 403) return { ok: false, error: "Purchase verification is misconfigured on our side. Please contact support — we'll activate you manually." };
     return { ok: false, error: "Couldn't reach Whop to verify. Please try again in a few minutes." };
   }
+  if (r.value.product_id !== c.product) return { ok: false, error: "That membership is for a different product." };
+  return { ok: true, membership: r.value };
 }

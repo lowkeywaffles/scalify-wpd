@@ -33,10 +33,9 @@ npm run dev                  # http://localhost:3000  (the /demo page works with
 |---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | browser + server | Supabase client (RLS protects data) |
 | `NEXT_PUBLIC_SITE_URL` | both | Absolute URLs in auth emails, sitemap |
-| `NEXT_PUBLIC_WHOP_CHECKOUT_URL` | both | "Buy on Whop" link (leave blank until ready) |
 | `NEXT_PUBLIC_SUPPORT_EMAIL` | both | Shown on contact/billing pages |
 | `SUPABASE_SERVICE_ROLE_KEY` | server | Webhooks, cron, entitlement writes, account deletion |
-| `WHOP_API_KEY`, `WHOP_PRODUCT_ID`, `WHOP_WEBHOOK_SECRET`, `WHOP_API_BASE` | server | Purchase verification |
+| `WHOP_API_KEY`, `WHOP_ACCOUNT_ID`, `WHOP_PRODUCT_ID`, `WHOP_PLAN_ID`, `WHOP_WEBHOOK_SECRET`, `WHOP_API_BASE` | server | Checkout + purchase verification (see docs/WHOP.md) |
 | `CRON_SECRET` | server | Protects `/api/cron/reminders` (Vercel sends it automatically as a Bearer token) |
 
 ## Scripts
