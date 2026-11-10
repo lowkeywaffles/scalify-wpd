@@ -8,12 +8,11 @@ export default function Contact() {
       <h2>Business details</h2>
       <table><tbody>
         <tr><th scope="row">Legal name</th><td>Scalify Web Production &amp; Development</td></tr>
-        <tr><th scope="row">Registered address</th><td>[REGISTERED ADDRESS]</td></tr>
-        <tr><th scope="row">Registration / trade licence no.</th><td>[REGISTRATION NUMBER — required in some countries]</td></tr>
-        <tr><th scope="row">Tax ID / VAT / TIN</th><td>[TAX ID, if required]</td></tr>
+        <tr><th scope="row">Operator</th><td>An individual trading as Scalify Web Production &amp; Development (not a registered company)</td></tr>
+        <tr><th scope="row">Country</th><td>Ethiopia</td></tr>
         <tr><th scope="row">Privacy requests</th><td><a href="mailto:scalifywpd@gmail.com">scalifywpd@gmail.com</a> — or use Settings to export or delete your data yourself</td></tr>
       </tbody></table>
-      <p className="text-sm text-muted">Placeholders shown in brackets must be completed before launch.</p>
+      
     </div>
   );
 }

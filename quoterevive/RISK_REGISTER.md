@@ -5,7 +5,10 @@ This is an engineering checklist, not legal advice. Have a qualified lawyer revi
 ## Legal
 | # | Risk | Status | Action |
 |---|---|---|---|
-| L1 | Legal pages are drafts with `[PLACEHOLDERS]` | Open | **Needs your info + needs lawyer** |
+| L1 | Legal pages written without a lawyer's review; operator is an unregistered individual in Ethiopia | Owner decision (no lawyer) | Review when revenue allows |
+| L12 | No postal address shown — EU/UK consumer rules expect a geographic address for online sellers | Open | Consider a P.O. box / virtual address |
+| L13 | Ethiopian rules to check: trade licence/TIN for online selling, Consumer Protection Proclamation No. 813/2013, Electronic Transactions Proclamation No. 1205/2020, PDPP No. 1321/2024 registration duties | Open | **Verify with a local adviser** |
+| L14 | DPAs with Supabase/Vercel/Google not signed; whether Whop is merchant of record (who handles VAT/sales tax) unconfirmed | Open | Sign DPAs in dashboards; check Whop terms |
 | L2 | Governing law/venue not chosen | Open | Needs your info |
 | L3 | Liability cap and "as is" disclaimer may be unenforceable for consumers in EU/UK/AU etc. | Mitigated by "doesn't limit statutory rights" wording | Needs lawyer |
 | L4 | Founding Access term ("as long as we operate, min. 24 months, 60 days' notice") is a binding promise | Confirmed by owner 2026-11-09 | — |
