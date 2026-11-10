@@ -1,0 +1,50 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:var(--w);height:var(--h);overflow:hidden;font-family:Inter,sans-serif;color:#eeeae2;
+ background:radial-gradient(900px 500px at 85% 0%,rgba(138,164,255,.35),transparent 70%),radial-gradient(700px 400px at 0% 100%,rgba(240,181,98,.18),transparent 70%),#111215}
+.wrap{position:absolute;inset:0;padding:var(--pad);display:flex;flex-direction:var(--dir);gap:40px}
+.copy{flex:1;display:flex;flex-direction:column;justify-content:center}
+.logo{display:flex;align-items:center;gap:14px;font-weight:700;font-size:34px}
+.logo i{font-family:"Instrument Serif";font-weight:400;color:#8aa4ff}
+h1{font-family:"Instrument Serif";font-weight:400;font-size:var(--h1);line-height:1.02;margin-top:36px}
+h1 em{color:#8aa4ff}
+p.sub{margin-top:24px;font-size:var(--sub);color:#a5a7ae;max-width:620px}
+.price{margin-top:34px;display:inline-flex;align-items:center;gap:14px;font-size:24px;font-weight:600}
+.price b{background:linear-gradient(180deg,#a3b6ff,#8aa4ff);color:#0d1020;padding:12px 22px;border-radius:999px}
+.stage{flex:1;position:relative;perspective:1400px}
+.scene{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(14deg) rotateY(-18deg)}
+.floor{position:absolute;inset:18% 4% 0;transform:rotateX(62deg) translateZ(-80px);border-radius:40px;opacity:.6;
+ background:radial-gradient(closest-side,rgba(138,164,255,.35),transparent),repeating-linear-gradient(90deg,#2f3138 0 1px,transparent 1px 44px),repeating-linear-gradient(0deg,#2f3138 0 1px,transparent 1px 44px)}
+.card{position:absolute;background:#1a1b20;border:1px solid #2f3138;border-radius:24px;padding:22px 24px;box-shadow:0 40px 80px -30px rgba(0,0,0,.8)}
+.q{left:4%;top:24%;width:62%;transform:translateZ(70px);border-color:#6fd39a}
+.q .t{display:flex;justify-content:space-between;font-size:15px;color:#a5a7ae}
+.badge{font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;background:rgba(111,211,154,.15);color:#6fd39a}
+.q h3{margin-top:12px;font-size:22px}
+.q .amt{font-family:"Instrument Serif";font-size:58px}
+.bar{height:8px;border-radius:9px;background:#2f3138;margin-top:12px}.bar i{display:block;height:100%;width:100%;border-radius:9px;background:#6fd39a}
+.s{right:2%;top:10%;display:flex;align-items:center;gap:14px;transform:translateZ(110px)}
+.s b{font-family:"Instrument Serif";font-size:40px;font-weight:400}
+.m{right:0;bottom:8%;width:60%;transform:translateZ(130px);font-size:17px;line-height:1.5}
+.m small{color:#a5a7ae;font-size:14px}.m span{display:block;margin-top:10px;color:#8aa4ff;font-weight:700}
+.w{left:28%;top:4%;display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px;transform:translateZ(190px)}
+.dot{position:absolute;width:10px;height:10px;border-radius:50%}
+.foot{position:absolute;left:var(--pad);bottom:28px;font-size:14px;color:#6b6e76}
+</style></head><body>
+<div class="wrap">
+ <div class="copy">
+  <div class="logo"><svg width="46" height="46" viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="#eeeae2"/><path d="M9 11.5a4.5 4.5 0 0 1 4.5-4.5h5A4.5 4.5 0 0 1 23 11.5v3a4.5 4.5 0 0 1-4.5 4.5H15l-3.5 3v-3.3A4.5 4.5 0 0 1 9 14.5z" fill="none" stroke="#111215" stroke-width="2" stroke-linejoin="round"/><path d="M13 13.2l2.2 2.1 4-4.3" fill="none" stroke="#2348e0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Quote<i>Revive</i></div>
+  <h1>Your next customer might be in your <em>unanswered quotes.</em></h1>
+  <p class="sub">Track quotes, follow up at the right time, and turn silence into “yes”.</p>
+  <div class="price"><b>$39 one-time</b><span>Founding Access · no subscription</span></div>
+ </div>
+ <div class="stage"><div class="floor"></div><div class="scene">
+  <div class="card w"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6fd39a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>Quote won!</div>
+  <div class="card s"><svg width="64" height="64" viewBox="0 0 44 44" style="transform:rotate(-90deg)"><circle cx="22" cy="22" r="18" fill="none" stroke="#2f3138" stroke-width="5"/><circle cx="22" cy="22" r="18" fill="none" stroke="#8aa4ff" stroke-width="5" stroke-linecap="round" stroke-dasharray="113" stroke-dashoffset="32"/></svg><div><small style="color:#a5a7ae;font-size:14px">Priority</small><br><b>72</b></div></div>
+  <div class="card q"><div class="t"><span>Quote · example</span><span class="badge">Accepted</span></div><h3>Maya R. — shop sign</h3><div class="amt">$1,150</div><div class="bar"><i></i></div></div>
+  <div class="card m"><small>WhatsApp draft</small><br>Hey Maya, just checking in about the shop sign quotation I sent last week…<span>Send ➜</span></div>
+ </div></div>
+</div>
+<div class="foot">Illustration with fictional example data · by Scalify Web Production &amp; Development</div>
+</body></html>
