@@ -9,8 +9,8 @@ const { createClient } = require("@supabase/supabase-js");
 
 const [base, sbUrl, sbKey] = process.argv.slice(2);
 const stamp = Date.now();
-const A = { email: `qr-e2e-a-${stamp}@example.com`, password: `TestPass-${stamp}-a` };
-const B = { email: `qr-e2e-b-${stamp}@example.com`, password: `TestPass-${stamp}-b` };
+const A = { email: `qr-e2e-a-${stamp}@mailinator.com`, password: `TestPass-${stamp}-a` };
+const B = { email: `qr-e2e-b-${stamp}@mailinator.com`, password: `TestPass-${stamp}-b` };
 const today = new Date().toISOString().slice(0, 10);
 const daysAgo = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
 let failures = 0;
