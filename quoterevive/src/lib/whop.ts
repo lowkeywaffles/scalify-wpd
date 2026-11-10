@@ -1,5 +1,8 @@
 import "server-only";
 
+/** Must match the price shown in src/lib/offer.ts and on Whop. */
+export const FOUNDING_PRICE_USD = 39;
+
 /**
  * Whop REST API (v1). Endpoints/fields checked against https://api.whop.com/api/v1/openapi.json (2026-11-10).
  * Key scopes needed: checkout_configuration:create, member:basic:read, payment:basic:read.
@@ -20,7 +23,7 @@ function config() {
     account: process.env.WHOP_ACCOUNT_ID ?? "",
   };
 }
-export const whopConfigured = () => { const c = config(); return Boolean(c.key && c.product && c.plan && c.account); };
+export const whopConfigured = () => { const c = config(); return Boolean(c.key && c.product && c.account); };
 export const whopProductId = () => config().product;
 
 async function whop<T>(path: string, init?: RequestInit): Promise<Result<T>> {
@@ -52,7 +55,15 @@ export async function createCheckout(businessId: string, redirectUrl: string) {
   const c = config();
   return whop<{ id: string; purchase_url: string | null }>("/checkout_configurations", {
     method: "POST",
-    body: JSON.stringify({ account_id: c.account, variant_id: c.plan, redirect_url: redirectUrl, metadata: { qr_business_id: businessId } }),
+    body: JSON.stringify({
+      account_id: c.account,
+      // Use the plan ID if configured; otherwise let Whop find (or create) the matching $39 one-time option on the product.
+      ...(c.plan
+        ? { variant_id: c.plan }
+        : { variant: { product_id: c.product, billing_type: "one_time", initial_price: FOUNDING_PRICE_USD, currency: "usd", unlimited_stock: true } }),
+      redirect_url: redirectUrl,
+      metadata: { qr_business_id: businessId },
+    }),
   });
 }
 

@@ -19,7 +19,7 @@ Fallbacks: buyers who bought from the store page directly (no tag) can paste the
 and `supabase/manual_provisioning.sql` activates anyone by email.
 
 ## Setup (repeat separately for sandbox and for live whop.com — nothing carries over)
-1. **Product + plan:** product "QuoteRevive Founding Access" with a **one-time $39** pricing option. Note the product ID (`prod_…`) and plan ID (`plan_…`).
+1. **Product + plan:** product "QuoteRevive Founding Access" with a **one-time $39** pricing option. Note the product ID (`prod_…`). A plan ID is optional: without it the app asks Whop for the product's $39 one-time option.
 2. **Company API key** (Developer → API keys → Create API key) with scopes:
    `checkout_configuration:create`, `member:basic:read`, `payment:basic:read`.
 3. **Webhook** (Developer → Webhooks): URL `https://YOUR-DOMAIN/api/webhooks/whop`; events
@@ -30,7 +30,7 @@ and `supabase/manual_provisioning.sql` activates anyone by email.
    | `WHOP_API_BASE` | `https://sandbox-api.whop.com` | `https://api.whop.com` |
    | `WHOP_ACCOUNT_ID` | sandbox `biz_…` | live `biz_…` |
    | `WHOP_PRODUCT_ID` | sandbox `prod_…` | live `prod_…` |
-   | `WHOP_PLAN_ID` | sandbox `plan_…` | live `plan_…` |
+   | `WHOP_PLAN_ID` (optional) | leave empty | leave empty |
    | `WHOP_API_KEY` (Sensitive) | sandbox key | live key |
    | `WHOP_WEBHOOK_SECRET` (Sensitive) | sandbox `ws_…` | live `ws_…` |
 5. Redeploy. The Buy button appears only when all of these are set.
