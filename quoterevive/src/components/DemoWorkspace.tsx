@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { today } from "@/lib/dates";
 import { DEMO_BUSINESS, demoWorkspace } from "@/lib/demo-data";
 import { recommendFollowUp } from "@/lib/engine";
+import { coachTips } from "@/lib/coach";
 import { computeMetrics } from "@/lib/metrics";
 import { Activity, Quote } from "@/lib/types";
 import { buildQueue } from "@/lib/workspace";
@@ -92,7 +93,7 @@ export function DemoWorkspace({ compact = false }: { compact?: boolean }) {
               <button type="button" onClick={close} className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line" aria-label="Close"><X className="h-4 w-4" aria-hidden="true" /></button>
             </div>
             <div className="grid gap-4 md:grid-cols-[1.3fr_1fr]">
-              <FollowUpAssistant key={q.id} quote={q} businessName="Northline Print Studio" previousFollowUps={qActs.filter((a) => a.kind === "follow_up").length} todayIso={t} recommended={recommendFollowUp(q, qActs)} onRecord={onRecord} />
+              <FollowUpAssistant key={q.id} quote={q} businessName="Northline Print Studio" previousFollowUps={qActs.filter((a) => a.kind === "follow_up").length} todayIso={t} recommended={recommendFollowUp(q, qActs)} onRecord={onRecord} tips={coachTips(q, qActs, t, DEMO_BUSINESS.typical)} />
               <section className="card p-4" aria-label="Timeline"><h3 className="mb-3 font-semibold">Timeline</h3><Timeline activities={qActs} /></section>
             </div>
           </div>

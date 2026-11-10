@@ -13,6 +13,7 @@ import { GRANTING_STATUSES } from "@/lib/webhook";
 import { createCheckout, fetchWhopMembership, whopConfigured } from "@/lib/whop";
 import { publicEnv } from "@/lib/env";
 import { rateLimit } from "@/lib/rate-limit";
+import { randomBytes } from "node:crypto";
 
 export type ActionState = { ok?: boolean; error?: string; fieldErrors?: Record<string, string[]>; message?: string };
 
@@ -151,6 +152,7 @@ export async function saveSettings(_: ActionState, fd: FormData): Promise<Action
     follow_up_interval_days: z.coerce.number().int().min(1).max(60),
     max_follow_ups: z.coerce.number().int().min(1).max(10),
     display_name: z.string().trim().max(80).transform((v) => v || null),
+    message_language: z.enum(["en", "ar", "fr", "es"]),
   });
   const parsed = schema.safeParse(formObject(fd));
   if (!parsed.success) return { fieldErrors: z.flattenError(parsed.error).fieldErrors };
@@ -244,4 +246,34 @@ export async function startCheckout() {
   const r = await createCheckout(business.id, `${publicEnv.siteUrl}/app/billing?checkout=done`);
   if (!r.ok || !r.value.purchase_url) redirect("/app/billing?checkout=error");
   redirect(r.value.purchase_url);
+}
+
+/** Create, re-enable, regenerate or disable the customer-facing quote link. */
+export async function setShareLink(id: string, mode: "enable" | "disable" | "regenerate"): Promise<ActionState & { token?: string | null }> {
+  z.string().uuid().parse(id);
+  z.enum(["enable", "disable", "regenerate"]).parse(mode);
+  const { supabase } = await requireBusiness();
+  const { data: q } = await supabase.from("quotes").select("share_token").eq("id", id).single();
+  if (!q) return { error: "Quote not found." };
+  const token = mode === "regenerate" || (mode === "enable" && !q.share_token) ? randomBytes(24).toString("base64url") : q.share_token;
+  const { error } = await supabase.from("quotes").update({ share_token: token, share_enabled: mode !== "disable" }).eq("id", id);
+  if (error) return { error: friendly(error, "share-link") };
+  revalidatePath("/app", "layout");
+  return { ok: true, token: mode === "disable" ? null : token, message: mode === "disable" ? "Link turned off." : mode === "regenerate" ? "New link created. The old one no longer works." : "Customer link is on." };
+}
+
+/** Remember which guided tours this user has finished or skipped. */
+export async function markTourSeen(key: string) {
+  const k = z.string().regex(/^[a-z0-9-]{1,40}$/).parse(key);
+  const { supabase, business } = await requireBusiness();
+  const seen = new Set(business.tour_seen ?? []);
+  if (seen.has(k)) return;
+  seen.add(k);
+  await supabase.from("businesses").update({ tour_seen: [...seen].slice(-50) }).eq("id", business.id);
+}
+
+export async function resetTours() {
+  const { supabase, business } = await requireBusiness();
+  await supabase.from("businesses").update({ tour_seen: [] }).eq("id", business.id);
+  revalidatePath("/app", "layout");
 }

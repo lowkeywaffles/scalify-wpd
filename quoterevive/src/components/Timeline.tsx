@@ -17,8 +17,9 @@ export function Timeline({ activities }: { activities: Activity[] }) {
               {TITLE[a.kind]}
               {a.kind === "status_change" && a.to_status ? `: ${a.from_status ? STATUS_LABEL[a.from_status as QuoteStatus] : "—"} → ${STATUS_LABEL[a.to_status as QuoteStatus]}` : ""}
               {a.channel ? <span className="font-normal text-muted"> via {a.channel}</span> : null}
+              {a.via_link ? <span className="ml-2 rounded-full bg-accent-soft px-2 py-0.5 text-[11px] font-semibold text-accent">via customer link</span> : null}
             </p>
-            {a.summary && <p className="text-sm text-muted">{a.summary}</p>}
+            {a.summary && <p className="text-sm text-muted" dir="auto">{a.summary}</p>}
             {a.contributed_to_sale && <p className="text-xs text-good">You marked this as contributing to the sale.</p>}
             <time className="text-xs text-muted" dateTime={a.occurred_at}>{new Date(a.occurred_at).toLocaleString()}</time>
           </li>

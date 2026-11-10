@@ -13,7 +13,7 @@ export default async function SettingsPage() {
     <div className="space-y-6">
       <h1 className="font-display text-4xl">Settings</h1>
       <S id="s-photo" title="Profile photo"><AvatarForm current={business.avatar_data_url} initials={initials} /></S>
-      <S id="s-prefs" title="Workspace & follow-up rules"><PreferencesForm b={business} /></S>
+      <div data-tour="rules"><S id="s-prefs" title="Workspace & follow-up rules"><PreferencesForm b={business} /></S></div>
       <S id="s-email" title="Email"><EmailForm email={user.email ?? ""} /></S>
       <S id="s-pw" title="Password"><PasswordForm /></S>
       <S id="s-data" title="Your data"><p className="text-sm">Export everything at any time: <a className="link" href="/api/export">quotes (CSV)</a> · <a className="link" href="/api/export?format=json">full export (JSON)</a>.</p><p className="text-sm text-muted">Notifications: QuoteRevive shows in-app reminders only. It does not send reminder emails yet.</p></S>

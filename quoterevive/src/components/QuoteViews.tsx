@@ -22,7 +22,7 @@ export function QuoteBrowser({ quotes, hrefBase = "/app/quotes", onSelect }: { q
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end" data-tour="quote-filters">
         <div className="flex-1">
           <label htmlFor="qsearch" className="label">Search</label>
           <input id="qsearch" type="search" className="input" placeholder="Customer, project or email" value={q} onChange={(e) => setQ(e.target.value)} />
@@ -35,7 +35,7 @@ export function QuoteBrowser({ quotes, hrefBase = "/app/quotes", onSelect }: { q
           </select>
         </div>
         <label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" className="h-4 w-4" checked={archived} onChange={(e) => setArchived(e.target.checked)} /> Show archived</label>
-        <div role="group" aria-label="View" className="flex rounded-full border border-line p-1">
+        <div role="group" aria-label="View" className="flex rounded-full border border-line p-1" data-tour="quote-views">
           {(["table", "pipeline"] as const).map((v) => (
             <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)} className={`min-h-9 rounded-full px-3 text-sm capitalize ${view === v ? "bg-ink text-bg" : ""}`}>{v}</button>
           ))}

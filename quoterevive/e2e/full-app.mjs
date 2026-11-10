@@ -14,6 +14,7 @@ const B = { email: `qr-e2e-b-${stamp}@example.com`, password: `TestPass-${stamp}
 const today = new Date().toISOString().slice(0, 10);
 const daysAgo = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
 let failures = 0;
+let tourSeen = 0;
 const ok = (m) => console.log("ok  ", m);
 const fail = (m) => { failures++; console.log("FAIL", m); };
 const check = (cond, m) => (cond ? ok(m) : fail(m));
@@ -26,6 +27,8 @@ async function account(creds, viewport) {
   await ctx.grantPermissions(["clipboard-read", "clipboard-write"], { origin: base });
   const page = await ctx.newPage();
   page.on("pageerror", (e) => fail(`page error: ${e.message}`));
+  // Guided tours auto-start on first visits; skip them whenever they appear (one tour is checked explicitly below).
+  await page.addLocatorHandler(page.getByRole("button", { name: "Skip tour" }), async () => { tourSeen++; await page.getByRole("button", { name: "Skip tour" }).click(); });
   await page.goto(`${base}/signup`);
   await page.getByLabel("Email", { exact: true }).fill(creds.email);
   await page.getByLabel("Password", { exact: true }).fill(creds.password);
@@ -113,6 +116,62 @@ try {
   check((await tile("Acceptance rate")) === "100%", "acceptance rate 100%");
   check((await tile("Follow-ups completed")) === "1", "follow-ups completed = 1");
 
+  // Customer quote link: create, open as the customer (no login), ask a question
+  await page.goto(quoteUrl);
+  // (quote is accepted now; create a second open quote for the link test)
+  await page.goto(`${base}/app/quotes/new`);
+  await page.getByLabel("Customer name").fill("Link Customer Omar");
+  await page.getByLabel("Job or project").fill("shop sign");
+  await page.getByLabel("Quote amount").fill("800");
+  await page.getByRole("button", { name: "Save quote" }).click();
+  await page.waitForURL(/\/app\/quotes\/[0-9a-f-]{36}/, { timeout: 15000 });
+  const linkQuoteUrl = page.url().split("?")[0];
+  await page.getByRole("combobox", { name: "Language" }).selectOption("fr");
+  check((await page.locator("#fua-msg").inputValue()).startsWith("Bonjour Link"), "French template applied");
+  check(await vis(page.getByText("Coach")), "coach tips shown");
+  await page.getByRole("button", { name: "Create customer link" }).click();
+  const linkInput = page.getByRole("textbox", { name: "Customer link" });
+  await linkInput.waitFor({ timeout: 15000 });
+  const shareUrl = await linkInput.inputValue();
+  check(/\/q\/[A-Za-z0-9_-]{32}$/.test(shareUrl), "customer link created");
+  check((await page.locator("#fua-msg").inputValue()).includes(shareUrl), "link added to message");
+  const anon = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const cust = await anon.newPage();
+  await cust.goto(shareUrl);
+  check(await vis(cust.getByRole("heading", { name: "E2E Test Studio" })) && await vis(cust.getByText("Hi Link,")), "customer sees quote page (no login)");
+  check(!(await cust.getByText("Test Customer Sarah").count()), "customer page shows no other quotes");
+  await cust.getByText("Ask a question").click();
+  await cust.getByLabel("Your question").fill("Can you do it by Friday?");
+  await cust.getByRole("button", { name: "Send response" }).click();
+  check(await vis(cust.getByText("your question has been sent")), "customer response sent");
+  await anon.close();
+  await page.goto(linkQuoteUrl);
+  check(await vis(page.getByText("via customer link")), "response appears on timeline via customer link");
+  check(await vis(page.getByText("Can you do it by Friday?")), "customer's question visible to business");
+  check(await vis(page.getByText("Negotiating").first()), "status moved to Negotiating");
+  await page.getByRole("button", { name: "Turn off link" }).click();
+  await page.getByText("Link turned off.").waitFor();
+  const dead = await (await browser.newContext()).newPage();
+  await dead.goto(shareUrl);
+  check(await vis(dead.getByRole("heading", { name: "Page not found" })), "turned-off link no longer works");
+
+  // Celebration on accept
+  await page.getByRole("button", { name: "Record customer response" }).click();
+  await page.getByLabel("New status").selectOption("accepted");
+  await page.getByRole("button", { name: "Save response" }).click();
+  check(await vis(page.getByText("Quote won!")), "celebration on accepted quote");
+
+  // Streak / score on dashboard
+  await page.goto(`${base}/app`);
+  check(await vis(page.getByText("Weekly score")) && await vis(page.getByText("Done today ✓")), "streak + weekly score shown");
+
+  // Payment pending panel with 10s cooldown
+  await page.goto(`${base}/app/billing?checkout=done`);
+  const again = page.getByRole("button", { name: /Check again/ });
+  check(await vis(page.getByText("Confirming your payment with Whop")) && await again.isDisabled(), "payment pending panel with disabled refresh");
+  await page.waitForTimeout(10500);
+  check(await again.isEnabled(), "refresh button enabled after 10s");
+
   // Edit quote
   await page.goto(quoteUrl);
   await page.getByText("Edit quote details").click();
@@ -139,7 +198,7 @@ try {
   const body = await exp.text();
   check(exp.status() === 200 && body.includes("Test Customer Sarah") && body.includes("Imported Ana"), "CSV export contains both quotes");
   const json = await (await page.request.get(`${base}/api/export?format=json`)).json();
-  check(json.quotes.length === 2 && json.activities.length >= 3, "JSON export complete");
+  check(json.quotes.length === 3 && json.activities.length >= 3, "JSON export complete");
 
   // Settings
   await page.goto(`${base}/app/settings`);
@@ -157,7 +216,8 @@ try {
 
   // Access page
   await page.goto(`${base}/app/billing`);
-  check(await vis(page.getByText(/free trial workspace: up to 10 quotes \(2 used\)/)), "access page shows free usage 2/10");
+  check(await vis(page.getByText(/free workspace: up to 10 quotes \(3 used\)/)), "access page shows free usage 3/10");
+  check(tourSeen >= 1, `guided tour appeared (${tourSeen} tours auto-started and were skipped)`);
 
   // ---------- Direct database checks with A's session ----------
   const sbA = createClient(sbUrl, sbKey, { auth: { persistSession: false } });
@@ -165,7 +225,7 @@ try {
   const { data: bizA } = await sbA.from("businesses").select("id").single();
   const ent = await sbA.from("entitlements").insert({ business_id: bizA.id, source: "manual", status: "active" });
   check(!!ent.error, "user cannot grant themselves paid access (RLS)");
-  const rows = Array.from({ length: 8 }, (_, i) => ({ business_id: bizA.id, customer_name: `Bulk ${i}`, title: "t", amount: 1, currency: "USD", status: "sent" }));
+  const rows = Array.from({ length: 7 }, (_, i) => ({ business_id: bizA.id, customer_name: `Bulk ${i}`, title: "t", amount: 1, currency: "USD", status: "sent" }));
   const bulk = await sbA.from("quotes").insert(rows);
   check(!bulk.error, "can fill up to 10 quotes");
   const over = await sbA.from("quotes").insert({ business_id: bizA.id, customer_name: "Eleventh", title: "t", amount: 1, currency: "USD", status: "sent" });

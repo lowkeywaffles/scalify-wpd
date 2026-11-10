@@ -42,6 +42,8 @@ export interface Quote {
   notes: string | null;
   archived: boolean;
   opted_out: boolean;
+  share_token?: string | null;
+  share_enabled?: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -57,5 +59,6 @@ export interface Activity {
   from_status: QuoteStatus | null;
   to_status: QuoteStatus | null;
   contributed_to_sale: boolean | null;
+  via_link?: boolean;
   occurred_at: string;
 }

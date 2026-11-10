@@ -3,6 +3,7 @@ import { useActionState, useRef, useState, useTransition } from "react";
 import { changeEmail, changePassword, deleteAccount, saveAvatar, saveSettings, type ActionState } from "@/app/app/actions";
 import type { Business } from "@/lib/data";
 import { aria, Field, Notice } from "./ui";
+import { LANGUAGE_LABEL, LANGUAGES } from "@/lib/templates";
 
 function Result({ s }: { s: ActionState }) {
   return <div aria-live="polite">{s.error ? <Notice kind="error">{s.error}</Notice> : s.message ? <Notice kind="ok">{s.message}</Notice> : null}</div>;
@@ -53,6 +54,9 @@ export function PreferencesForm({ b }: { b: Business }) {
       <Field id="typical_quote_value" label="Typical quote value" error={e.typical_quote_value}><input {...aria("typical_quote_value", e.typical_quote_value)} className="input" inputMode="decimal" defaultValue={b.typical_quote_value} /></Field>
       <Field id="preferred_channel" label="Preferred follow-up channel" error={e.preferred_channel}>
         <select {...aria("preferred_channel", e.preferred_channel)} className="input" defaultValue={b.preferred_channel}><option value="whatsapp">WhatsApp</option><option value="email">Email</option><option value="phone">Phone</option><option value="other">Other</option></select>
+      </Field>
+      <Field id="message_language" label="Default message language" error={e.message_language}>
+        <select {...aria("message_language", e.message_language)} className="input" defaultValue={b.message_language ?? "en"}>{LANGUAGES.map((l) => <option key={l} value={l}>{LANGUAGE_LABEL[l]}</option>)}</select>
       </Field>
       <Field id="first_follow_up_days" label="First follow-up after (days)" error={e.first_follow_up_days}><input {...aria("first_follow_up_days", e.first_follow_up_days)} className="input" type="number" min={1} max={60} defaultValue={b.first_follow_up_days} /></Field>
       <Field id="follow_up_interval_days" label="Days between follow-ups (reminder frequency)" error={e.follow_up_interval_days}><input {...aria("follow_up_interval_days", e.follow_up_interval_days)} className="input" type="number" min={1} max={60} defaultValue={b.follow_up_interval_days} /></Field>

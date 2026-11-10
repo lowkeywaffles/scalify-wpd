@@ -33,7 +33,7 @@ export function QueueList({ items, todayIso, hrefBase, onSelect }: { items: Queu
             </span>
           </>
         );
-        const cls = "card flex items-start gap-3 p-3 sm:p-4 text-left w-full transition hover:border-accent rise";
+        const cls = "card card-hover flex items-start gap-3 p-3 sm:p-4 text-left w-full rise";
         return (
           <li key={q.id} style={{ animationDelay: `${i * 40}ms` }}>
             {onSelect ? (

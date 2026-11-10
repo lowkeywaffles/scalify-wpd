@@ -8,7 +8,9 @@ import { QuoteActions } from "@/components/QuoteActions";
 import { QuoteForm } from "@/components/QuoteForm";
 import { Timeline } from "@/components/Timeline";
 import { Notice, StatusBadge } from "@/components/ui";
-import { recordActivity } from "../../actions";
+import { recordActivity, setShareLink } from "../../actions";
+import { coachTips } from "@/lib/coach";
+import { publicEnv } from "@/lib/env";
 
 export const metadata = { title: "Quote" };
 
@@ -35,8 +37,10 @@ export default async function QuotePage({ params, searchParams }: { params: Prom
         <QuoteActions id={quote.id} archived={quote.archived} optedOut={quote.opted_out} />
       </div>
       <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-        <FollowUpAssistant quote={quote} businessName={business.name} previousFollowUps={acts.filter((a) => a.kind === "follow_up").length} todayIso={t} recommended={rec} onRecord={recordActivity} defaultChannel={business.preferred_channel} />
-        <section className="card p-4 sm:p-6" aria-labelledby="tl"><h2 id="tl" className="mb-4 font-display text-2xl">Timeline</h2><Timeline activities={acts} /></section>
+        <FollowUpAssistant quote={quote} businessName={business.name} previousFollowUps={acts.filter((a) => a.kind === "follow_up").length} todayIso={t} recommended={rec} onRecord={recordActivity} defaultChannel={business.preferred_channel}
+          defaultLang={business.message_language ?? "en"} tips={coachTips(quote, acts, t, business.typical_quote_value)}
+          share={{ url: quote.share_enabled && quote.share_token ? `${publicEnv.siteUrl}/q/${quote.share_token}` : null, onChange: setShareLink.bind(null, quote.id), base: publicEnv.siteUrl }} />
+        <section className="card p-4 sm:p-6" aria-labelledby="tl" data-tour="timeline"><h2 id="tl" className="mb-4 font-display text-2xl">Timeline</h2><Timeline activities={acts} /></section>
       </div>
       <details className="group">
         <summary className="cursor-pointer list-none font-semibold"><span className="btn btn-ghost">Edit quote details</span></summary>

@@ -28,7 +28,7 @@ export function ImportWizard({ currency }: { currency: string }) {
 
   return (
     <div className="space-y-6">
-      <div className="card space-y-3 p-4 sm:p-6">
+      <div className="card space-y-3 p-4 sm:p-6" data-tour="csv">
         <label htmlFor="csv" className="label">1. Choose a CSV file</label>
         <input id="csv" type="file" accept=".csv,text/csv" className="input py-2" onChange={(e) => onFile(e.target.files?.[0])} aria-describedby="csv-hint" />
         <p id="csv-hint" className="hint">Max 1,000 rows, 2 MB. Dates as YYYY-MM-DD. The file is read in your browser; only valid rows are sent when you confirm.</p>

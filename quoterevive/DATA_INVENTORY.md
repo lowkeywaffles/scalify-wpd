@@ -17,6 +17,9 @@ Every stored item and why it exists. If a field has no purpose, delete it.
 | quotes.title, description, amount, currency, dates, status, notes | Possibly | Core service | " |
 | quotes.archived, opted_out | No | Hide; stop recommendations for customers who asked not to be contacted | " |
 | activities.* (kind, channel, short summary, status change, contributed_to_sale) | Possibly in summary | Timeline, follow-up rules, metrics. **Message text is not stored.** | " |
+| quotes.share_token, share_enabled | No (random token) | Customer quote link; off by default, revocable/regenerable | With the quote |
+| activities.via_link + customer's choice/message in summary | Possibly (customer's message) | Record a reply made through the quote link | With the quote |
+| businesses.tour_seen, message_language | No | Show tours once; default message language | Life of account |
 | reminders.(quote_id, due_on, read_at) | No | In-app reminders, idempotent per day | Deleted with quote/account |
 | entitlements.(source, whop_membership_id, status, plan) | Pseudonymous ID | Paid access | Life of account |
 | Sent to Whop at checkout: `metadata.qr_business_id` (random UUID) | Pseudonymous | Match the payment to the account | Kept by Whop on the payment/membership |
