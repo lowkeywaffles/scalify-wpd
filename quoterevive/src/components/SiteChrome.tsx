@@ -34,7 +34,7 @@ export function SiteFooter() {
         <div className="space-y-3">
           <Wordmark />
           <p className="max-w-sm text-sm text-muted">A focused workspace for following up on quotes. QuoteRevive never sends messages on your behalf.</p>
-          <p className="text-xs text-muted">© {new Date().getFullYear()} [LEGAL BUSINESS NAME]. QuoteRevive is not affiliated with WhatsApp, Meta, Instagram or Whop.</p>
+          <p className="text-xs text-muted">© {new Date().getFullYear()} Scalify Web Production &amp; Development. QuoteRevive is not affiliated with WhatsApp, Meta, Instagram or Whop.</p>
         </div>
         <nav aria-label="Product"><h2 className="mb-2 text-sm font-semibold">Product</h2><ul className="space-y-2 text-sm text-muted">
           <li><Link href="/demo">Demo</Link></li><li><Link href="/guide">How to use it</Link></li><li><Link href="/#pricing">Pricing</Link></li><li><Link href="/#security">Privacy & security</Link></li><li><Link href="/contact">Contact & support</Link></li></ul></nav>

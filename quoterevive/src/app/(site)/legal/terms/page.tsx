@@ -5,7 +5,7 @@ export const metadata = { title: "Terms & Conditions" };
 export default function Terms() {
   return (
     <LegalPage title="Terms & Conditions">
-      <p>These terms are an agreement between you and [LEGAL BUSINESS NAME] ([REGISTERED ADDRESS]) for use of QuoteRevive. By creating an account you agree to them.</p>
+      <p>These terms are an agreement between you and Scalify Web Production &amp; Development ([REGISTERED ADDRESS]) for use of QuoteRevive. By creating an account you agree to them.</p>
       <h2>1. The service</h2>
       <p>QuoteRevive helps you record quotes, plan follow-ups and prepare messages. It does <strong>not</strong> send messages to your customers, does not integrate with or automate WhatsApp, Instagram or email, and does not guarantee any sale, reply or revenue. The priority score and suggestions are simple rules to help you organise your work, not predictions.</p>
       <h2>2. Accounts</h2>
@@ -19,7 +19,7 @@ export default function Terms() {
       <h2>6. Availability</h2>
       <p>We aim for reliable service but do not promise it will be uninterrupted or error-free. Keep your own copies of important records using the export feature.</p>
       <h2>7. Intellectual property</h2>
-      <p>The QuoteRevive software, name, logo and design belong to [LEGAL BUSINESS NAME]. Open-source components are used under their licences.</p>
+      <p>The QuoteRevive software, name, logo and design belong to Scalify Web Production &amp; Development. Open-source components are used under their licences.</p>
       <h2>8. Disclaimers and liability</h2>
       <p>To the extent permitted by law, the service is provided &quot;as is&quot; and our total liability for any claim is limited to the amount you paid us in the 12 months before the claim. We are not liable for lost profits, lost sales or indirect losses. Nothing in these terms limits liability that cannot legally be limited, or your statutory rights as a consumer where those apply. [Lawyer: enforceability varies by jurisdiction.]</p>
       <h2>9. Termination</h2>
@@ -29,7 +29,7 @@ export default function Terms() {
       <h2>11. Governing law</h2>
       <p>These terms are governed by the laws of [JURISDICTION], and disputes go to the courts of [VENUE], without removing any mandatory consumer protections of your country of residence.</p>
       <h2>12. Contact</h2>
-      <p>Message us on Whop (from your QuoteRevive purchase) · [LEGAL BUSINESS NAME], [REGISTERED ADDRESS]</p>
+      <p><a href="mailto:scalifywpd@gmail.com">scalifywpd@gmail.com</a> · Scalify Web Production &amp; Development, [REGISTERED ADDRESS]</p>
       <p className="text-sm">WhatsApp and Instagram are trademarks of Meta Platforms, Inc. Whop is a trademark of its owner. QuoteRevive is not affiliated with or endorsed by them.</p>
     </LegalPage>
   );

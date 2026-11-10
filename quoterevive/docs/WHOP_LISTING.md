@@ -25,4 +25,4 @@ QuoteRevive never messages your customers for you and doesn't connect to your Wh
 
 **Refunds:** Full refund within 14 days, no questions asked.
 
-**After purchase:** Create a free account at [YOUR-DOMAIN], open *Access*, and paste your Whop membership ID. Need help? Message us here on Whop.
+**After purchase:** Create a free account at [YOUR-DOMAIN], open *Access*, and paste your Whop membership ID. Need help? scalifywpd@gmail.com

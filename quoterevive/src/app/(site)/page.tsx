@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BellRing, CalendarClock, ClipboardCopy, FileSpreadsheet, Gauge, History, LineChart, ShieldCheck } from "lucide-react";
 import { DemoWorkspace } from "@/components/DemoWorkspace";
+import { MotionStage } from "@/components/MotionStage";
 import { PRICE } from "@/lib/offer";
 
 const STEPS = [
@@ -62,6 +63,8 @@ export default function Home() {
           </ul>
         </div>
       </section>
+
+      <MotionStage />
 
       <section id="how" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20" aria-labelledby="how-h">
         <h2 id="how-h" className="font-display text-4xl sm:text-5xl">How QuoteRevive works</h2>

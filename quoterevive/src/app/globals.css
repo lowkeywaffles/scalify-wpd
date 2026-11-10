@@ -112,3 +112,41 @@ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-even
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
 }
+
+/* ---------- 3D motion stage (decorative, homepage) ---------- */
+@keyframes grow { from { width: 0 } to { width: 100% } }
+@keyframes floaty { 0%,100% { translate: 0 0 } 50% { translate: 0 -8px } }
+@keyframes pop { 0% { opacity: 0; scale: .4 } 60% { opacity: 1 } 100% { opacity: 0; scale: 1.4 } }
+.stage3d { perspective: 1200px; }
+.stage3d-floor { position: absolute; inset: 12% 6% 0; border-radius: 32px; transform: rotateX(62deg) translateZ(-60px);
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--accent) 30%, transparent), transparent), repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 36px), repeating-linear-gradient(0deg, var(--line) 0 1px, transparent 1px 36px);
+  opacity: .55; }
+.stage3d-scene { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(14deg) rotateY(-18deg); transition: transform 1s cubic-bezier(.2,.7,.2,1); }
+.stage3d[data-step="1"] .stage3d-scene { transform: rotateX(10deg) rotateY(-6deg); }
+.stage3d[data-step="2"] .stage3d-scene { transform: rotateX(12deg) rotateY(10deg); }
+.stage3d[data-step="3"] .stage3d-scene { transform: rotateX(8deg) rotateY(0deg); }
+.s3-card { position: absolute; padding: 14px 16px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface);
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / .55); transition: all .8s cubic-bezier(.2,.7,.2,1); animation: floaty 5s ease-in-out infinite; }
+.s3-quote { left: 8%; top: 18%; width: 56%; transform: translateZ(40px); }
+.s3-score { right: 6%; top: 8%; display: flex; align-items: center; gap: 10px; transform: translateZ(10px) scale(.85); opacity: 0; animation-delay: -1.5s; }
+.s3-msg { right: 4%; bottom: 10%; width: 58%; transform: translateZ(0) translateY(30px); opacity: 0; animation-delay: -3s; }
+.s3-win { left: 30%; top: 4%; display: flex; align-items: center; gap: 8px; transform: translateZ(120px) scale(.6); opacity: 0; }
+.s3-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); color: var(--muted); transition: all .5s; }
+.s3-badge-due { background: var(--accent); color: var(--accent-ink); }
+.s3-badge-good { background: color-mix(in oklab, var(--good) 20%, var(--surface)); color: var(--good); }
+.s3-progress { width: 15%; background: var(--accent); transition: width .9s ease, background .5s; }
+.s3-ring { stroke-dashoffset: 113; transition: stroke-dashoffset 1.2s ease; }
+.s3-send { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 700; color: var(--accent); }
+.stage3d[data-step="1"] .s3-score, .stage3d[data-step="2"] .s3-score, .stage3d[data-step="3"] .s3-score { opacity: 1; transform: translateZ(70px) scale(1); }
+.stage3d[data-step="1"] .s3-ring, .stage3d[data-step="2"] .s3-ring, .stage3d[data-step="3"] .s3-ring { stroke-dashoffset: 32; }
+.stage3d[data-step="1"] .s3-progress { width: 45%; }
+.stage3d[data-step="2"] .s3-progress { width: 75%; }
+.stage3d[data-step="2"] .s3-msg, .stage3d[data-step="3"] .s3-msg { opacity: 1; transform: translateZ(90px) translateY(0); }
+.stage3d[data-step="3"] .s3-progress { width: 100%; background: var(--good); }
+.stage3d[data-step="3"] .s3-quote { transform: translateZ(60px); border-color: var(--good); }
+.stage3d[data-step="3"] .s3-win { opacity: 1; transform: translateZ(150px) scale(1); }
+.s3-spark { position: absolute; left: 50%; top: 22%; transform: translateZ(160px); }
+.s3-spark span { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--warn); animation: pop .9s ease-out forwards; }
+.s3-spark span:nth-child(3n) { background: var(--accent); } .s3-spark span:nth-child(3n+1) { background: var(--good); }
+@media (max-width: 640px) { .stage3d-scene { transform: rotateX(10deg) rotateY(-8deg) scale(.92); } .s3-quote { width: 70%; } .s3-msg { width: 72%; } }
+@media (prefers-reduced-motion: reduce) { .s3-card { animation: none; } .stage3d-scene, .s3-card { transition: none; } .s3-spark { display: none; } }

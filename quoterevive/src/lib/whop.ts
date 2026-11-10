@@ -70,11 +70,11 @@ export async function createCheckout(businessId: string, redirectUrl: string) {
 /** Back-compat helper used by the manual "link membership ID" fallback. */
 export async function fetchWhopMembership(id: string): Promise<{ ok: true; membership: WhopMembership } | { ok: false; error: string }> {
   const c = config();
-  if (!c.key || !c.product) return { ok: false, error: "Purchases can't be verified yet. Message us on Whop and we'll activate you manually." };
+  if (!c.key || !c.product) return { ok: false, error: "Purchases can't be verified yet. Email scalifywpd@gmail.com and we'll activate you manually." };
   const r = await getMembership(id);
   if (!r.ok) {
     if ([400, 404, 422].includes(r.status)) return { ok: false, error: "We couldn't find that membership. Check the ID starts with mem_ and was copied in full." };
-    if (r.status === 401 || r.status === 403) return { ok: false, error: "Purchase verification isn't working on our side right now. Message us on Whop and we'll activate you manually." };
+    if (r.status === 401 || r.status === 403) return { ok: false, error: "Purchase verification isn't working on our side right now. Email scalifywpd@gmail.com and we'll activate you manually." };
     return { ok: false, error: "Couldn't reach Whop to verify. Please try again in a few minutes." };
   }
   if (r.value.product_id !== c.product) return { ok: false, error: "That membership is for a different product." };

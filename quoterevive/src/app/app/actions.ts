@@ -207,7 +207,7 @@ export async function deleteAccount(_: ActionState, fd: FormData): Promise<Actio
   const { supabase, user } = await requireBusiness();
   // Cascades remove business, quotes, activities, reminders, entitlements.
   const { error } = await supabaseAdmin().auth.admin.deleteUser(user.id);
-  if (error) return { error: "Could not delete your account. Message us on Whop and we'll sort it out." };
+  if (error) return { error: "Could not delete your account. Email scalifywpd@gmail.com and we'll sort it out." };
   await supabase.auth.signOut();
   redirect("/?account_deleted=1");
 }
@@ -229,9 +229,9 @@ export async function linkWhopMembership(_: ActionState, fd: FormData): Promise<
   if (!GRANTING_STATUSES.has(m.membership.status)) return { error: `This membership is ${m.membership.status} and does not grant access.` };
   const admin = supabaseAdmin();
   const { data: existing } = await admin.from("entitlements").select("business_id").eq("whop_membership_id", id).maybeSingle();
-  if (existing && existing.business_id !== business.id) return { error: "This membership is already linked to another QuoteRevive account. Message us on Whop and we'll sort it out." };
+  if (existing && existing.business_id !== business.id) return { error: "This membership is already linked to another QuoteRevive account. Email scalifywpd@gmail.com and we'll sort it out." };
   const { error } = await admin.from("entitlements").upsert({ business_id: business.id, source: "whop", whop_membership_id: id, status: "active", updated_at: new Date().toISOString() });
-  if (error) return { error: "Could not activate access. Message us on Whop and we'll sort it out." };
+  if (error) return { error: "Could not activate access. Email scalifywpd@gmail.com and we'll sort it out." };
   revalidatePath("/app", "layout");
   return { ok: true, message: "Founding Access is active. Thank you!" };
 }
