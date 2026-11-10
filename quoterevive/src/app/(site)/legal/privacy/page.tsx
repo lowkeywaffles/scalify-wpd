@@ -5,7 +5,7 @@ export default function Privacy() {
   return (
     <LegalPage title="Privacy Policy">
       <h2>Who we are</h2>
-      <p>QuoteRevive is operated by [LEGAL BUSINESS NAME], [REGISTERED ADDRESS], [REGISTRATION NUMBER, if any] (&quot;we&quot;). Contact: [PRIVACY EMAIL]. [If required: EU/UK representative or Data Protection Officer details.]</p>
+      <p>QuoteRevive is operated by [LEGAL BUSINESS NAME], [REGISTERED ADDRESS], [REGISTRATION NUMBER, if any] (&quot;we&quot;). Contact: message us on Whop, or see the <Link href="/contact">Contact page</Link>. [If required: EU/UK representative or Data Protection Officer details.]</p>
 
       <h2>Two kinds of personal data</h2>
       <p><strong>Your account data</strong> — we are the controller. <strong>Your customers&apos; data</strong> that you enter into QuoteRevive (names, contact details, quote details) — you are the controller and we process it only on your instructions to provide the service (we act as your processor). You are responsible for having a lawful reason to store your customers&apos; details and for honouring their requests; use the &quot;customer asked not to be contacted&quot; option and delete records you no longer need. [Lawyer: consider a Data Processing Addendum for business customers.]</p>
@@ -36,7 +36,7 @@ export default function Privacy() {
       <p>Our providers may process data in the United States and other countries. Where required we rely on appropriate safeguards such as the European Commission&apos;s Standard Contractual Clauses or the EU–US Data Privacy Framework. [VERIFY each provider&apos;s mechanism.]</p>
 
       <h2>Your rights</h2>
-      <p>Depending on where you live (for example under the GDPR, UK GDPR, California CCPA/CPRA, or Ethiopia&apos;s Personal Data Protection Proclamation No. 1321/2024), you may have the right to access, correct, delete, export or restrict your data, object to processing, and withdraw consent. You can export your data (Settings → Your data) and delete your account (Settings → Delete account) yourself at any time. For anything else email [PRIVACY EMAIL]; we respond within 30 days. We will not discriminate against you for exercising your rights.</p>
+      <p>Depending on where you live (for example under the GDPR, UK GDPR, California CCPA/CPRA, or Ethiopia&apos;s Personal Data Protection Proclamation No. 1321/2024), you may have the right to access, correct, delete, export or restrict your data, object to processing, and withdraw consent. You can export your data (Settings → Your data) and delete your account (Settings → Delete account) yourself at any time. For anything else, message us on Whop (open your QuoteRevive purchase on whop.com and use the chat); we respond within 30 days. We will not discriminate against you for exercising your rights.</p>
       <p>If your customer contacts us about their data, we will refer them to you as the controller and help you respond.</p>
 
       <h2>Complaints</h2>

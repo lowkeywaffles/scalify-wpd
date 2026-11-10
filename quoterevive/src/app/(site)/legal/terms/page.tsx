@@ -29,7 +29,7 @@ export default function Terms() {
       <h2>11. Governing law</h2>
       <p>These terms are governed by the laws of [JURISDICTION], and disputes go to the courts of [VENUE], without removing any mandatory consumer protections of your country of residence.</p>
       <h2>12. Contact</h2>
-      <p>[SUPPORT EMAIL] · [LEGAL BUSINESS NAME], [REGISTERED ADDRESS]</p>
+      <p>Message us on Whop (from your QuoteRevive purchase) · [LEGAL BUSINESS NAME], [REGISTERED ADDRESS]</p>
       <p className="text-sm">WhatsApp and Instagram are trademarks of Meta Platforms, Inc. Whop is a trademark of its owner. QuoteRevive is not affiliated with or endorsed by them.</p>
     </LegalPage>
   );

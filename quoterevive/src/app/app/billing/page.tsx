@@ -1,5 +1,4 @@
 import { loadWorkspace } from "@/lib/data";
-import { publicEnv } from "@/lib/env";
 import { whopConfigured } from "@/lib/whop";
 import { LinkWhopForm } from "@/components/LinkWhopForm";
 import { Notice } from "@/components/ui";
@@ -10,8 +9,8 @@ export const metadata = { title: "Access" };
 
 const MESSAGES: Record<string, { kind: "info" | "error"; text: string }> = {
   done: { kind: "info", text: "Thanks! Whop is confirming your payment — this usually takes under a minute. Refresh this page to see Founding Access activate." },
-  error: { kind: "error", text: "We couldn't open checkout just now. Please try again, or contact support." },
-  unavailable: { kind: "error", text: "Checkout isn't open yet. Please contact support for early access." },
+  error: { kind: "error", text: "We couldn't open checkout just now. Please try again in a few minutes." },
+  unavailable: { kind: "error", text: "Checkout isn't open yet. Please check back soon." },
   busy: { kind: "error", text: "Too many checkout attempts. Please wait a bit and try again." },
 };
 
@@ -35,7 +34,7 @@ export default async function Billing({ searchParams }: { searchParams: Promise<
               <button className="btn btn-primary">Buy Founding Access — $39 one-time</button>
               <p className="hint mt-2">You&apos;ll pay securely on Whop. Whop may show the price in your local currency and adds any tax before you pay. Access unlocks automatically on this account. 14-day refund.</p>
             </form>
-          ) : <p className="text-sm">Checkout isn&apos;t open yet. Email {publicEnv.supportEmail} for early access.</p>}
+          ) : <p className="text-sm">Checkout isn&apos;t open yet. Please check back soon.</p>}
           <details className="border-t border-line pt-4">
             <summary className="cursor-pointer text-sm font-semibold">Bought on Whop directly? Link your purchase</summary>
             <p className="mt-2 text-sm text-muted">Paste your Whop membership ID (starts with <code>mem_</code>). We check it with Whop before unlocking anything.</p>
