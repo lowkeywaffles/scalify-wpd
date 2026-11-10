@@ -54,7 +54,7 @@ if (!/^(Hey|Hi) \w+,.* the [a-z ]+ quot/.test(msg)) fail("message not personalis
 await dlg.getByRole("button", { name: "Copy message" }).click();
 const clip = await page.evaluate(() => navigator.clipboard.readText());
 if (clip !== msg) fail("clipboard mismatch"); else console.log("ok   copied to clipboard");
-const wa = await dlg.getByRole("link", { name: /Open WhatsApp/ }).getAttribute("href");
+const wa = await dlg.getByRole("link", { name: /WhatsApp/ }).getAttribute("href");
 if (!wa.startsWith("https://wa.me/?text=")) fail("wa link " + wa); else console.log("ok   WhatsApp link prefilled");
 await dlg.getByRole("button", { name: "I sent this follow-up" }).click();
 await dlg.getByRole("button", { name: "Save follow-up" }).click();

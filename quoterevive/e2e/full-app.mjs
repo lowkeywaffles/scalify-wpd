@@ -84,7 +84,7 @@ try {
   check(/^Hey Test, just checking in about the website quotation/.test(msg), `message prepared: "${msg.slice(0, 60)}…"`);
   await page.getByRole("button", { name: "Copy message" }).click();
   check((await page.evaluate(() => navigator.clipboard.readText())) === msg, "message copied");
-  const wa = await page.getByRole("link", { name: /Open WhatsApp/ }).getAttribute("href");
+  const wa = await page.getByRole("link", { name: /WhatsApp/ }).getAttribute("href");
   check(wa.startsWith("https://wa.me/15550100000?text="), "WhatsApp link has phone + text");
 
   // Record follow-up
