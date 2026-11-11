@@ -1,0 +1,223 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0d10;--ink:#eeeae2;--muted:#a5a7ae;--line:#2f3138;--card:#17181d;--accent:#8aa4ff;--good:#6fd39a;--warn:#f0b562;--bad:#ff8a8a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-family:Inter,sans-serif;color:var(--ink)}
+.abs{position:absolute}.scene{position:absolute;inset:0;opacity:0}
+.serif{font-family:"Instrument Serif",serif;font-weight:400}
+#bg{position:absolute;inset:-200px}
+.blob{position:absolute;border-radius:50%;filter:blur(120px)}
+#grain{position:absolute;inset:0;opacity:.07;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>")}
+#vign{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.65))}
+.cap{position:absolute;left:80px;right:80px;text-align:center}
+.h1{font-size:120px;line-height:1.02}
+.h2{font-size:84px;line-height:1.05}
+.sub{font-size:40px;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:36px;box-shadow:0 60px 120px -40px rgba(0,0,0,.8)}
+.pill{display:inline-flex;align-items:center;gap:14px;padding:12px 26px;border-radius:999px;font-weight:700;font-size:30px}
+.bubble{position:absolute;right:60px;max-width:640px;background:#2b5cff;color:#fff;padding:28px 34px;border-radius:40px 40px 10px 40px;font-size:40px;line-height:1.3}
+.qc{position:absolute;width:520px;padding:30px 34px}
+.qc .n{font-size:34px;font-weight:700}.qc .a{font-family:"Instrument Serif";font-size:70px}
+.tag{display:inline-block;margin-top:10px;font-size:24px;font-weight:700;padding:6px 16px;border-radius:999px;background:rgba(255,138,138,.15);color:var(--bad)}
+.sticky{position:absolute;padding:26px 30px;background:#f0d27a;color:#3a2e0a;font-size:36px;font-weight:600;border-radius:6px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7);font-family:"Instrument Serif";font-style:italic}
+.field{border:2px solid var(--line);border-radius:22px;padding:22px 26px;font-size:38px;margin-top:14px;min-height:90px}
+.lab{font-size:26px;color:var(--muted);font-weight:600;margin-top:26px}
+.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-weight:700;font-size:36px;padding:26px 44px}
+.btnp{background:linear-gradient(180deg,#a7b8ff,#8aa4ff);color:#0d1020;box-shadow:0 20px 60px -15px rgba(138,164,255,.8)}
+.qrow{position:absolute;left:90px;right:90px;padding:28px 30px;display:flex;gap:26px;align-items:center}
+.ring{width:110px;height:110px;flex:none;position:relative}
+.ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px}
+.chip{display:inline-block;font-size:22px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 14px;margin:8px 8px 0 0}
+.tone{display:inline-block;font-size:30px;padding:16px 28px;border-radius:999px;border:2px solid var(--line);margin-right:12px}
+.conf{position:absolute;width:18px;height:30px;border-radius:4px}
+</style></head><body>
+<div id="bg"><div class="blob" id="b1" style="width:900px;height:900px"></div><div class="blob" id="b2" style="width:800px;height:800px"></div></div>
+<div id="world" class="abs" style="inset:0">
+
+<!-- A: You sent the quote -->
+<div class="scene" id="sA">
+  <div class="cap serif h1" id="aT1" style="top:300px">You sent the quote.</div>
+  <div class="card abs" id="aPhone" style="left:110px;right:110px;top:620px;height:860px;padding:40px">
+    <div style="display:flex;align-items:center;gap:22px;border-bottom:1px solid var(--line);padding-bottom:28px">
+      <div style="width:84px;height:84px;border-radius:50%;background:#3a3d46;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700">S</div>
+      <div><div style="font-size:38px;font-weight:700">Sarah · Client</div><div style="font-size:26px;color:var(--muted)" id="aLast">online</div></div>
+    </div>
+    <div class="bubble" id="aB1" style="top:200px">Here's the quote for your new website — <b>$2,400</b> ✅</div>
+    <div class="abs" id="aSeen" style="right:64px;top:420px;font-size:26px;color:var(--muted)">Seen ✓✓</div>
+    <div class="abs" id="aType" style="left:60px;top:500px;background:#2a2c33;border-radius:40px;padding:26px 34px;font-size:46px;letter-spacing:6px">•••</div>
+    <div class="abs" id="aDay" style="left:0;right:0;bottom:60px;text-align:center;font-size:44px;font-weight:800;color:var(--bad)">Day 1</div>
+  </div>
+  <div class="cap serif h1" id="aT2" style="top:1560px;font-size:96px"><em style="color:var(--bad)">They never replied.</em></div>
+</div>
+
+<!-- B: chaos -->
+<div class="scene" id="sB">
+  <div class="cap serif h2" id="bT1" style="top:280px">Quotes buried in WhatsApp, email &amp; DMs…</div>
+  <div id="bCards" class="abs" style="inset:0"></div>
+  <div class="cap" id="bSum" style="top:1430px"><div style="font-size:120px;font-weight:800;letter-spacing:-3px" id="bNum">$0</div><div class="sub">sitting in silent quotes <span style="font-size:26px">(example)</span></div></div>
+  <div class="cap serif h1" id="bT2" style="top:1600px;font-size:100px">Did you ever <em style="color:var(--accent)">follow up?</em></div>
+</div>
+
+<!-- C: cost -->
+<div class="scene" id="sC">
+  <div class="cap serif" id="c1" style="top:760px;font-size:170px">Forgot.</div>
+  <div class="cap serif" id="c2" style="top:760px;font-size:150px">Felt awkward.</div>
+  <div class="cap serif" id="c3" style="top:700px;font-size:150px;line-height:1"><em style="color:var(--bad)">Lost the<br>client.</em></div>
+</div>
+
+<!-- D: reveal -->
+<div class="scene" id="sD">
+  <div class="abs" id="dGlow" style="left:240px;top:560px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(138,164,255,.55),transparent 65%)"></div>
+  <svg class="abs" id="dLogo" style="left:390px;top:700px" width="300" height="300" viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="#eeeae2"/><path d="M9 11.5a4.5 4.5 0 0 1 4.5-4.5h5A4.5 4.5 0 0 1 23 11.5v3a4.5 4.5 0 0 1-4.5 4.5H15l-3.5 3v-3.3A4.5 4.5 0 0 1 9 14.5z" fill="none" stroke="#0c0d10" stroke-width="2" stroke-linejoin="round"/><path id="dCheck" d="M13 13.2l2.2 2.1 4-4.3" fill="none" stroke="#2348e0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10" stroke-dashoffset="10"/></svg>
+  <div class="cap" id="dName" style="top:1080px;font-size:120px;font-weight:700;letter-spacing:-2px">Quote<span class="serif" style="font-style:italic;color:var(--accent);font-weight:400">Revive</span></div>
+  <div class="cap sub" id="dSub" style="top:1250px;font-size:46px">Turn silent quotes into <em class="serif" style="color:var(--ink);font-size:58px">“yes”</em></div>
+</div>
+
+<!-- E: step 1 log -->
+<div class="scene" id="sE">
+  <div class="cap" style="top:270px"><span class="pill" style="background:rgba(138,164,255,.15);color:var(--accent)">01 · LOG IT</span></div>
+  <div class="cap serif h2" style="top:370px">Add a quote in seconds</div>
+  <div class="card abs" id="eForm" style="left:110px;right:110px;top:600px;padding:44px">
+    <div class="lab" style="margin-top:0">Customer</div><div class="field" id="eF1"></div>
+    <div class="lab">Job</div><div class="field" id="eF2"></div>
+    <div class="lab">Amount</div><div class="field serif" id="eF3" style="font-size:50px"></div>
+    <div style="margin-top:36px"><span class="btn btnp" id="eBtn">Save quote</span></div>
+  </div>
+  <div class="card abs" id="eToast" style="left:170px;right:170px;top:1500px;padding:28px 34px;font-size:34px;display:flex;gap:16px;align-items:center;border-color:var(--good)"><span style="color:var(--good);font-size:44px">✓</span> Follow-up scheduled · in 3 days</div>
+</div>
+
+<!-- F: step 2 queue -->
+<div class="scene" id="sF">
+  <div class="cap" style="top:270px"><span class="pill" style="background:rgba(138,164,255,.15);color:var(--accent)">02 · KNOW WHO</span></div>
+  <div class="cap serif h2" style="top:370px">See exactly who to chase <em style="color:var(--accent)">today</em></div>
+  <div id="fRows"></div>
+</div>
+
+<!-- G: step 3 follow up -->
+<div class="scene" id="sG">
+  <div class="cap" style="top:270px"><span class="pill" style="background:rgba(138,164,255,.15);color:var(--accent)">03 · FOLLOW UP</span></div>
+  <div class="cap serif h2" style="top:370px">A personal nudge, <em style="color:var(--accent)">minus the awkward</em></div>
+  <div class="card abs" style="left:90px;right:90px;top:620px;padding:44px" id="gCard">
+    <div id="gTones"><span class="tone">Friendly</span><span class="tone">Professional</span><span class="tone">Concise</span></div>
+    <div class="field" id="gMsg" style="min-height:330px;margin-top:30px;font-size:40px;line-height:1.4"></div>
+    <div style="margin-top:34px;display:flex;gap:18px"><span class="btn" id="gWa" style="background:#25d366;color:#05210f">WhatsApp ➜</span><span class="btn" style="border:2px solid var(--line)">Copy</span></div>
+  </div>
+  <div class="abs" id="gTap" style="width:90px;height:90px;border-radius:50%;border:4px solid #fff;left:230px;top:1338px;opacity:0"></div>
+  <div class="card abs" id="gToast" style="left:170px;right:170px;top:1500px;padding:28px 34px;font-size:34px;display:flex;gap:16px;align-items:center;border-color:var(--good)"><span style="color:var(--good);font-size:44px">✓</span> Sent by you · next nudge in 5 days</div>
+</div>
+
+<!-- H: step 4 win -->
+<div class="scene" id="sH">
+  <div class="cap" style="top:270px"><span class="pill" style="background:rgba(111,211,154,.15);color:var(--good)">04 · WIN IT BACK</span></div>
+  <div class="cap serif h2" style="top:370px">One tap. <em style="color:var(--good)">Deal back on.</em></div>
+  <div class="card abs" id="hCard" style="left:150px;right:150px;top:620px;padding:44px;text-align:center">
+    <div style="font-size:28px;color:var(--muted)">Quote for Sarah</div>
+    <div style="font-size:40px;font-weight:700;margin-top:8px">New website</div>
+    <div class="serif" style="font-size:130px;margin-top:6px">$2,400</div>
+    <div class="btn" id="hAcc" style="margin-top:20px;width:100%;background:var(--good);color:#06210f">Accept quote</div>
+  </div>
+  <div id="hConf" class="abs" style="inset:0"></div>
+  <div class="abs" id="hTap" style="width:90px;height:90px;border-radius:50%;border:4px solid #fff;left:495px;top:1060px;opacity:0"></div>
+  <div class="cap" id="hWon" style="top:1190px"><span class="pill" style="font-size:52px;padding:22px 46px;background:var(--card);border:2px solid var(--good)">🎉 Quote won!</span></div>
+  <div class="abs" id="hStats" style="left:110px;right:110px;top:1360px;display:flex;gap:24px">
+    <div class="card" style="flex:1;padding:30px"><div style="font-size:26px;color:var(--muted)">Accepted value</div><div class="serif" id="hVal" style="font-size:84px;color:var(--good)">$0</div></div>
+    <div class="card" style="flex:1;padding:30px"><div style="font-size:26px;color:var(--muted)">Follow-up streak</div><div class="serif" style="font-size:84px">🔥 5 days</div></div>
+  </div>
+</div>
+
+<!-- I: outro -->
+<div class="scene" id="sI">
+  <div class="cap serif" id="i1" style="top:480px;font-size:128px;line-height:1">Stop losing clients</div>
+  <div class="cap serif" id="i2" style="top:620px;font-size:128px;line-height:1"><em style="color:var(--accent)">to silence.</em></div>
+  <div class="cap" id="i3" style="top:900px;display:flex;justify-content:center;align-items:center;gap:22px;font-size:76px;font-weight:700">
+    <svg width="110" height="110" viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="#eeeae2"/><path d="M9 11.5a4.5 4.5 0 0 1 4.5-4.5h5A4.5 4.5 0 0 1 23 11.5v3a4.5 4.5 0 0 1-4.5 4.5H15l-3.5 3v-3.3A4.5 4.5 0 0 1 9 14.5z" fill="none" stroke="#0c0d10" stroke-width="2" stroke-linejoin="round"/><path d="M13 13.2l2.2 2.1 4-4.3" fill="none" stroke="#2348e0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>Quote<span class="serif" style="font-style:italic;color:var(--accent);font-weight:400">Revive</span></span></div>
+  <div class="cap" id="i4" style="top:1110px"><span class="btn btnp" style="font-size:44px;padding:30px 60px">Start free · link in bio</span></div>
+  <div class="cap sub" id="i5" style="top:1260px;font-size:36px">Founding Access $39 one-time · no subscription</div>
+</div>
+</div>
+<div id="flash" class="abs" style="inset:0;background:#fff;opacity:0"></div>
+<div id="vign"></div><div id="grain"></div>
+<div class="abs" id="foot" style="left:0;right:0;top:205px;text-align:center;font-size:22px;color:#6b6e76">Demo · fictional example data</div>
+<script>
+const $=id=>document.getElementById(id);
+const P=(t,a,b)=>Math.min(1,Math.max(0,(t-a)/(b-a)));
+const eo=x=>1-Math.pow(1-x,3), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{const c1=1.9,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+function S(el,{o=1,x=0,y=0,s=1,r=0,b=0}={}){el.style.opacity=o;el.style.transform=`translate(${x}px,${y}px) scale(${s}) rotate(${r}deg)`;el.style.filter=b?`blur(${b}px)`:"none"}
+// scene window: fade in/out
+function W(t,a,b,fi=.35,fo=.35){return Math.min(P(t,a,a+fi),1-P(t,b-fo,b))}
+function pop(t,a,dur=.5){const p=P(t,a,a+dur);return {o:Math.min(1,p*2.5),s:p?back(p):0.6,y:(1-eo(p))*40}}
+function rise(t,a,dur=.6){const p=eo(P(t,a,a+dur));return {o:p,y:(1-p)*70,b:(1-p)*12}}
+function type(el,text,t,a,cps){el.textContent=text.slice(0,Math.floor(Math.max(0,t-a)*cps))}
+const money=n=>"$"+Math.round(n).toLocaleString("en-US");
+
+// build B cards
+const QC=[["Shop sign","$1,150","9 days silent",80,600,-8],["Kitchen refit","$5,200","21 days silent",480,760,6],["Event banners","$640","14 days silent",60,1000,4],["Logo refresh","$450","6 days silent",500,1060,-5],["Vehicle wrap","$3,100","32 days silent",250,1240,-3]];
+$("bCards").innerHTML=QC.map((q,i)=>`<div class="card qc" id="q${i}" style="left:${q[3]}px;top:${q[4]}px"><div class="n">${q[0]}</div><div class="a">${q[1]}</div><span class="tag">● No reply · ${q[2]}</span></div>`).join("")+
+ `<div class="sticky" id="st0" style="left:640px;top:520px">follow up??</div><div class="sticky" id="st1" style="left:90px;top:1380px;opacity:0">who was this?</div>`;
+// build F rows
+const QR=[["Sarah · Website","$2,400",75,["Follow-up due today +20","Above usual value +10"]],["Daniel · Shop sign","$1,150",70,["Expires in 3d +19","9d silent +9"]],["Meron · Event banners","$640",57,["14d silent +14","Never followed up +10"]],["Priya · Kitchen refit","$5,200",45,["In negotiation +5","21d silent +20"]]];
+$("fRows").innerHTML=QR.map((q,i)=>`<div class="card qrow" id="r${i}" style="top:${620+i*235}px"><div class="ring"><svg viewBox="0 0 44 44" width="110" height="110" style="transform:rotate(-90deg)"><circle cx="22" cy="22" r="18" fill="none" stroke="#2f3138" stroke-width="5"/><circle id="rc${i}" cx="22" cy="22" r="18" fill="none" stroke="#8aa4ff" stroke-width="5" stroke-linecap="round" stroke-dasharray="113" stroke-dashoffset="113"/></svg><b id="rn${i}">0</b></div><div style="flex:1"><div style="display:flex;justify-content:space-between;font-size:36px;font-weight:700"><span>${q[0]}</span><span class="serif" style="font-weight:400;font-size:46px">${q[1]}</span></div><div>${q[3].map(c=>`<span class="chip">${c}</span>`).join("")}</div></div></div>`).join("");
+// confetti
+const CF=[];for(let i=0;i<70;i++){const a=(i*137.5)%360*Math.PI/180,sp=500+((i*53)%400),col=["#8aa4ff","#6fd39a","#f0b562","#ff8a8a","#eeeae2"][i%5];CF.push({a,sp,col,rot:(i*47)%360});}
+$("hConf").innerHTML=CF.map((c,i)=>`<div class="conf" id="cf${i}" style="background:${c.col};left:530px;top:1040px"></div>`).join("");
+
+const SC={A:[0,4.6],B:[4.6,9.6],C:[9.6,13],D:[13.15,16.3],E:[16.3,21.6],F:[21.6,27],G:[27,33.2],H:[33.2,38.8],I:[38.8,44]};
+window.render=function(t){
+  // background
+  const warm=1-P(t,12.6,13.3);
+  const b1=$("b1").style,b2=$("b2").style;
+  b1.left=`${300+Math.sin(t*.4)*180}px`;b1.top=`${200+Math.cos(t*.3)*160}px`;b1.background=warm>0.5?"rgba(255,90,90,.28)":"rgba(138,164,255,.30)";
+  b2.left=`${500+Math.cos(t*.35)*200}px`;b2.top=`${1300+Math.sin(t*.25)*180}px`;b2.background=warm>0.5?"rgba(240,140,80,.18)":"rgba(111,211,154,.16)";
+  for(const k in SC){$("s"+k).style.opacity=W(t,SC[k][0],SC[k][1])}
+  // camera drift + shake in C
+  let sh=0; if(t>9.6&&t<13){const k=[9.6,10.7,11.8].find(v=>t>=v&&t<v+.25); if(k!==undefined) sh=(1-P(t,k,k+.25))*14;}
+  $("world").style.transform=`translate(${Math.sin(t*37)*sh}px,${Math.cos(t*29)*sh}px) scale(${1+Math.sin(t*.5)*.006})`;
+  $("flash").style.opacity=Math.max(0,1-P(t,13.1,13.6))*(t>=13.1?1:0)*.9;
+  // A
+  S($("aT1"),rise(t,.2)); S($("aPhone"),{...rise(t,.5,.7),s:1-P(t,3.8,4.6)*.04});
+  S($("aB1"),pop(t,.9)); S($("aSeen"),{o:P(t,1.6,1.9)});
+  const typing=t>2.1&&t<3.0; S($("aType"),{o:typing?.6+Math.sin(t*14)*.4:0});
+  $("aLast").textContent=typing?"typing…":(t>3?"last seen 12 days ago":"online");
+  const day=Math.max(1,Math.min(12,1+Math.floor(P(t,3.0,4.2)*11))); $("aDay").textContent=t>3?`Day ${day} · no reply`:""; 
+  S($("aT2"),rise(t,3.1,.5));
+  // B
+  S($("bT1"),rise(t,4.8));
+  QC.forEach((q,i)=>{const a=5.0+i*.28,p=P(t,a,a+.5);const fall=P(t,8.9,9.6);S($("q"+i),{o:Math.min(1,p*2)*(1-fall),y:(1-eo(p))*-260+Math.sin(t*1.3+i)*10+fall*400,r:q[5]*(1-p*.4)+Math.sin(t+i)*1.5,s:.9+eo(p)*.1})});
+  S($("st0"),{...pop(t,6.0),r:-6}); S($("st1"),{...pop(t,6.7),r:5});
+  const sum=eo(P(t,5.4,7.0))*10540; $("bNum").textContent=money(sum); S($("bSum"),{o:P(t,5.3,5.6)*(1-P(t,7.3,7.6))});
+  S($("bT2"),{...rise(t,7.5,.5),o:rise(t,7.5,.5).o}); 
+  // C
+  [["c1",9.7,10.7],["c2",10.8,11.8],["c3",11.9,13.0]].forEach(([id,a,b])=>{const p=P(t,a,a+.18);S($(id),{o:W(t,a,b,.12,.15),s:1.25-eo(p)*.25})});
+  // D
+  const lp=P(t,13.3,14.1); S($("dLogo"),{o:Math.min(1,lp*2),s:lp?back(lp):.4,r:(1-eo(lp))*-20});
+  $("dCheck").setAttribute("stroke-dashoffset",10-10*eo(P(t,14.0,14.5)));
+  S($("dGlow"),{o:P(t,13.3,14)*(.7+Math.sin(t*3)*.2),s:1+Math.sin(t*2)*.05});
+  S($("dName"),rise(t,14.3)); S($("dSub"),rise(t,14.8));
+  // E
+  S($("eForm"),rise(t,16.5)); type($("eF1"),"Sarah Lin",t,17.1,18); type($("eF2"),"New website",t,17.8,18); type($("eF3"),"$2,400",t,18.6,12);
+  const bp=P(t,19.5,19.7)-P(t,19.7,19.9); S($("eBtn"),{s:1-bp*.08}); S($("eToast"),pop(t,19.9));
+  // F
+  QR.forEach((q,i)=>{const a=22.0+i*.35;S($("r"+i),{...rise(t,a,.55),x:(1-eo(P(t,a,a+.55)))*120});const sc=q[2]*eo(P(t,a+.2,a+1.2));$("rn"+i).textContent=Math.round(sc);$("rc"+i).setAttribute("stroke-dashoffset",113-113*sc/100)});
+  const hl=P(t,24.4,24.8); $("r0").style.borderColor=hl?`rgba(138,164,255,${hl})`:"#2f3138"; $("r0").style.boxShadow=hl?`0 0 0 ${3*hl}px rgba(138,164,255,.6),0 40px 100px -30px rgba(138,164,255,${.6*hl})`:"";
+  // G
+  S($("gCard"),rise(t,27.2));
+  const tones=$("gTones").children; const sel=t<28.2?-1:0; [...tones].forEach((el,i)=>{const on=i===sel;el.style.background=on?"rgba(138,164,255,.18)":"transparent";el.style.borderColor=on?"#8aa4ff":"#2f3138";el.style.color=on?"#8aa4ff":"#eeeae2"});
+  type($("gMsg"),"Hey Sarah, just checking in about the website quotation I sent last week. Happy to answer any questions or adjust the scope if needed 🙂",t,28.4,42);
+  const wp=P(t,31.4,31.6)-P(t,31.6,31.8); S($("gWa"),{s:1-wp*.08}); 
+  const tp=P(t,31.3,31.9); S($("gTap"),{o:tp>0&&tp<1?1-tp:0,s:.5+tp*1.2});
+  S($("gToast"),pop(t,32.0));
+  // H
+  S($("hCard"),rise(t,33.4)); const ap=P(t,34.9,35.1)-P(t,35.1,35.3); S($("hAcc"),{s:1-ap*.06});
+  const htp=P(t,34.8,35.4); S($("hTap"),{o:htp>0&&htp<1?1-htp:0,s:.5+htp*1.2});
+  if(t>35.2){$("hCard").style.borderColor="#6fd39a"}else{$("hCard").style.borderColor="#2f3138"}
+  S($("hWon"),pop(t,35.3,.55)); S($("hStats"),rise(t,35.8)); $("hVal").textContent=money(eo(P(t,36.0,37.4))*2400);
+  CF.forEach((c,i)=>{const p=P(t,35.25,37.6);const d=c.sp*eo(p);S($("cf"+i),{o:p>0&&p<1?1-p*.8:0,x:Math.cos(c.a)*d,y:Math.sin(c.a)*d*.8-120*eo(p)+p*p*900,r:c.rot+p*720})});
+  // I
+  S($("i1"),rise(t,39.0)); S($("i2"),rise(t,39.4)); S($("i3"),pop(t,40.2,.6)); S($("i4"),{...pop(t,40.9,.6),s:(pop(t,40.9,.6).s)*(1+Math.sin(t*5)*.015*P(t,41.5,42))}); S($("i5"),rise(t,41.4));
+  $("foot").style.opacity=(t>4.6&&t<9.6)||(t>16.3&&t<38.8)?.9:0;
+};
+window.render(0);
+</script></body></html>
