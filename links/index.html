@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SCALIFY WPD · Links</title>
+<meta name="description" content="SCALIFY WPD builds web apps, websites and video for small businesses. QuoteRevive, projects, contact and socials in one place.">
+<meta property="og:title" content="SCALIFY WPD · Web apps, websites & video">
+<meta property="og:description" content="Our products, services and contact, in one place.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<script>
+try { const t = localStorage.getItem('scalify-theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch {}
+</script>
+<style>
+/* Same tokens as the main SCALIFY site; dark-first feel on the hero card. */
+:root{--bg:#F4F3EE;--ink:#0E0F12;--muted:#4A4F59;--line:#C9C7BD;--card:#FFFFFF;--accent:#C6FF3D;--on-accent:#0E0F12;--btn-bg:#0E0F12;--btn-fg:#C6FF3D;--focus:#0B5FFF;--grid:rgba(14,15,18,.07);--qr:#2348e0;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E0F12;--ink:#F4F3EE;--muted:#A8ADB7;--line:#404550;--card:#1B1E26;--btn-bg:#C6FF3D;--btn-fg:#0E0F12;--focus:#7FB0FF;--grid:rgba(244,243,238,.06);--qr:#8aa4ff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E0F12;--ink:#F4F3EE;--muted:#A8ADB7;--line:#404550;--card:#1B1E26;--btn-bg:#C6FF3D;--btn-fg:#0E0F12;--focus:#7FB0FF;--grid:rgba(244,243,238,.06);--qr:#8aa4ff;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font:400 16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:12px}
+.wrap{max-width:520px;margin:0 auto;padding-block:36px 48px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));display:grid;gap:14px}
+.head{display:grid;justify-items:center;text-align:center;gap:10px;margin-bottom:8px}
+.logo{width:84px;height:84px;border-radius:24px;background:var(--btn-bg);color:var(--btn-fg);display:grid;place-items:center;font:800 34px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-2px;box-shadow:0 14px 40px -16px rgba(0,0,0,.5)}
+h1{margin:4px 0 0;font-size:26px;letter-spacing:-.5px;display:flex;align-items:center;gap:8px}
+h1 small{background:var(--accent);color:var(--on-accent);padding:1px 7px;border-radius:5px;font-size:13px;letter-spacing:2px}
+.tag{color:var(--muted);margin:0;max-width:36ch}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:2px 0 0;padding:0;list-style:none}
+.chips li{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.04em;border:1px solid var(--line);border-radius:999px;padding:7px 10px;background:var(--card)}
+/* featured product */
+.feat{display:block;text-decoration:none;border-radius:22px;padding:20px;background:#0E0F12;color:#F4F3EE;position:relative;overflow:hidden;border:1px solid #2a2d36}
+.feat::before{content:"";position:absolute;inset:-40% -20% auto auto;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(138,164,255,.55),transparent 65%)}
+.feat .row{position:relative;display:flex;gap:14px;align-items:center}
+.feat .ic{width:52px;height:52px;flex:none}
+.feat .k{font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;color:#C6FF3D}
+.feat .n{font-size:22px;font-weight:700;letter-spacing:-.3px;margin-top:4px}
+.feat .n i{font-family:Georgia,serif;font-weight:400;color:#8aa4ff}
+.feat p{position:relative;margin:12px 0 14px;color:#c9ccd4;font-size:15px}
+.feat .cta{position:relative;display:inline-flex;align-items:center;gap:8px;background:#8aa4ff;color:#0d1020;font-weight:700;border-radius:999px;padding:11px 18px;font-size:15px}
+.feat .fine{position:relative;display:block;margin-top:10px;font-size:12px;color:#9aa0ab}
+.feat:hover .cta{filter:brightness(1.07)}
+/* link buttons */
+.lnk{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;transition:transform .15s ease,border-color .15s ease}
+.lnk:hover{transform:translateY(-2px);border-color:var(--ink)}
+.lnk .i{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--bg);border:1px solid var(--line)}
+.lnk .i svg{width:22px;height:22px}
+.lnk b{display:block;font-size:16px}
+.lnk span{display:block;color:var(--muted);font-size:13.5px}
+.lnk .go{font-size:18px;color:var(--muted)}
+.primary{background:var(--btn-bg);color:var(--btn-fg);border-color:var(--btn-bg)}
+.primary span,.primary .go{color:inherit;opacity:.8}
+.primary .i{background:transparent;border-color:currentColor}
+.sect{font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;color:var(--muted);margin:14px 4px 0}
+.contact{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;display:grid;gap:10px;font-size:15px}
+.contact .r{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center}
+.contact .lab{grid-column:1;font-size:12.5px;color:var(--muted)}
+.contact .v{grid-column:1;overflow-wrap:anywhere}
+.contact .r button{grid-column:2;grid-row:1 / span 2}
+.contact .v{font-weight:600;user-select:all}
+button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer}
+.socials{display:flex;justify-content:center;gap:10px;margin-top:6px}
+.socials a{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line)}
+.socials svg{width:22px;height:22px}
+footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:14px}
+@media (prefers-reduced-motion:reduce){.lnk{transition:none}}
+</style>
+</head>
+<body>
+<main class="wrap" id="main">
+  <header class="head">
+    <div class="logo" aria-hidden="true">S/</div>
+    <h1>SCALIFY <small>WPD</small></h1>
+    <p class="tag">Web apps, websites and video for small businesses. Based in Bole, Addis Ababa.</p>
+    <ul class="chips" aria-label="What we do"><li>Web apps</li><li>Websites</li><li>Video &amp; reels</li><li>Social content</li></ul>
+  </header>
+
+  <p class="sect">OUR PRODUCT</p>
+  <a class="feat" href="https://quoterevive-ebon.vercel.app/?ref=scalify-links">
+    <div class="row">
+      <svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#eeeae2"/><path d="M9 11.5a4.5 4.5 0 0 1 4.5-4.5h5A4.5 4.5 0 0 1 23 11.5v3a4.5 4.5 0 0 1-4.5 4.5H15l-3.5 3v-3.3A4.5 4.5 0 0 1 9 14.5z" fill="none" stroke="#0E0F12" stroke-width="2" stroke-linejoin="round"/><path d="M13 13.2l2.2 2.1 4-4.3" fill="none" stroke="#2348e0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><div class="k">NEW · BUILT BY SCALIFY</div><div class="n">Quote<i>Revive</i></div></div>
+    </div>
+    <p>Stop losing clients to unanswered quotes. See who to follow up with today, send a ready-made message, and let clients accept in one tap.</p>
+    <span class="cta">Start free <span aria-hidden="true">→</span></span>
+    <span class="fine">Free for 10 quotes · Founding Access $39 one-time, no subscription</span>
+  </a>
+
+  <p class="sect">WORK WITH US</p>
+  <a class="lnk primary" href="https://wa.me/251969803580?text=Hi%20Scalify%20WPD%2C%20I%27d%20like%20to%20talk%20about%20a%20project.">
+    <span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg></span>
+    <span><b>Start a project</b><span>Web app, website or video. Message us on WhatsApp</span></span><span class="go" aria-hidden="true">→</span>
+  </a>
+  <a class="lnk" href="../#services">
+    <span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3M7 9l3 3-3 3M13 15h4"/></svg></span>
+    <span><b>Websites &amp; web apps</b><span>Design, development, launch and hand-over</span></span><span class="go" aria-hidden="true">→</span>
+  </a>
+  <a class="lnk" href="../#services">
+    <span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="13" height="14" rx="2"/><path d="m16 10 5-3v10l-5-3"/></svg></span>
+    <span><b>Video &amp; social content</b><span>Promo reels, product videos, content for your accounts</span></span><span class="go" aria-hidden="true">→</span>
+  </a>
+  <a class="lnk" href="../">
+    <span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+    <span><b>Our website</b><span>How we work, process and contact</span></span><span class="go" aria-hidden="true">→</span>
+  </a>
+
+  <p class="sect">CONTACT</p>
+  <div class="contact">
+    <div class="r"><span class="lab">Email</span><span class="v" id="em">skelifywpd@gmail.com</span><button type="button" data-copy="em">Copy</button></div>
+    <div class="r"><span class="lab">Phone / WhatsApp</span><span class="v" id="ph">+251 969 803 580</span><button type="button" data-copy="ph">Copy</button></div>
+  </div>
+  <nav class="socials" aria-label="Social media">
+    <a href="https://www.tiktok.com/@scalifywpd" aria-label="TikTok @scalifywpd"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.4 2.2 1.9 3.8 4.1 4v3.1a7.2 7.2 0 0 1-4-1.3v6.3a5.9 5.9 0 1 1-5.9-5.9c.3 0 .6 0 .9.1v3.2a2.8 2.8 0 1 0 1.9 2.6V3h3z"/></svg></a>
+    <a href="https://www.instagram.com/scalifywpd" aria-label="Instagram @scalifywpd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+    <a href="mailto:skelifywpd@gmail.com" aria-label="Email skelifywpd@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+  </nav>
+  <footer>© <span id="yr">2026</span> SCALIFY WPD · Bole, Addis Ababa · <a href="../#legal">Privacy &amp; terms</a></footer>
+</main>
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', async () => {
+  const el = document.getElementById(b.dataset.copy);
+  try { await navigator.clipboard.writeText(el.textContent.trim()); b.textContent = 'Copied'; }
+  catch { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selected'; }
+  setTimeout(() => b.textContent = 'Copy', 1800);
+}));
+</script>
+</body>
+</html>
