@@ -24,7 +24,7 @@ a{color:inherit}
 :focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:12px}
 .wrap{max-width:520px;margin:0 auto;padding-block:36px 48px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));display:grid;gap:14px}
 .head{display:grid;justify-items:center;text-align:center;gap:10px;margin-bottom:8px}
-.logo{width:84px;height:84px;border-radius:24px;background:var(--btn-bg);color:var(--btn-fg);display:grid;place-items:center;font:800 34px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-2px;box-shadow:0 14px 40px -16px rgba(0,0,0,.5)}
+.logo{width:84px;height:84px;border-radius:20px;box-shadow:0 14px 40px -16px rgba(0,0,0,.5)}
 h1{margin:4px 0 0;font-size:26px;letter-spacing:-.5px;display:flex;align-items:center;gap:8px}
 h1 small{background:var(--accent);color:var(--on-accent);padding:1px 7px;border-radius:5px;font-size:13px;letter-spacing:2px}
 .tag{color:var(--muted);margin:0;max-width:36ch}
@@ -71,7 +71,7 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:14px}
 <body>
 <main class="wrap" id="main">
   <header class="head">
-    <div class="logo" aria-hidden="true">S/</div>
+    <div class="logo"><svg width="84" height="84" viewBox="0 0 48 48" aria-hidden="true" style="flex:none;display:block"><rect width="48" height="48" rx="11" fill="#C6FF3D"/><path d="M32 15H20a5 5 0 0 0 0 10h8a5 5 0 0 1 0 10H16" fill="none" stroke="#0E0F12" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <h1>SCALIFY <small>WPD</small></h1>
     <p class="tag">Web apps, websites and video for small businesses. Based in Bole, Addis Ababa.</p>
     <ul class="chips" aria-label="What we do"><li>Web apps</li><li>Websites</li><li>Video &amp; reels</li><li>Social content</li></ul>
