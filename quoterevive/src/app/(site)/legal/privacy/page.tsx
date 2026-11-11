@@ -5,7 +5,7 @@ export default function Privacy() {
   return (
     <LegalPage title="Privacy Policy">
       <h2>Who we are</h2>
-      <p>QuoteRevive is operated by Scalify Web Production &amp; Development, an individual based in Ethiopia (&quot;we&quot;). Contact: <a href="mailto:scalifywpd@gmail.com">scalifywpd@gmail.com</a>.</p>
+      <p>QuoteRevive is operated by Scalify Web Production &amp; Development, an individual based in Ethiopia (&quot;we&quot;). Contact: <a href="mailto:skelifywpd@gmail.com">skelifywpd@gmail.com</a>.</p>
 
       <h2>Two kinds of personal data</h2>
       <p><strong>Your account data</strong> — we are the controller. <strong>Your customers&apos; data</strong> that you enter into QuoteRevive (names, contact details, quote details) — you are the controller and we process it only on your instructions to provide the service (we act as your processor). You are responsible for having a lawful reason to store your customers&apos; details and for honouring their requests; use the &quot;customer asked not to be contacted&quot; option and delete records you no longer need.</p>
@@ -31,7 +31,7 @@ export default function Privacy() {
         <li><strong>Supabase</strong> — database, authentication and auth emails. Region: European Union (Frankfurt, Germany).</li>
         <li><strong>Vercel</strong> — hosting and request logs.</li>
         <li><strong>Whop</strong> — checkout and payments. Whop processes your purchase under its own terms and privacy policy.</li>
-        <li><strong>Google (Gmail)</strong> — sends account emails (sign-up confirmation, password reset, email change) from scalifywpd@gmail.com.</li>
+        <li><strong>Google (Gmail)</strong> — sends account emails (sign-up confirmation, password reset, email change) from skelifywpd@gmail.com.</li>
       </ul>
       <p>We may disclose data if required by law or to protect our rights and users&apos; safety.</p>
 
@@ -39,7 +39,7 @@ export default function Privacy() {
       <p>Our providers may process data in the United States and other countries. Where required, we rely on the safeguards our providers offer, such as the European Commission&apos;s Standard Contractual Clauses.</p>
 
       <h2>Your rights</h2>
-      <p>Depending on where you live (for example under the GDPR, UK GDPR, California CCPA/CPRA, or Ethiopia&apos;s Personal Data Protection Proclamation No. 1321/2024), you may have the right to access, correct, delete, export or restrict your data, object to processing, and withdraw consent. You can export your data (Settings → Your data) and delete your account (Settings → Delete account) yourself at any time. For anything else email <a href="mailto:scalifywpd@gmail.com">scalifywpd@gmail.com</a>; we respond within 30 days. We will not discriminate against you for exercising your rights.</p>
+      <p>Depending on where you live (for example under the GDPR, UK GDPR, California CCPA/CPRA, or Ethiopia&apos;s Personal Data Protection Proclamation No. 1321/2024), you may have the right to access, correct, delete, export or restrict your data, object to processing, and withdraw consent. You can export your data (Settings → Your data) and delete your account (Settings → Delete account) yourself at any time. For anything else email <a href="mailto:skelifywpd@gmail.com">skelifywpd@gmail.com</a>; we respond within 30 days. We will not discriminate against you for exercising your rights.</p>
       <p>If your customer contacts us about their data, we will refer them to you as the controller and help you respond.</p>
 
       <h2>Complaints</h2>

@@ -41,7 +41,7 @@ export function PaymentPending() {
           {pending ? "Checking…" : ready ? "Check again" : `Check again in ${left}s`}
         </button>
       </div>
-      <p className="relative mt-4 text-xs text-muted">Waited more than 10 minutes? Email scalifywpd@gmail.com and we&apos;ll activate you manually.</p>
+      <p className="relative mt-4 text-xs text-muted">Waited more than 10 minutes? Email skelifywpd@gmail.com and we&apos;ll activate you manually.</p>
     </section>
   );
 }

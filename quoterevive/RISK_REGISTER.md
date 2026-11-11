@@ -15,7 +15,7 @@ This is an engineering checklist, not legal advice. Have a qualified lawyer revi
 | L5 | 14-day no-questions refund window | Confirmed by owner 2026-11-09 | Honour it in Whop |
 | L6 | Whop's role (merchant of record? who collects sales tax/VAT?) affects your tax duties and policy wording | Open | Verify in Whop docs/contract |
 | L7 | Users store their customers' data → you are a processor; a DPA for business users may be expected (GDPR Art. 28) | Open | Needs lawyer; consider publishing a DPA |
-| L9 | Support/privacy contact is a free Gmail address (scalifywpd@gmail.com) | Resolved for now | Move to a domain email when you buy a domain |
+| L9 | Support/privacy contact is a free Gmail address (skelifywpd@gmail.com) | Resolved for now | Move to a domain email when you buy a domain |
 | L10 | Arabic/French/Spanish templates are machine-quality translations written by the developer | Open | **Native speaker review before marketing them** |
 | L11 | Customer quote link exposes one quote to anyone holding the link (bearer token, 192-bit random) | Mitigated: off by default, noindex, revocable, rate-limited, minimal fields | — |
 | L8 | Users contacting customers via WhatsApp/email must follow anti-spam laws and Meta's policies | Mitigated (no automation; terms put responsibility on user; opt-out flag) | — |

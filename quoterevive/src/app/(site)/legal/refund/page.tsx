@@ -9,7 +9,7 @@ export default function Refund() {
       <h2>14-day refund</h2>
       <p>If you&apos;re not happy, ask for a full refund within <strong>14 days</strong> of purchase — no reason needed. This also covers the EU/UK 14-day right of withdrawal for consumers.</p>
       <h2>How to ask</h2>
-      <p>Request it through your Whop purchase page (Request refund), or email <a href="mailto:scalifywpd@gmail.com">scalifywpd@gmail.com</a>. We aim to approve within 3 business days. Whop returns the money to your original payment method; how long it takes to appear depends on your bank or card provider. We do not charge a fee for refunds. If Whop keeps any processing fee on a refund, we cover it — you get the full amount you paid back.</p>
+      <p>Request it through your Whop purchase page (Request refund), or email <a href="mailto:skelifywpd@gmail.com">skelifywpd@gmail.com</a>. We aim to approve within 3 business days. Whop returns the money to your original payment method; how long it takes to appear depends on your bank or card provider. We do not charge a fee for refunds. If Whop keeps any processing fee on a refund, we cover it — you get the full amount you paid back.</p>
       <h2>After 14 days</h2>
       <p>Refunds after 14 days are at our discretion, except where the law gives you a right to one (for example if the service is faulty or not as described).</p>
       <h2>What happens to your account</h2>

@@ -29,7 +29,7 @@ export default function Terms() {
       <h2>11. Governing law</h2>
       <p>These terms are governed by the laws of the Federal Democratic Republic of Ethiopia, and disputes go to the competent courts of Ethiopia, without removing any mandatory consumer protections of your country of residence.</p>
       <h2>12. Contact</h2>
-      <p><a href="mailto:scalifywpd@gmail.com">scalifywpd@gmail.com</a> · Scalify Web Production &amp; Development, Ethiopia</p>
+      <p><a href="mailto:skelifywpd@gmail.com">skelifywpd@gmail.com</a> · Scalify Web Production &amp; Development, Ethiopia</p>
       <p className="text-sm">WhatsApp and Instagram are trademarks of Meta Platforms, Inc. Whop is a trademark of its owner. QuoteRevive is not affiliated with or endorsed by them.</p>
     </LegalPage>
   );
