@@ -1,0 +1,20 @@
+{
+  "voice_id": "nPczCjzI2devNBz1zQrb",
+  "voice_name": "Brian (ElevenLabs premade)",
+  "model_id": "eleven_multilingual_v2",
+  "lines": [
+    {"id": "01", "start": 0.25, "end": 2.2,  "text": "You sent the quote."},
+    {"id": "02", "start": 2.9,  "end": 4.5,  "text": "They never replied."},
+    {"id": "03", "start": 4.8,  "end": 7.3,  "text": "Buried in WhatsApp, email, and DMs."},
+    {"id": "04", "start": 7.5,  "end": 9.5,  "text": "So... did you ever follow up?"},
+    {"id": "05", "start": 9.75, "end": 10.75,"text": "You forgot."},
+    {"id": "06", "start": 10.85,"end": 11.85,"text": "It felt awkward."},
+    {"id": "07", "start": 11.95,"end": 13.05,"text": "You lost the client."},
+    {"id": "08", "start": 13.6, "end": 16.2, "text": "Meet QuoteRevive."},
+    {"id": "09", "start": 16.5, "end": 21.3, "text": "Add a quote in seconds, and your follow-up is scheduled for you."},
+    {"id": "10", "start": 21.9, "end": 26.8, "text": "Every morning, see exactly who to chase today."},
+    {"id": "11", "start": 27.3, "end": 33.0, "text": "Pick a tone, your message is ready. Send it from your own WhatsApp."},
+    {"id": "12", "start": 33.5, "end": 38.6, "text": "Your client taps accept... and the deal is back on."},
+    {"id": "13", "start": 39.1, "end": 43.6, "text": "Stop losing clients to silence. Start free with QuoteRevive. Link in bio."}
+  ]
+}
