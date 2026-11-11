@@ -63,53 +63,147 @@ add(boom, 13.15, 0.8)
 add(tone(note(84), 2.5, (1, 2, 3), d=1.2), 13.4, 0.12, pan=-0.2)   # sparkle on logo
 add(tone(note(88), 2.5, (1, 2, 3), d=1.2), 13.55, 0.10, pan=0.2)
 
-# ---- Act 2: uplifting groove (13.15 – 44) ----
-bpm = 120; beat = 60 / bpm
-prog = [(60, 64, 67), (55, 59, 62), (57, 60, 64), (53, 57, 60)]  # C G Am F
-start2 = 13.15
-for bar in range(16):
-    t0 = start2 + bar * 4 * beat
-    if t0 > 43: break
-    ch = prog[bar % 4]
-    for m in ch:  # warm pad
-        pad = tone(note(m), 4 * beat + 0.3, (1, 2, 3, 4), amps=[1, .35, .18, .08], a=0.25, d=9, sustain=0.6, rel=0.4)
-        add(pad, t0, 0.055, pan=(m % 3 - 1) * 0.3)
-    add(tone(note(ch[0] - 24), 4 * beat, (1, 2), a=0.01, d=1.5, sustain=0.3, rel=0.2), t0, 0.18)  # bass
-    if t0 >= 16.2:  # pluck arpeggio from step 1
-        seq = [ch[0], ch[1], ch[2], ch[1] + 12, ch[2], ch[1], ch[0] + 12, ch[2]]
-        for i, m in enumerate(seq):
-            add(tone(note(m + 12), 0.4, (1, 2, 3), amps=[1, .4, .15], d=0.12), t0 + i * beat / 2, 0.07, pan=(-0.4 if i % 2 else 0.4))
-groove_end = 42.4
-k = 16.3
-while k < groove_end:  # kick
-    n_k = int(0.3 * SR); tk = np.arange(n_k) / SR
-    kick = np.sin(2 * np.pi * (50 + 110 * np.exp(-tk * 30)) * tk) * np.exp(-tk * 9)
-    add(kick, k, 0.55); k += beat
-k = 21.6 + beat / 2
-while k < groove_end:  # hats
-    hat = np.diff(noise(0.05), prepend=0) * env(int(0.05 * SR), a=0.0005, d=0.012)
-    add(hat, k, 0.10, pan=0.25); k += beat
-k = 27.0 + beat
-while k < groove_end:  # claps on 2 & 4
-    clap = lowpass(noise(0.15), 3) * env(int(0.15 * SR), a=0.001, d=0.05)
-    add(clap, k, 0.22, pan=-0.15); k += 2 * beat
-for k in [16.3, 21.6, 27.0, 33.2, 38.8]:  # whooshes on scene changes
-    wn = int(0.6 * SR); wt = np.arange(wn) / SR
-    w = lowpass(noise(0.6), 6) * np.sin(np.pi * wt / 0.6) ** 2
-    add(w, k - 0.35, 0.28, pan=0.0)
-for k in np.arange(17.1, 19.1, 0.11):  # typing clicks (form)
-    add(lowpass(noise(0.02), 2) * env(int(0.02*SR), d=0.004), k, 0.12)
-add(tone(note(79), 0.4, (1, 2), d=0.12), 19.9, 0.2); add(tone(note(84), 0.5, (1, 2), d=0.15), 20.0, 0.18)   # saved pop
-for i in range(4): add(tone(note(72 + i * 2), 0.3, (1, 2), d=0.1), 22.0 + i * 0.35, 0.12)              # queue rows
-for k in np.arange(28.4, 31.2, 0.09):  # message typing
-    add(lowpass(noise(0.02), 2) * env(int(0.02*SR), d=0.004), k, 0.08)
-add(tone(note(76), 0.5, (1, 2), d=0.15), 31.5, 0.2); add(tone(note(83), 0.6, (1, 2), d=0.2), 32.0, 0.2)    # sent
-for i, m in enumerate([72, 76, 79, 84, 88]):  # win sparkle
-    add(tone(note(m), 1.2, (1, 2, 3), d=0.4), 35.25 + i * 0.06, 0.16, pan=(i - 2) * 0.2)
-add(lowpass(noise(0.4), 4) * env(int(0.4*SR), d=0.1), 35.25, 0.35)
-# final chord swell + fade
-for m in (48, 60, 64, 67, 72):
-    add(tone(note(m), 5.0, (1, 2, 3), amps=[1, .3, .1], a=0.4, d=20, sustain=0.7, rel=1.6), 39.0, 0.07)
+# ---- Act 2: engaging house groove (13.15 – 44) ----
+bpm = 120; beat = 60 / bpm; bar = 4 * beat
+T0 = 13.15            # reveal / impact
+G0 = 16.3             # groove starts (step 1)
+DROP = 33.2           # win section drop
+END = 42.4
+
+def saw(freq, dur, nh=14, cutoff=1.0):
+    n = int(dur * SR); t = np.arange(n) / SR
+    out = np.zeros(n)
+    for k in range(1, nh + 1):
+        if freq * k > 12000: break
+        out += np.sin(2 * np.pi * freq * k * t) / k * np.exp(-k / (2 + 10 * cutoff))
+    return out
+def adsr(n, a=.005, d=.1, s=.6, r=.05):
+    t = np.arange(n) / SR; T = n / SR
+    e = np.where(t < a, t / a, s + (1 - s) * np.exp(-(t - a) / d))
+    return e * np.clip((T - t) / r, 0, 1)
+def bell(freq, dur, g=1.0):
+    n = int(dur * SR); t = np.arange(n) / SR
+    s_ = (np.sin(2*np.pi*freq*t) + .5*np.sin(2*np.pi*freq*2.76*t)*np.exp(-t*6) + .25*np.sin(2*np.pi*freq*5.4*t)*np.exp(-t*10))
+    return s_ * np.exp(-t * 3.2) * np.clip(t / .002, 0, 1) * g
+def echo(x, delay=.18, fb=.38, taps=4):
+    out = x.copy(); d = int(delay * SR)
+    for k in range(1, taps + 1):
+        pad = np.zeros(d * k); out = out + np.concatenate([pad, x])[: len(x)] * fb ** k if len(x) > d * k else out
+    return out
+
+# sidechain envelope (ducks pad/bass on every kick from G0)
+duck = np.ones(N)
+k = G0
+while k < END:
+    i0 = int(k * SR); n_ = int(.42 * SR); tt = np.arange(n_) / SR
+    seg = 1 - .65 * np.exp(-tt * 9)
+    duck[i0:i0 + n_] = np.minimum(duck[i0:i0 + n_], seg[: max(0, min(n_, N - i0))])
+    k += beat
+music_L = np.zeros(N); music_R = np.zeros(N)
+def addm(sig, start, gain=1.0, pan=0.0):
+    i0 = int(start * SR); j0 = min(N, i0 + len(sig))
+    if i0 >= N: return
+    s_ = sig[: j0 - i0] * gain
+    music_L[i0:j0] += s_ * (1 - max(0, pan)); music_R[i0:j0] += s_ * (1 + min(0, pan))
+
+prog = [(57, 60, 64), (53, 57, 60), (48, 52, 55), (55, 59, 62)]   # Am F C G (emotive pop-house)
+# pads: soft swell from reveal, full from groove, brighter after drop
+nb = int((END + 1.6 - T0) / bar) + 1
+for b in range(nb):
+    t0 = T0 + b * bar
+    if t0 > END + 0.5: break
+    ch = prog[b % 4]
+    bright = .55 if t0 < G0 else (.75 if t0 < DROP else 1.0)
+    for m in ch + (ch[0] + 12,):
+        sig = saw(note(m), bar + .25, nh=10, cutoff=bright) * adsr(int((bar + .25) * SR), a=.06, d=1.5, s=.7, r=.25)
+        addm(sig, t0, .045 * (1.25 if t0 >= DROP else 1), pan=((m % 5) - 2) * .2)
+    if t0 >= G0 - 0.01:   # offbeat house bass (root, octave stabs)
+        for st in range(8):
+            mm = ch[0] - 24 + (12 if st % 4 == 3 else 0)
+            bs = saw(note(mm), .22, nh=8, cutoff=.5) * adsr(int(.22 * SR), a=.003, d=.08, s=.4, r=.04)
+            addm(bs, t0 + st * beat + beat / 2, .23)
+# lead hook (enters at step 2, doubled an octave up after the drop)
+hook = [(0, 76), (.5, 79), (1, 81), (1.75, 79), (2, 76), (2.5, 74), (3, 76),
+        (4, 72), (4.5, 74), (5, 76), (5.75, 79), (6, 81), (6.5, 79), (7, 76)]
+for b in range(0, 12, 2):
+    t0 = 21.6 + b * bar / 2 * 1.0
+    t0 = 21.6 + (b // 2) * 2 * bar
+    if t0 > END - 0.5: break
+    for off, m in hook:
+        ts = t0 + off * beat
+        if ts > END: break
+        dur = .45 if off % 1 == 0 else .3
+        ld = saw(note(m), dur, nh=12, cutoff=.85) * adsr(int(dur * SR), a=.004, d=.12, s=.5, r=.06)
+        ld = echo(np.concatenate([ld, np.zeros(int(.8 * SR))]), delay=beat * .75, fb=.3, taps=3)
+        addm(ld, ts, .055, pan=.15)
+        if ts >= DROP:
+            addm(echo(np.concatenate([bell(note(m + 12), .5, .8), np.zeros(int(.6*SR))]), beat*.75, .25, 2), ts, .05, pan=-.25)
+# apply sidechain to music bus
+music_L *= duck; music_R *= duck
+L[:] += music_L; R[:] += music_R
+
+# drums
+def kick():
+    n_ = int(.32 * SR); tk = np.arange(n_) / SR
+    return np.sin(2 * np.pi * (48 + 140 * np.exp(-tk * 32)) * tk) * np.exp(-tk * 8) + .3 * lowpass(noise(.32), 2) * np.exp(-tk * 120)
+K = kick(); k = G0
+while k < END:
+    add(K, k, .62); k += beat
+k = G0 + beat / 4
+while k < END:  # 16th hats with accent on offbeat
+    idx = int(round((k - G0) / (beat / 4))) % 4
+    if k >= 21.6 or idx == 2:
+        h = np.diff(noise(.04), prepend=0) * env(int(.04 * SR), a=.0004, d=.01 if idx != 2 else .03)
+        add(h, k, .09 if idx == 2 else .045, pan=.3 if idx % 2 else -.1)
+    k += beat / 4
+k = 21.6 + beat
+while k < END:  # claps on 2 & 4 (layered)
+    c = lowpass(noise(.18), 3) * env(int(.18 * SR), a=.001, d=.06)
+    add(c, k, .26, pan=-.1); add(c, k + .012, .12, pan=.25); k += 2 * beat
+# build into the drop: snare roll + riser + cut
+roll_t = 31.2
+for i_ in range(32):
+    tt = roll_t + i_ * (2.0 / 32)
+    sn = lowpass(noise(.08), 3) * env(int(.08 * SR), a=.001, d=.025)
+    add(sn, tt, .05 + .18 * (i_ / 32), pan=.0)
+rn = int(2.0 * SR); rt = np.arange(rn) / SR
+add(lowpass(noise(2.0), 3) * (rt / 2) ** 2 * .5 + np.sin(2*np.pi*(300 + 2200*(rt/2)**2)*rt) * (rt/2)**2 * .12, roll_t, .5)
+# drop impact
+add(tone(40, 1.5, (1, 2), d=.5) + lowpass(noise(1.5), 25) * env(int(1.5*SR), d=.2) * .6, DROP, .6)
+# whooshes on cuts
+for k in [16.3, 21.6, 27.0, 33.2, 38.8]:
+    wn = int(.55 * SR); wt = np.arange(wn) / SR
+    w = lowpass(noise(.55), 5) * np.sin(np.pi * wt / .55) ** 3
+    add(w, k - .32, .3, pan=-.4); add(w[::-1] * .6, k - .32, .3, pan=.4)
+
+# ---- success sounds ----
+def chime(notes, start, gap=.07, g=.22, pan=0):
+    for i_, m in enumerate(notes):
+        b_ = np.concatenate([bell(note(m), 1.4), np.zeros(int(.6 * SR))])
+        add(echo(b_, .11, .32, 3), start + i_ * gap, g, pan=pan + (i_ - len(notes) / 2) * .15)
+for k in np.arange(17.1, 19.1, 0.11):  # form typing (soft keys)
+    add(lowpass(noise(.018), 2) * env(int(.018 * SR), d=.004), k, .1)
+add(lowpass(noise(.05), 2) * env(int(.05*SR), d=.01), 19.55, .35)          # button press
+chime([79, 84, 88], 19.9, gap=.06, g=.2)                                 # "saved" — bright triad
+for i_ in range(4): add(bell(note(76 + [0, 3, 5, 7][i_]), .4, .9), 22.0 + i_ * .35, .1, pan=-.3 + i_ * .2)  # queue rows
+for k in np.arange(28.4, 31.2, 0.085):
+    add(lowpass(noise(.018), 2) * env(int(.018 * SR), d=.004), k, .07)
+wn = int(.5 * SR); wt = np.arange(wn) / SR
+add(np.sin(2*np.pi*(500 + 1600*(wt/.5)**1.5)*wt) * np.sin(np.pi*wt/.5)**2 * .5, 31.5, .2)   # "sent" swoosh up
+chime([84, 91], 32.0, gap=.09, g=.22)                                      # sent ding-ding
+add(lowpass(noise(.05), 2) * env(int(.05*SR), d=.01), 34.95, .4)          # accept tap
+chime([72, 76, 79, 84, 88, 91], 35.25, gap=.055, g=.22)                    # QUOTE WON — rising sparkle
+add(tone(note(36), 1.2, (1, 2), d=.45), 35.25, .45)                         # sub hit under the win
+sh = lowpass(noise(1.4), 1); sht = np.arange(len(sh)) / SR
+add(np.diff(sh, prepend=0) * np.exp(-sht * 3) * .5, 35.3, .25)            # shimmer
+for i_ in range(10):  # counter ticks as accepted value counts up
+    add(bell(note(96), .08, .6), 36.0 + i_ * .14, .05)
+# outro: final chord + reverse swell + logo hit
+for m in (45, 57, 60, 64, 69, 72):
+    sig = saw(note(m), 5.0, nh=9, cutoff=.7) * adsr(int(5.0 * SR), a=.3, d=3, s=.75, r=1.8)
+    add(sig, 39.0, .045, pan=((m % 5) - 2) * .2)
+add(tone(note(33), 3.0, (1, 2), d=1.2), 40.2, .35)
+chime([81, 88, 93], 40.2, gap=.08, g=.18)
 
 # master: fade in/out, soft clip, normalise
 fade = np.clip(t_all / 0.15, 0, 1) * np.clip((DUR - t_all) / 1.2, 0, 1)
