@@ -56,6 +56,17 @@ h2{font-size:clamp(30px,5vw,46px);letter-spacing:-.03em;line-height:1.1;margin:0
 .steps{counter-reset:s}
 .steps .card::before{counter-increment:s;content:"0" counter(s);display:inline-block;background:var(--accent);color:var(--on-accent);font-weight:700;padding:2px 10px;border-radius:6px;letter-spacing:2px}
 .alt-bg{background:var(--section);border-block:1px solid var(--line)}
+#services .grid{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.product{background:var(--card);border:1px solid var(--card-line);border-radius:18px;padding:28px;max-width:760px}
+.product-head{display:flex;align-items:center;gap:16px}
+.product-logo{width:56px;height:56px;flex:none}
+.product-tag{display:inline-block;background:var(--accent);color:var(--on-accent);font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:2px 8px;border-radius:5px}
+.product h3{margin:6px 0 0;font-size:28px;letter-spacing:-.5px}
+.product-lead{color:var(--muted);margin:16px 0 0;max-width:60ch}
+.product-list{margin:18px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px 20px}
+.product-list li{padding-left:26px;position:relative}
+.product-list li::before{content:"";position:absolute;left:0;top:.45em;width:14px;height:8px;border-left:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate(-45deg)}
+.product-price{margin:20px 0 18px}
 .contact a.mail{font-size:clamp(22px,4vw,34px);font-weight:700;letter-spacing:-.02em}
 details{border:1px solid var(--card-line);border-radius:12px;background:var(--card);margin:0 0 12px}
 summary{cursor:pointer;padding:16px 18px;font-weight:700;font-size:18px;min-height:48px}
@@ -199,6 +210,7 @@ details[open]>div{animation:fade .4s both}
 SCALIFY <small>WPD</small></a>
 <nav aria-label="Main"><ul>
 <li><a href="#services">Services</a></li>
+<li><a href="#products">Products</a></li>
 <li><a href="#process">Process</a></li>
 <li><a href="#about">About</a></li>
 <li><a href="#contact">Contact</a></li>
@@ -211,11 +223,11 @@ SCALIFY <small>WPD</small></a>
 <div class="hero" id="top"><div class="glow" aria-hidden="true"></div><svg class="hero-mark" aria-hidden="true" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="10" stroke-width=".6"/><path pathLength="1" d="M32 15H20a5 5 0 0 0 0 10h8a5 5 0 0 1 0 10H16" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="wrap">
 <span class="eyebrow">Web Production &amp; Design</span>
 <h1><span class="w" style="--i:0">We</span> <span class="w" style="--i:1">design</span> <span class="w" style="--i:2">and</span> <span class="w" style="--i:3">build</span> <span class="w" style="--i:4">the</span> <span class="w" style="--i:5">web.</span></h1>
-<p class="lead">SCALIFY WPD is a small team that designs and builds websites, and produces social media and media content to go with them.</p>
+<p class="lead">SCALIFY WPD is a small team that designs and builds websites and web apps, and produces social media and media content to go with them.</p>
 <a class="btn" href="#contact">Start a project</a> <a class="btn alt" href="#services">See what we do</a>
 </div></div>
 
-<div class="marquee" aria-hidden="true"><div class="track"><div class="grp" style="display:contents"><span>Web design</span><span>•</span><span>Web development</span><span>•</span><span>Social media</span><span>•</span><span>Media production</span><span>•</span></div><div class="dup"><span>Web design</span><span>•</span><span>Web development</span><span>•</span><span>Social media</span><span>•</span><span>Media production</span><span>•</span></div></div></div>
+<div class="marquee" aria-hidden="true"><div class="track"><div class="grp" style="display:contents"><span>Web design</span><span>•</span><span>Web development</span><span>•</span><span>Web apps</span><span>•</span><span>Social media</span><span>•</span><span>Media production</span><span>•</span></div><div class="dup"><span>Web design</span><span>•</span><span>Web development</span><span>•</span><span>Web apps</span><span>•</span><span>Social media</span><span>•</span><span>Media production</span><span>•</span></div></div></div>
 
 <section id="services"><div class="wrap">
 <h2>Services</h2>
@@ -224,8 +236,32 @@ SCALIFY <small>WPD</small></a>
 <li class="card"><div class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></div><h3>Web design</h3><p>Layouts, visuals and branding for sites that are clear, fast to read and easy to use.</p></li>
 <li class="card"><div class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg></div><h3>Web development</h3><p>Responsive, accessible websites built with clean, maintainable code.</p></li>
 <li class="card"><div class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="6" cy="12" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8.7 10.6l6.6-3.2M8.7 13.4l6.6 3.2"/></svg></div><h3>Social media</h3><p>Content and visuals for your accounts, matched to your brand.</p></li>
-<li class="card"><div class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg></div><h3>Media production</h3><p>Graphics and video content for your site, ads and channels.</p></li>
+<li class="card"><div class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg></div><h3>Media production</h3><p>Graphics and video content for your site, ads and channels, including motion promos and reels for TikTok and Instagram.</p></li>
+<li class="card"><div class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></div><h3>Web apps</h3><p>Custom tools for your business, with logins, payments and email built in, like our own product QuoteRevive.</p></li>
+<li class="card"><div class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><h3>Security-first builds</h3><p>We have a cybersecurity specialist on our team, so security is part of how we build from day one.</p></li>
 </ul>
+</div></section>
+
+<section id="products"><div class="wrap">
+<h2>Products</h2>
+<p class="sub">Tools we design, build and run ourselves.</p>
+<article class="product">
+<div class="product-head">
+<svg class="product-logo" aria-hidden="true" viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="#0E0F12"/><path d="M9 11.5a4.5 4.5 0 0 1 4.5-4.5h5A4.5 4.5 0 0 1 23 11.5v3a4.5 4.5 0 0 1-4.5 4.5H15l-3.5 3v-3.3A4.5 4.5 0 0 1 9 14.5z" fill="none" stroke="#F4F3EE" stroke-width="2" stroke-linejoin="round"/><path d="M13 13.2l2.2 2.1 4-4.3" fill="none" stroke="#C6FF3D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div><span class="product-tag">Live now</span><h3>QuoteRevive</h3></div>
+</div>
+<p class="product-lead">Stop losing clients to unanswered quotes. QuoteRevive shows which quotes need a follow-up today, prepares a personal message for WhatsApp or email, and lets your client accept with one tap.</p>
+<ul class="product-list">
+<li>Daily follow-up queue with an explained priority score</li>
+<li>Message coach and replies to common objections</li>
+<li>Customer quote links: accept, ask a question or "not now"</li>
+<li>Messages in English, Arabic, French and Spanish</li>
+<li>Secure accounts, data kept separate per business</li>
+<li>Payments through Whop, with a 14-day refund</li>
+</ul>
+<p class="product-price"><strong>Free to start</strong> (10 quotes) · Founding Access <strong>$39 one-time</strong>, no subscription</p>
+<a class="btn" href="https://quoterevive-ebon.vercel.app" rel="noopener">Try QuoteRevive free</a> <a class="btn alt" href="https://quoterevive-ebon.vercel.app/demo" rel="noopener">See the demo</a>
+</article>
 </div></section>
 
 <section id="process" class="alt-bg"><div class="wrap">
@@ -283,7 +319,7 @@ SCALIFY <small>WPD</small></a>
 <button class="cc-pause" type="button" aria-pressed="false">Pause animation</button>
 </div>
 <h2>The people behind it</h2>
-<p class="sub">SCALIFY WPD (Web Production &amp; Design) is a team of web designers, developers and media creators. We’re a team of 3 founders based in Bole, Addis Ababa, Ethiopia.</p>
+<p class="sub">SCALIFY WPD (Web Production &amp; Design) is a team of web designers, developers and media creators. We’re a team of 3 founders based in Bole, Addis Ababa, Ethiopia. Our team includes a cybersecurity specialist, so security is part of how we build from day one.</p>
 </div></section>
 
 <section id="contact" class="alt-bg contact"><div class="wrap">
