@@ -1,0 +1,91 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+*{margin:0;box-sizing:border-box}
+body{width:1080px;height:1350px;overflow:hidden;background:#0E0F12;color:#F4F3EE;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;position:relative;
+ background-image:linear-gradient(rgba(244,243,238,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(244,243,238,.055) 1px,transparent 1px);background-size:54px 54px}
+.glow{position:absolute;border-radius:50%;filter:blur(100px)}
+.s{position:absolute;inset:0;padding:84px 80px;display:none;flex-direction:column}
+.top{display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:14px;font-weight:800;font-size:30px;letter-spacing:-.5px}
+.brand i{width:54px;height:54px;border-radius:15px;background:#C6FF3D;color:#0E0F12;display:grid;place-items:center;font:800 24px ui-monospace,Menlo,monospace;letter-spacing:-1px;font-style:normal}
+.brand small{background:#C6FF3D;color:#0E0F12;padding:2px 9px;border-radius:6px;font-size:16px;letter-spacing:3px}
+.pg{font:600 22px ui-monospace,Menlo,monospace;color:#A8ADB7}
+.k{font:700 22px ui-monospace,Menlo,monospace;letter-spacing:.12em;color:#C6FF3D;margin-top:70px}
+h1{font-size:82px;line-height:1.02;letter-spacing:-2.5px;font-weight:800;margin-top:18px}
+h1 em{font-style:normal;color:#C6FF3D}
+.lead{font-size:30px;color:#A8ADB7;margin-top:22px;line-height:1.4;max-width:860px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px}
+.c{background:#171920;border:1px solid #30333d;border-radius:28px;padding:30px}
+.c .t{font-size:32px;font-weight:800;letter-spacing:-.5px}
+.c .d{font-size:23px;color:#A8ADB7;margin-top:8px;line-height:1.4}
+.c .ex{display:inline-block;margin-top:16px;font:600 19px ui-monospace,Menlo,monospace;color:#C6FF3D;border:1px solid rgba(198,255,61,.35);border-radius:999px;padding:7px 14px}
+.ico{width:58px;height:58px;border-radius:16px;background:#0E0F12;border:1px solid #30333d;display:grid;place-items:center;margin-bottom:18px}
+.ico svg{width:30px;height:30px;stroke:#C6FF3D}
+.foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;font-size:24px;color:#A8ADB7}
+.foot b{color:#F4F3EE}
+.list{margin-top:40px;display:grid;gap:16px}
+.row{display:flex;gap:20px;align-items:flex-start;background:#171920;border:1px solid #30333d;border-radius:22px;padding:var(--rowpad,22px) 26px}
+.row .ck{flex:none;width:40px;height:40px;border-radius:12px;background:rgba(198,255,61,.14);color:#C6FF3D;display:grid;place-items:center;font-size:24px;font-weight:800}
+.row b{display:block;font-size:28px;letter-spacing:-.3px}
+.row span{display:block;font-size:22px;color:#A8ADB7;margin-top:4px}
+.person{display:flex;gap:30px;align-items:center;background:linear-gradient(135deg,#1a1d16,#171920);border:1px solid rgba(198,255,61,.4);border-radius:30px;padding:34px;margin-top:44px}
+.av{flex:none;width:140px;height:140px;border-radius:36px;background:#C6FF3D;color:#0E0F12;display:grid;place-items:center;font:800 64px system-ui}
+.person .n{font-size:46px;font-weight:800;letter-spacing:-1px}
+.person .r{font-size:28px;color:#C6FF3D;font-weight:700;margin-top:4px}
+.person .d{font-size:24px;color:#A8ADB7;margin-top:10px;line-height:1.4}
+.team{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.team div{background:#171920;border:1px solid #30333d;border-radius:22px;padding:22px;font-size:22px;color:#A8ADB7}
+.team b{display:block;color:#F4F3EE;font-size:26px;margin-bottom:6px}
+.swipe{font:700 22px ui-monospace,Menlo,monospace;color:#0E0F12;background:#C6FF3D;border-radius:999px;padding:14px 24px}
+</style></head><body>
+<div class="glow" style="width:700px;height:700px;right:-250px;top:-250px;background:rgba(198,255,61,.18)"></div>
+<div class="glow" style="width:650px;height:650px;left:-260px;bottom:-280px;background:rgba(138,164,255,.2)"></div>
+
+<!-- 1: what we build -->
+<section class="s" id="s1">
+ <div class="top"><div class="brand"><i>S/</i>SCALIFY <small>WPD</small></div><div class="pg">1 / 3</div></div>
+ <div class="k">WHAT WE BUILD</div>
+ <h1>Web apps, websites <em>&amp; video</em> for small businesses.</h1>
+ <div class="grid">
+  <div class="c"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></div><div class="t">Web apps</div><div class="d">Custom tools with logins, payments and email built in.</div><span class="ex">e.g. QuoteRevive</span></div>
+  <div class="c"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div><div class="t">Websites</div><div class="d">Fast, mobile-friendly sites that work in light and dark mode.</div><span class="ex">e.g. our own site</span></div>
+  <div class="c"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="14" rx="2"/><path d="m16 10 5-3v10l-5-3"/></svg></div><div class="t">Video &amp; reels</div><div class="d">Motion promos for TikTok and Reels, with original sound.</div><span class="ex">e.g. QuoteRevive reel</span></div>
+  <div class="c"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg></div><div class="t">Social content</div><div class="d">Posts, carousels and banners that match your brand.</div><span class="ex">e.g. this post</span></div>
+ </div>
+ <div class="foot"><span>3 founders · <b>Bole, Addis Ababa</b></span><span class="swipe">SWIPE →</span></div>
+</section>
+
+<!-- 2: case study -->
+<section class="s" id="s2" style="--rowpad:18px">
+ <div class="top"><div class="brand"><i>S/</i>SCALIFY <small>WPD</small></div><div class="pg">2 / 3</div></div>
+ <div class="k" style="margin-top:56px">BUILT BY US · LIVE NOW</div>
+ <h1>QuoteRevive: idea to <em>launched product.</em></h1>
+ <p class="lead" style="margin-top:16px">Our own web app that helps businesses follow up on unanswered quotes. Designed, built, launched and promoted by our team.</p>
+ <div class="list">
+  <div class="row"><span class="ck">✓</span><div><b>Accounts &amp; secure logins</b><span>Email sign-up with branded confirmation emails</span></div></div>
+  <div class="row"><span class="ck">✓</span><div><b>Real payments</b><span>Checkout through Whop. Access unlocks and refunds lock it automatically</span></div></div>
+  <div class="row"><span class="ck">✓</span><div><b>Smart features</b><span>Daily queue, message coach, customer quote links, 4 message languages</span></div></div>
+  <div class="row"><span class="ck">✓</span><div><b>Works everywhere</b><span>Mobile-first, light &amp; dark mode, accessibility-tested</span></div></div>
+  <div class="row"><span class="ck">✓</span><div><b>Launch kit</b><span>Promo reel, product images, legal pages and guided tour</span></div></div>
+ </div>
+ <div class="foot"><span>Try it: <b>link in bio</b></span><span class="swipe">SWIPE →</span></div>
+</section>
+
+<!-- 3: security + team -->
+<section class="s" id="s3">
+ <div class="top"><div class="brand"><i>S/</i>SCALIFY <small>WPD</small></div><div class="pg">3 / 3</div></div>
+ <div class="k">SECURITY, BUILT IN</div>
+ <h1>Your data is <em>taken seriously.</em></h1>
+ <div class="person">
+  <div class="av">S</div>
+  <div><div class="n">Samuel</div><div class="r">Scalify WPD team · Cybersecurity specialist</div><div class="d">Works with companies in Australia. Brings that security mindset to everything we build.</div></div>
+ </div>
+ <div class="list" style="margin-top:22px">
+  <div class="row"><span class="ck">✓</span><div><b>Each customer's data kept separate</b><span>Database-level access rules, tested with real accounts</span></div></div>
+  <div class="row"><span class="ck">✓</span><div><b>Verified payments only</b><span>Signed webhooks; no "trust the browser" shortcuts</span></div></div>
+  <div class="row"><span class="ck">✓</span><div><b>No trackers, no ads</b><span>Strict security headers and minimal data collection</span></div></div>
+ </div>
+ <div class="foot"><span>Start a project: <b>link in bio</b><br><span style="font-size:20px">skelifywpd@gmail.com · WhatsApp +251 969 803 580</span></span></div>
+</section>
+<script>const n=new URLSearchParams(location.search).get("s")||"1";document.getElementById("s"+n).style.display="flex";</script>
+</body></html>
