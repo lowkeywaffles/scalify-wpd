@@ -4,6 +4,16 @@ import "server-only";
 export const FOUNDING_PRICE_USD = 39;
 
 /**
+ * Checkout price. WHOP_TEST_PRICE_USD (server-only) temporarily overrides it for an end-to-end payment
+ * test (e.g. 1). Remove the variable after testing. Values outside 1..39 are ignored.
+ */
+export function checkoutPriceUsd(): number {
+  const raw = process.env.WHOP_TEST_PRICE_USD;
+  const n = raw ? Number(raw) : NaN;
+  return Number.isFinite(n) && n >= 1 && n <= FOUNDING_PRICE_USD ? n : FOUNDING_PRICE_USD;
+}
+
+/**
  * Whop REST API (v1). Endpoints/fields checked against https://api.whop.com/api/v1/openapi.json (2026-11-10).
  * Key scopes needed: checkout_configuration:create, member:basic:read, payment:basic:read.
  */
@@ -60,7 +70,7 @@ export async function createCheckout(businessId: string, redirectUrl: string) {
       // Use the plan ID if configured; otherwise let Whop find (or create) the matching $39 one-time option on the product.
       ...(c.plan
         ? { variant_id: c.plan }
-        : { variant: { product_id: c.product, billing_type: "one_time", initial_price: FOUNDING_PRICE_USD, currency: "usd", unlimited_stock: true } }),
+        : { variant: { product_id: c.product, billing_type: "one_time", initial_price: checkoutPriceUsd(), currency: "usd", unlimited_stock: true, visibility: "hidden" } }),
       redirect_url: redirectUrl,
       metadata: { qr_business_id: businessId },
     }),
