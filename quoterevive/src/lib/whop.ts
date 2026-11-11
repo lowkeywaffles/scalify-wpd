@@ -20,7 +20,7 @@ export function checkoutPriceUsd(): number {
 export interface WhopMembership { id: string; status: string; product_id: string | null; metadata?: Record<string, unknown> | null }
 export interface WhopPayment {
   id: string; status: string; product_id: string | null; membership_id: string | null;
-  metadata?: Record<string, unknown> | null; refunded_at: string | null;
+  metadata?: Record<string, unknown> | null; refunded_at: string | null; customer_email?: string | null;
 }
 type Result<T> = { ok: true; value: T } | { ok: false; status: number; error: string };
 
@@ -76,6 +76,25 @@ export async function createCheckout(businessId: string, redirectUrl: string) {
     }),
   });
 }
+
+/** Manual linking: accepts a receipt number (pay_…) or membership ID (mem_…) and resolves it to a paid membership. */
+export async function resolvePurchase(id: string): Promise<{ ok: true; membershipId: string } | { ok: false; error: string }> {
+  if (id.startsWith("pay_")) {
+    const c = config();
+    if (!c.key || !c.product) return { ok: false, error: "Purchases can't be verified yet. Email skelifywpd@gmail.com and we'll activate you manually." };
+    const r = await getPayment(id);
+    if (!r.ok) return { ok: false, error: [400, 404, 422].includes(r.status) ? "We couldn't find that receipt number. Check it starts with pay_ and was copied in full." : "Couldn't verify with Whop right now. Please try again in a few minutes." };
+    const p = r.value;
+    if (p.product_id !== c.product) return { ok: false, error: "That receipt is for a different product." };
+    if (p.status !== "paid" || p.refunded_at || !p.membership_id) return { ok: false, error: "That payment isn't completed (or was refunded), so it can't unlock access." };
+    return { ok: true, membershipId: p.membership_id };
+  }
+  const m = await fetchWhopMembership(id);
+  if (!m.ok) return m;
+  if (!GRANTING.has(m.membership.status)) return { ok: false, error: `This membership is ${m.membership.status} and does not grant access.` };
+  return { ok: true, membershipId: m.membership.id };
+}
+const GRANTING = new Set(["active", "trialing", "completed"]);
 
 /** Back-compat helper used by the manual "link membership ID" fallback. */
 export async function fetchWhopMembership(id: string): Promise<{ ok: true; membership: WhopMembership } | { ok: false; error: string }> {

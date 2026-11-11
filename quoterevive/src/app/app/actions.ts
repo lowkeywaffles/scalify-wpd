@@ -9,8 +9,7 @@ import { importRowSchema } from "@/lib/csv";
 import { recommendFollowUp } from "@/lib/engine";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import { Activity, Quote } from "@/lib/types";
-import { GRANTING_STATUSES } from "@/lib/webhook";
-import { createCheckout, fetchWhopMembership, whopConfigured } from "@/lib/whop";
+import { createCheckout, resolvePurchase, whopConfigured } from "@/lib/whop";
 import { publicEnv } from "@/lib/env";
 import { rateLimit } from "@/lib/rate-limit";
 import { randomBytes } from "node:crypto";
@@ -221,16 +220,16 @@ export async function markRemindersRead() {
 /** Link a Whop purchase: verified server-side against the Whop API, never trusted from the client. */
 export async function linkWhopMembership(_: ActionState, fd: FormData): Promise<ActionState> {
   const id = String(fd.get("membership_id") ?? "").trim();
-  if (!/^mem_[A-Za-z0-9]+$/.test(id)) return { fieldErrors: { membership_id: ["Membership IDs start with mem_"] } };
+  if (!/^(mem|pay)_[A-Za-z0-9]+$/.test(id)) return { fieldErrors: { membership_id: ["Paste the receipt number (starts with pay_) or membership ID (starts with mem_)"] } };
   const { user, business } = await requireBusiness();
   if (!rateLimit(`whop:${user.id}`, 5, 15 * 60_000)) return { error: "Too many attempts. Try again in 15 minutes." };
-  const m = await fetchWhopMembership(id);
+  const m = await resolvePurchase(id);
   if (!m.ok) return { error: m.error };
-  if (!GRANTING_STATUSES.has(m.membership.status)) return { error: `This membership is ${m.membership.status} and does not grant access.` };
+  const memId = m.membershipId;
   const admin = supabaseAdmin();
-  const { data: existing } = await admin.from("entitlements").select("business_id").eq("whop_membership_id", id).maybeSingle();
+  const { data: existing } = await admin.from("entitlements").select("business_id").eq("whop_membership_id", memId).maybeSingle();
   if (existing && existing.business_id !== business.id) return { error: "This membership is already linked to another QuoteRevive account. Email skelifywpd@gmail.com and we'll sort it out." };
-  const { error } = await admin.from("entitlements").upsert({ business_id: business.id, source: "whop", whop_membership_id: id, status: "active", updated_at: new Date().toISOString() });
+  const { error } = await admin.from("entitlements").upsert({ business_id: business.id, source: "whop", whop_membership_id: memId, status: "active", updated_at: new Date().toISOString() });
   if (error) return { error: "Could not activate access. Email skelifywpd@gmail.com and we'll sort it out." };
   revalidatePath("/app", "layout");
   return { ok: true, message: "Founding Access is active. Thank you!" };

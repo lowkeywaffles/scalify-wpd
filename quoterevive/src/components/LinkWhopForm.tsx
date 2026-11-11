@@ -8,7 +8,7 @@ export function LinkWhopForm() {
   const e = s.fieldErrors ?? {};
   return (
     <form action={action} className="space-y-3" noValidate>
-      <Field id="membership_id" label="Whop membership ID" error={e.membership_id}><input {...aria("membership_id", e.membership_id)} className="input" placeholder="mem_…" autoComplete="off" required /></Field>
+      <Field id="membership_id" label="Receipt number or membership ID" hint="Starts with pay_ (on your Whop receipt) or mem_" error={e.membership_id}><input {...aria("membership_id", e.membership_id, true)} className="input" placeholder="pay_… or mem_…" autoComplete="off" spellCheck={false} required /></Field>
       <button className="btn btn-ghost" disabled={pending}>{pending ? "Verifying…" : "Verify and activate"}</button>
       <div aria-live="polite">{s.error ? <Notice kind="error">{s.error}</Notice> : s.message ? <Notice kind="ok">{s.message}</Notice> : null}</div>
     </form>

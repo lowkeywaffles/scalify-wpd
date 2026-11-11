@@ -8,6 +8,7 @@ function deps(over: Partial<Deps> = {}) {
     productId: PROD,
     getPayment: vi.fn(async () => ({ ok: true as const, value: { status: "paid", product_id: PROD, membership_id: "mem_1", metadata: { qr_business_id: BIZ }, refunded_at: null } })),
     getMembership: vi.fn(async () => ({ ok: true as const, value: { status: "completed", product_id: PROD, metadata: { qr_business_id: BIZ } } })),
+    businessIdForEmail: vi.fn(async (): Promise<string | null> => null),
     link: vi.fn(async () => {}),
     setStatus: vi.fn(async () => {}),
     ...over,
@@ -56,6 +57,22 @@ describe("processWhopEvent", () => {
     await processWhopEvent({ type: "payment.succeeded", data: { id: "pay_1", status: "paid", metadata: { qr_business_id: "attacker" } } }, d);
     expect(d.getPayment).toHaveBeenCalledWith("pay_1");
     expect(d.link).toHaveBeenCalledWith(BIZ, "mem_1");
+  });
+  it("matches a store purchase (no tag) by the buyer's email", async () => {
+    const d = deps({
+      getPayment: vi.fn(async () => ({ ok: true as const, value: { status: "paid", product_id: PROD, membership_id: "mem_2", metadata: null, refunded_at: null, customer_email: "Buyer@Example.com" } })),
+      businessIdForEmail: vi.fn(async () => BIZ),
+    });
+    expect(await processWhopEvent({ type: "payment.succeeded", data: { id: "pay_2" } }, d)).toBe("activated");
+    expect(d.businessIdForEmail).toHaveBeenCalledWith("Buyer@Example.com");
+    expect(d.link).toHaveBeenCalledWith(BIZ, "mem_2");
+  });
+  it("tag wins over email; no match leaves it for manual linking", async () => {
+    const tagged = deps({ businessIdForEmail: vi.fn(async () => "other") });
+    await processWhopEvent({ type: "payment.succeeded", data: { id: "pay_1" } }, tagged);
+    expect(tagged.businessIdForEmail).not.toHaveBeenCalled();
+    const none = deps({ getPayment: vi.fn(async () => ({ ok: true as const, value: { status: "paid", product_id: PROD, membership_id: "mem_3", metadata: null, refunded_at: null, customer_email: "x@y.z" } })) });
+    expect(await processWhopEvent({ type: "payment.succeeded", data: { id: "pay_3" } }, none)).toBe("ignored");
   });
   it("ignores unknown events", async () => {
     expect(await processWhopEvent({ type: "member.created", data: {} }, deps())).toBe("ignored");

@@ -45,7 +45,11 @@ export default async function Billing({ searchParams }: { searchParams: Promise<
           ) : <p className="text-sm">Checkout isn&apos;t open yet. Please check back soon.</p>}
           <details className="border-t border-line pt-4">
             <summary className="cursor-pointer text-sm font-semibold">Bought on Whop directly? Link your purchase</summary>
-            <p className="mt-2 text-sm text-muted">Paste your Whop membership ID (starts with <code>mem_</code>). We check it with Whop before unlocking anything.</p>
+            <div className="mt-2 space-y-2 text-sm text-muted">
+              <p><strong className="text-ink">Used the same email on Whop?</strong> Access unlocks automatically within a minute or two — just refresh this page.</p>
+              <p><strong className="text-ink">Different email?</strong> Paste your receipt number below. Find it in Whop&apos;s receipt email, or on whop.com → your profile → <em>Orders</em> → QuoteRevive. It starts with <code>pay_</code> (shown as &quot;Invoice #&quot;). A membership ID starting with <code>mem_</code> works too.</p>
+              <p>We check it with Whop before unlocking anything. Each purchase can unlock one account.</p>
+            </div>
             <div className="mt-3"><LinkWhopForm /></div>
           </details>
         </div>

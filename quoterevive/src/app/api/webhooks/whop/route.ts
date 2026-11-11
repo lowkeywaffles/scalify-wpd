@@ -27,6 +27,11 @@ export async function POST(req: Request) {
     productId: whopProductId(),
     getPayment,
     getMembership,
+    async businessIdForEmail(email) {
+      const { data, error } = await admin.rpc("business_id_for_email", { p_email: email });
+      if (error) { console.error(`[whop-webhook] email match failed: ${error.code}`); return null; }
+      return typeof data === "string" ? data : null;
+    },
     async link(businessId, membershipId) {
       const { data: owner } = await admin.from("entitlements").select("business_id").eq("whop_membership_id", membershipId).maybeSingle();
       if (owner && owner.business_id !== businessId) return; // never move a purchase between accounts automatically

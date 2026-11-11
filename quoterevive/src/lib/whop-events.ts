@@ -6,7 +6,9 @@ import { GRANTING_STATUSES } from "./webhook";
 
 export interface Deps {
   productId: string;
-  getPayment(id: string): Promise<{ ok: true; value: { status: string; product_id: string | null; membership_id: string | null; metadata?: Record<string, unknown> | null; refunded_at: string | null } } | { ok: false; status: number }>;
+  getPayment(id: string): Promise<{ ok: true; value: { status: string; product_id: string | null; membership_id: string | null; metadata?: Record<string, unknown> | null; refunded_at: string | null; customer_email?: string | null } } | { ok: false; status: number }>;
+  /** Finds the workspace whose confirmed login email matches the Whop buyer's email (store purchases). */
+  businessIdForEmail(email: string): Promise<string | null>;
   getMembership(id: string): Promise<{ ok: true; value: { status: string; product_id: string | null; metadata?: Record<string, unknown> | null } } | { ok: false; status: number }>;
   /** Link membership to business (no-op if already linked to another business). */
   link(businessId: string, membershipId: string): Promise<void>;
@@ -32,8 +34,10 @@ export async function processWhopEvent(event: { type?: string; data?: Record<str
     if (!p.ok) return "retry";
     const pay = p.value;
     if (pay.product_id !== deps.productId || pay.status !== "paid" || pay.refunded_at || !pay.membership_id) return "ignored";
-    const biz = businessIdFrom(pay.metadata);
-    if (!biz) return "ignored"; // bought without our tagged checkout: buyer links manually
+    let biz = businessIdFrom(pay.metadata);
+    // Bought from the Whop store page (no tag): match the buyer's email to a QuoteRevive account.
+    if (!biz && pay.customer_email) biz = await deps.businessIdForEmail(pay.customer_email);
+    if (!biz) return "ignored"; // different email: buyer links manually with pay_/mem_
     await deps.link(biz, pay.membership_id);
     await deps.setStatus(pay.membership_id, "active");
     return "activated";
