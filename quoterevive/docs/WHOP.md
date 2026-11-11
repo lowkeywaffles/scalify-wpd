@@ -2,6 +2,14 @@
 
 Checked against Whop's OpenAPI spec (https://api.whop.com/api/v1/openapi.json) on 2026-11-10.
 
+## Status (2026-11-11)
+LIVE on whop.com (business `biz_sCSqNQY6t26aFx`, product `prod_AOn93RN2TsMSs`). Verified with real money:
+tagged checkout -> activation, store purchase -> link by `pay_` receipt, refund -> automatic revoke.
+
+`WHOP_TEST_PRICE_USD` (server-only, 1–39) temporarily overrides the checkout price for a live test. It is set to 39 (normal);
+delete it in Vercel when convenient. Store-page purchases auto-activate when the Whop email matches a confirmed QuoteRevive login
+(migration 0003); otherwise buyers paste their `pay_…` receipt number on the Access page.
+
 ## How a purchase works
 1. A signed-in user opens **Access** → **Buy Founding Access**.
 2. The server creates a Whop *checkout configuration* (`POST /api/v1/checkout_configurations`) for the $39 one-time plan, with
