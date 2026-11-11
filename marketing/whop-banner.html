@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+*{margin:0;box-sizing:border-box}
+body{width:var(--w);height:var(--h);overflow:hidden;background:#0E0F12;color:#F4F3EE;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;position:relative;
+ background-image:linear-gradient(rgba(244,243,238,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(244,243,238,.06) 1px,transparent 1px);background-size:48px 48px}
+.glow{position:absolute;border-radius:50%;filter:blur(90px)}
+.wrap{position:absolute;inset:0;padding:var(--pad);display:flex;align-items:center;justify-content:space-between;gap:60px}
+.brand{display:flex;align-items:center;gap:18px;font-weight:800;font-size:44px;letter-spacing:-1px}
+.brand small{background:#C6FF3D;color:#0E0F12;padding:3px 12px;border-radius:8px;font-size:22px;letter-spacing:4px}
+h1{font-size:var(--h1);line-height:1.02;letter-spacing:-2px;margin-top:22px;font-weight:800}
+h1 em{font-style:normal;color:#C6FF3D}
+.chips{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap}
+.chips span{font:600 22px ui-monospace,Menlo,monospace;border:1px solid #404550;border-radius:999px;padding:10px 18px;background:#1B1E26}
+.term{width:560px;flex:none;background:#14161C;border:1px solid #404550;border-radius:22px;padding:26px 30px;font:500 24px/1.7 ui-monospace,Menlo,monospace;box-shadow:0 40px 90px -30px #000}
+.term .d{display:flex;gap:8px;margin-bottom:12px}.term .d i{width:14px;height:14px;border-radius:50%;background:#404550;display:block}
+.g{color:#C6FF3D}.m{color:#A8ADB7}.b{color:#8aa4ff}
+</style></head><body>
+<div class="glow" style="width:700px;height:700px;right:-120px;top:-300px;background:rgba(198,255,61,.22)"></div>
+<div class="glow" style="width:600px;height:600px;left:-200px;bottom:-350px;background:rgba(138,164,255,.25)"></div>
+<div class="wrap">
+ <div>
+  <div class="brand"><span style="width:72px;height:72px;border-radius:20px;background:#C6FF3D;color:#0E0F12;display:grid;place-items:center;font:800 32px ui-monospace,Menlo,monospace;letter-spacing:-2px">S/</span>SCALIFY <small>WPD</small></div>
+  <h1>We build <em>web apps</em>, websites<br>&amp; video for small businesses.</h1>
+  <div class="chips"><span>Web apps</span><span>Websites</span><span>Video &amp; reels</span><span>Social content</span></div>
+ </div>
+ <div class="term" id="term">
+  <div class="d"><i></i><i></i><i></i></div>
+  <div><span class="g">$</span> scalify launch quoterevive</div>
+  <div class="m">▸ design ✓ build ✓ payments ✓</div>
+  <div class="m">▸ promo video ✓</div>
+  <div><span class="g">✓ live</span> <span class="b">— our first product</span></div>
+  <div style="margin-top:8px"><span class="g">$</span> scalify start <span class="b">your-project</span><span class="g">▌</span></div>
+ </div>
+</div>
+</body></html>
