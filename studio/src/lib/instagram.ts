@@ -6,8 +6,11 @@ export const IG_VERSION = process.env.INSTAGRAM_API_VERSION || "v27.0";
 const GRAPH = "https://graph.instagram.com";
 export const IG_SCOPES = ["instagram_business_basic", "instagram_business_content_publish"];
 
+const appId = (): string => (process.env.INSTAGRAM_APP_ID ?? "").trim();
+const appSecret = (): string => (process.env.INSTAGRAM_APP_SECRET ?? "").trim();
+
 export function igConfigured(): boolean {
-  return Boolean(process.env.INSTAGRAM_APP_ID && process.env.INSTAGRAM_APP_SECRET && process.env.SUPABASE_SERVICE_ROLE_KEY);
+  return Boolean(appId() && appSecret() && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 export const igRedirectUri = () => `${publicEnv.siteUrl}/api/instagram/callback`;
 
@@ -43,7 +46,7 @@ const form = (params: Record<string, string>) => ({
 
 export function authorizeUrl(state: string): string {
   const u = new URL("https://www.instagram.com/oauth/authorize");
-  u.searchParams.set("client_id", process.env.INSTAGRAM_APP_ID ?? "");
+  u.searchParams.set("client_id", appId());
   u.searchParams.set("redirect_uri", igRedirectUri());
   u.searchParams.set("response_type", "code");
   u.searchParams.set("scope", IG_SCOPES.join(","));
@@ -57,8 +60,8 @@ export async function exchangeCode(code: string) {
   const short = await call<{ data?: { access_token: string; user_id: string | number }[]; access_token?: string; user_id?: string | number }>(
     "https://api.instagram.com/oauth/access_token",
     form({
-      client_id: process.env.INSTAGRAM_APP_ID ?? "",
-      client_secret: process.env.INSTAGRAM_APP_SECRET ?? "",
+      client_id: appId(),
+      client_secret: appSecret(),
       grant_type: "authorization_code",
       redirect_uri: igRedirectUri(),
       code: code.replace(/#_$/, ""),
@@ -67,7 +70,7 @@ export async function exchangeCode(code: string) {
   const shortToken = short.data?.[0]?.access_token ?? short.access_token;
   if (!shortToken) throw new IgError("Instagram did not return an access token", false);
   const long = await call<{ access_token: string; expires_in: number }>(
-    `${GRAPH}/access_token?${new URLSearchParams({ grant_type: "ig_exchange_token", client_secret: process.env.INSTAGRAM_APP_SECRET ?? "", access_token: shortToken })}`,
+    `${GRAPH}/access_token?${new URLSearchParams({ grant_type: "ig_exchange_token", client_secret: appSecret(), access_token: shortToken })}`,
   );
   const me = await call<{ user_id?: string | number; id?: string; username: string }>(
     `${GRAPH}/${IG_VERSION}/me?${new URLSearchParams({ fields: "user_id,username", access_token: long.access_token })}`,
