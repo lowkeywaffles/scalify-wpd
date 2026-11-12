@@ -1,11 +1,18 @@
 import "server-only";
-import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto";
+import { createCipheriv, createDecipheriv, hkdfSync, randomBytes } from "node:crypto";
 
+/** STUDIO_TOKEN_KEY (32 random bytes, base64) if set; otherwise a key derived (HKDF-SHA256) from the
+ *  service-role key, which is already a server-only secret. Rotating whichever is used disconnects accounts. */
 function key(): Buffer {
-  const raw = process.env.STUDIO_TOKEN_KEY ?? "";
-  const k = Buffer.from(raw, "base64");
-  if (k.length !== 32) throw new Error("STUDIO_TOKEN_KEY must be 32 random bytes, base64-encoded");
-  return k;
+  const raw = process.env.STUDIO_TOKEN_KEY;
+  if (raw) {
+    const k = Buffer.from(raw, "base64");
+    if (k.length !== 32) throw new Error("STUDIO_TOKEN_KEY must be 32 random bytes, base64-encoded");
+    return k;
+  }
+  const base = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!base) throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set");
+  return Buffer.from(hkdfSync("sha256", base, "scalify-studio", "instagram-token-encryption-v1", 32));
 }
 
 /** AES-256-GCM. Output: v1.<iv>.<tag>.<ciphertext> (base64url). */

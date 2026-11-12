@@ -13,7 +13,7 @@ Instagram API with Instagram Login · Gemini free tier, Claude (optional) or bui
   uses RLS through `studio_is_member()`, so QuoteRevive customers who share the same Supabase Auth can't read anything.
 - **Media**: a private bucket `studio-media` (50 MB per file). Browsers upload directly with a one-time signed upload URL.
   Instagram fetches media through 3-hour signed URLs at publish time.
-- **Tokens**: Instagram long-lived tokens are encrypted with AES-256-GCM (`STUDIO_TOKEN_KEY`) and stored in
+- **Tokens**: Instagram long-lived tokens are encrypted with AES-256-GCM (key from `STUDIO_TOKEN_KEY` or derived from the service-role key) and stored in
   `studio_secrets`, which has no RLS policies (service role only). They refresh automatically before they expire.
 - **Scheduler**: Supabase `pg_cron` calls `/api/cron/publish` every 5 minutes (`supabase/0002_scheduler.sql`), and
   a daily Vercel cron acts as a backup. Each post moves through: scheduled → publishing (container created, waiting
@@ -25,9 +25,9 @@ Instagram API with Instagram Login · Gemini free tier, Claude (optional) or bui
 |---|---|---|
 | NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY | setup | same as QuoteRevive |
 | NEXT_PUBLIC_SITE_URL | setup | e.g. https://scalify-studio.vercel.app |
-| SUPABASE_SERVICE_ROLE_KEY | setup (Sensitive) | |
-| STUDIO_TOKEN_KEY | setup (Sensitive) | 32 random bytes, base64. Changing it disconnects all accounts |
-| CRON_SECRET | setup (Sensitive) | must match the vault secret `studio_cron_secret` |
+| SUPABASE_SERVICE_ROLE_KEY | **you** (Sensitive) | Supabase → Project Settings → API keys → service_role |
+| STUDIO_TOKEN_KEY | optional (Sensitive) | 32 random bytes, base64. If unset, derived from the service-role key. Changing either disconnects Instagram |
+| CRON_SECRET | optional (Sensitive) | only for the daily Vercel backup cron. pg_cron uses a vault-generated secret |
 | INSTAGRAM_APP_ID / INSTAGRAM_APP_SECRET | **you** (Sensitive) | from the Meta app, see /studio/setup |
 | GEMINI_API_KEY | **you** (Sensitive, optional) | free tier; see the privacy note |
 | STUDIO_AI_PROVIDER | optional | `gemini` (default), `claude`, `templates` |

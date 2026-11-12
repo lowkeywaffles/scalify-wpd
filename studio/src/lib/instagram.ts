@@ -7,7 +7,7 @@ const GRAPH = "https://graph.instagram.com";
 export const IG_SCOPES = ["instagram_business_basic", "instagram_business_content_publish"];
 
 export function igConfigured(): boolean {
-  return Boolean(process.env.INSTAGRAM_APP_ID && process.env.INSTAGRAM_APP_SECRET && process.env.STUDIO_TOKEN_KEY);
+  return Boolean(process.env.INSTAGRAM_APP_ID && process.env.INSTAGRAM_APP_SECRET && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 export const igRedirectUri = () => `${publicEnv.siteUrl}/api/instagram/callback`;
 
