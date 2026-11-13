@@ -35,11 +35,11 @@ subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{D}/vo_track.wav", "-af",
     "highpass=f=90,acompressor=threshold=-22dB:ratio=3.5:attack=4:release=110,equalizer=f=3200:t=q:w=1:g=3,equalizer=f=220:t=q:w=1:g=-2,loudnorm=I=-16:TP=-2",
     "-ar", str(SR), "-ac", "2", f"{D}/vo_proc.wav"], check=True)
 vo = rd(f"{D}/vo_proc.wav")[:n]; vo = np.pad(vo, ((0, n - len(vo)), (0, 0)))
-g = np.ones(n); duck = 10 ** (-17 / 20); ramp = int(0.12 * SR)
+g = np.ones(n); duck = 10 ** (-22 / 20); ramp = int(0.12 * SR)
 for f, s in placement:
     a = max(0, int((s - 0.08) * SR)); e = min(n, int((s + dur(f) + 0.12) * SR)); g[a:e] = np.minimum(g[a:e], duck)
 g = np.convolve(g, np.ones(ramp) / ramp, mode="same")
-wr(f"{D}/mix_raw.wav", music * g[:, None] * 0.9 + vo)
+wr(f"{D}/mix_raw.wav", music * g[:, None] * 0.85 + vo)
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{D}/mix_raw.wav", "-af", "loudnorm=I=-14:TP=-1.2:LRA=9", "-ar", str(SR), f"{D}/audio_hook.wav"], check=True)
 for f, s in placement:
     a, e = int(s * SR), int((s + dur(f)) * SR)
