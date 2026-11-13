@@ -9,6 +9,9 @@ export const IG_SCOPES = ["instagram_business_basic", "instagram_business_conten
 const appId = (): string => (process.env.INSTAGRAM_APP_ID ?? "").trim();
 const appSecret = (): string => (process.env.INSTAGRAM_APP_SECRET ?? "").trim();
 
+/** The app ID is public (it appears in the login URL), so it is safe to display for troubleshooting. */
+export const igAppIdForDisplay = () => appId();
+
 export function igConfigured(): boolean {
   return Boolean(appId() && appSecret() && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }

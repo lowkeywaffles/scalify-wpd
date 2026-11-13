@@ -1,7 +1,7 @@
 import { ActionButton } from "@/components/ActionButton";
 import { LocalTime } from "@/components/LocalTime";
 import { listAccounts } from "@/lib/data";
-import { igConfigured } from "@/lib/instagram";
+import { igAppIdForDisplay, igConfigured, igRedirectUri } from "@/lib/instagram";
 import { requireMember } from "@/lib/members";
 import { disconnectAccount } from "../actions";
 
@@ -34,6 +34,9 @@ export default async function AccountsPage({ searchParams }: { searchParams: Pro
               <div className="mt-2"><ActionButton action={disconnectAccount.bind(null, a.id)} label="Disconnect" variant="danger" confirm="Disconnect this Instagram account? Its scheduled posts become drafts." /></div>
             </div>
           ))}
+          {igConfigured() && (
+            <p className="text-xs text-muted">App ID in use: <code>{igAppIdForDisplay()}</code>. This must be the <strong>Instagram app ID</strong> from Meta → Instagram → API setup with Instagram login, not the Facebook App ID from App settings → Basic. Redirect URL Meta must allow: <code className="break-all">{igRedirectUri()}</code></p>
+          )}
           {igConfigured() ? <a href="/api/instagram/connect" className="btn-primary">{accounts.some((a) => a.platform === "instagram") ? "Reconnect / add account" : "Connect Instagram"}</a>
             : <p className="text-sm text-warn">Instagram app keys aren't set yet. <a href="/studio/setup" className="underline">Setup guide</a></p>}
         </section>
