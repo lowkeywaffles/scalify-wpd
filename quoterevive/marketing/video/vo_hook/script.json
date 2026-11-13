@@ -1,0 +1,43 @@
+{
+ "voice_id": "nPczCjzI2devNBz1zQrb",
+ "voice_name": "Brian (ElevenLabs premade)",
+ "model_id": "eleven_multilingual_v2",
+ "lines": [
+  {
+   "id": "1",
+   "start": 0.35,
+   "end": 2.1,
+   "text": "Seen. Nine days ago."
+  },
+  {
+   "id": "2",
+   "start": 2.55,
+   "end": 5.3,
+   "text": "They didn't say no. Your quote just got buried."
+  },
+  {
+   "id": "3",
+   "start": 5.75,
+   "end": 9.0,
+   "text": "And almost nobody sends the second message."
+  },
+  {
+   "id": "4",
+   "start": 9.45,
+   "end": 13.0,
+   "text": "QuoteRevive picks the day to follow up, and writes it for you."
+  },
+  {
+   "id": "5",
+   "start": 13.5,
+   "end": 17.0,
+   "text": "First six customers get half off, with code first six."
+  },
+  {
+   "id": "6",
+   "start": 17.5,
+   "end": 19.0,
+   "text": "Link in bio."
+  }
+ ]
+}
