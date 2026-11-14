@@ -36,7 +36,7 @@ We help small businesses show up online and work smarter:
 - Email: skelifywpd@gmail.com
 - WhatsApp / phone: +251 969 803 580
 - TikTok & Instagram: @scalifywpd
-- All links: https://scalify-wpd.vercel.app/links
+- All products: https://scalify-wpd.vercel.app/products
 
 ## FAQ (if Whop offers an FAQ section)
 **Do you work with businesses outside Ethiopia?**
