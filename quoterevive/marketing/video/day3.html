@@ -1,0 +1,188 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:1080px;height:1920px;overflow:hidden;background:#07080b;font-family:Inter,sans-serif;color:#f1f0ea}
+.abs{position:absolute}.serif{font-family:"Instrument Serif",serif;font-weight:400}
+.cap{position:absolute;left:60px;right:60px;text-align:center}
+.bk{position:absolute;border-radius:50%;filter:blur(18px)}
+/* phone */
+#phoneWrap{position:absolute;left:50%;top:250px;width:640px;height:1300px;margin-left:-320px;perspective:2200px}
+#phone{position:absolute;inset:0;border-radius:96px;background:#0b0c0f;border:3px solid #3a3d45;box-shadow:inset 0 0 0 12px #16171b,0 80px 160px -40px rgba(0,0,0,.9),0 0 0 2px #1d1f24;transform-style:preserve-3d}
+#screen{position:absolute;left:22px;top:22px;right:22px;bottom:22px;border-radius:76px;overflow:hidden;background:#f7f4ee;color:#17181c}
+#island{position:absolute;left:50%;top:22px;width:170px;height:50px;margin-left:-85px;background:#000;border-radius:30px;z-index:5}
+.sb{height:96px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 52px 14px;font-weight:700;font-size:26px}
+/* app UI (light theme, matches QuoteRevive tokens) */
+.app{padding:0 30px;font-size:22px}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:10px 0 18px}
+.lbl{font-weight:700;font-size:21px;margin:14px 0 6px}
+.lbl small{font-weight:500;color:#565961;margin-left:6px}
+.inp{height:62px;border:2px solid #ddd7cc;border-radius:14px;background:#fff;padding:0 18px;display:flex;align-items:center;font-size:24px;color:#17181c}
+.inp.f{border-color:#2348e0;box-shadow:0 0 0 4px #e3e9ff}
+.ph{color:#9a9ca3}
+.caret{display:inline-block;width:3px;height:30px;background:#2348e0;margin-left:2px;vertical-align:-6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:64px;padding:0 34px;border-radius:999px;background:#2348e0;color:#fff;font-weight:700;font-size:24px}
+.card{background:#fff;border:2px solid #ddd7cc;border-radius:22px}
+#tap{position:absolute;width:70px;height:70px;border-radius:50%;background:rgba(35,72,224,.25);border:3px solid rgba(35,72,224,.6);pointer-events:none;opacity:0;z-index:9}
+/* captions under phone */
+.step{display:inline-block;padding:16px 30px;border-radius:999px;background:rgba(10,11,14,.75);border:1px solid #2f3138;font-weight:800;font-size:32px;letter-spacing:.12em}
+#timer{position:absolute;right:70px;top:120px;padding:14px 26px;border-radius:999px;background:rgba(10,11,14,.8);border:2px solid #C6FF3D;font:800 40px/1 ui-monospace,Menlo,monospace;color:#C6FF3D}
+#grain{position:absolute;inset:0;opacity:.07;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>")}
+.hw{display:inline-block;margin:0 10px}
+</style></head><body>
+<div id="bg" class="abs" style="inset:0;overflow:hidden"></div>
+<div id="hookbg" class="abs" style="inset:0;background:radial-gradient(ellipse at 50% 40%,#3a0d0d,#07080b 70%)"></div>
+
+<!-- HOOK -->
+<div id="hook" class="abs" style="inset:0">
+  <div class="cap" id="stop" style="top:520px;font-size:300px;font-weight:900;letter-spacing:-14px;line-height:1;color:#ff4d4d">STOP.</div>
+  <div class="cap" id="hl" style="top:880px;font-size:86px;font-weight:900;line-height:1.08;letter-spacing:-2px">
+    <span class="hw" id="w0">You're</span><span class="hw" id="w1" style="color:#ff4d4d">losing</span><span class="hw" id="w2">jobs</span><br><span class="hw" id="w3">you</span><span class="hw" id="w4">already</span><span class="hw" id="w5">quoted.</span>
+  </div>
+  <div class="cap" id="hsub" style="top:1150px;font-size:44px;font-weight:600;color:#d8d6cf">Because nobody followed up.</div>
+</div>
+
+<!-- DEMO -->
+<div id="demo" class="abs" style="inset:0;opacity:0">
+  <div class="cap" id="dtitle" style="top:110px;text-align:left;left:70px;font-size:56px;font-weight:900;letter-spacing:-1px;line-height:1.05">Add a quote.<br><span style="color:#C6FF3D">Watch the clock.</span></div>
+  <div id="timer">0:00.0</div>
+  <div id="phoneWrap"><div id="phone">
+    <div id="island"></div>
+    <div id="screen">
+      <div class="sb"><span>9:41</span><span>▮▮▮ ◔ ▬</span></div>
+      <!-- form view -->
+      <div id="vForm" class="app abs" style="left:0;right:0;top:96px">
+        <div class="nav"><b style="font-size:26px">Quote<span class="serif" style="font-style:italic;color:#2348e0;font-weight:400">Revive</span></b><span style="font-size:30px">☰</span></div>
+        <div class="serif" style="font-size:58px;margin:4px 0 6px">New quote</div>
+        <div id="formScroll">
+          <div class="card" style="padding:6px 22px 22px">
+            <div class="lbl">Customer name</div><div class="inp" id="i0"><span id="t0"></span></div>
+            <div class="lbl">Job or project</div><div class="inp" id="i1"><span id="t1"></span><span class="ph" id="p1">e.g. Shopfront sign</span></div>
+            <div class="lbl">Customer WhatsApp / phone<small>Optional</small></div><div class="inp" id="i2"><span id="t2"></span></div>
+            <div class="lbl">Quote amount</div><div class="inp" id="i3"><span id="t3"></span></div>
+            <div class="lbl">Currency</div><div class="inp">USD</div>
+            <div class="lbl">Date sent<small>Optional</small></div><div class="inp" id="i5">11/14/2026</div>
+            <div class="lbl">Next follow-up<small>Optional</small></div><div class="inp"><span class="ph">mm/dd/yyyy</span></div>
+            <div style="font-size:19px;color:#565961;margin-top:6px">Leave blank and we'll suggest one</div>
+            <div style="margin-top:26px"><span class="btn" id="save">Save quote</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- result view -->
+      <div id="vDone" class="app abs" style="left:0;right:0;top:96px;opacity:0;background:#f7f4ee;bottom:0">
+        <div class="nav"><b style="font-size:26px">Quote<span class="serif" style="font-style:italic;color:#2348e0;font-weight:400">Revive</span></b><span style="font-size:30px">☰</span></div>
+        <div id="notice" style="border-radius:16px;background:#e5f3ea;border:2px solid #19703f;color:#19703f;padding:18px 20px;font-size:22px;font-weight:700;line-height:1.35">✓ Quote saved — follow-up scheduled for 2026-11-17.</div>
+        <div style="font-size:22px;color:#565961;margin-top:26px">Website redesign</div>
+        <div class="serif" style="font-size:66px;line-height:1.05">Sara M.</div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:10px;font-size:24px"><span style="background:#e3e9ff;color:#2348e0;border-radius:999px;padding:6px 16px;font-weight:700">Sent</span><b>$2,400.00</b><span style="color:#565961">· waiting 0 days</span></div>
+        <div class="card" style="margin-top:28px;padding:24px">
+          <div class="serif" style="font-size:38px">Follow-up</div>
+          <div style="font-size:22px;color:#565961;margin-top:6px">Suggested: <b style="color:#17181c">Tue, Nov 17</b> · 3 days after the quote was sent.</div>
+          <div style="margin-top:18px;border-radius:14px;background:#efebe3;padding:18px;font-size:21px;line-height:1.45">Hi Sara, just checking in on the website redesign quote I sent. Happy to answer any questions.</div>
+        </div>
+      </div>
+      <!-- today view (3 days later) -->
+      <div id="vToday" class="app abs" style="left:0;right:0;top:96px;opacity:0;background:#f7f4ee;bottom:0">
+        <div class="nav"><b style="font-size:26px">Quote<span class="serif" style="font-style:italic;color:#2348e0;font-weight:400">Revive</span></b><span style="font-size:30px">☰</span></div>
+        <div style="font-size:22px;color:#565961">Tuesday, Nov 17</div>
+        <div class="serif" style="font-size:60px">Today</div>
+        <div class="card" id="todayCard" style="margin-top:20px;padding:22px;display:flex;gap:18px;align-items:center">
+          <div style="width:80px;height:80px;border-radius:50%;border:7px solid #2348e0;display:grid;place-items:center;font-weight:800;font-size:26px">75</div>
+          <div style="flex:1"><div style="font-weight:800;font-size:28px">Sara M. · Website redesign</div><div style="font-size:21px;color:#565961">Follow-up due today · message ready</div></div>
+          <div class="serif" style="font-size:36px">$2,400</div>
+        </div>
+        <div style="margin-top:20px"><span class="btn" id="wa" style="background:#25d366;color:#05210f">Send on WhatsApp ➜</span></div>
+      </div>
+      <div id="tap"></div>
+    </div>
+  </div></div>
+  <div class="cap" id="stepCap" style="top:1610px"><span class="step" id="stepTxt">ADD THE CUSTOMER</span></div>
+  <div class="cap" style="top:1720px;font-size:22px;color:#7c7f88" id="fict">App demo · fictional customer · typed at normal speed</div>
+</div>
+
+<!-- END -->
+<div id="end" class="abs" style="inset:0;opacity:0">
+  <div class="cap serif" id="e1" style="top:470px;font-size:120px;line-height:1">This is<br><em style="color:#C6FF3D">all it takes.</em></div>
+  <div class="cap" id="e2" style="top:820px;display:flex;justify-content:center;align-items:center;gap:22px;font-size:84px;font-weight:700">
+    <svg width="110" height="110" viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="#f1f0ea"/><path d="M9 11.5a4.5 4.5 0 0 1 4.5-4.5h5A4.5 4.5 0 0 1 23 11.5v3a4.5 4.5 0 0 1-4.5 4.5H15l-3.5 3v-3.3A4.5 4.5 0 0 1 9 14.5z" fill="none" stroke="#0c0d10" stroke-width="2" stroke-linejoin="round"/><path d="M13 13.2l2.2 2.1 4-4.3" fill="none" stroke="#2348e0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>Quote<span class="serif" style="font-style:italic;color:#8aa4ff;font-weight:400">Revive</span></span></div>
+  <div class="cap" id="e3" style="top:1020px"><span style="display:inline-block;background:linear-gradient(180deg,#d9ff7a,#C6FF3D);color:#0c0d10;border-radius:999px;padding:30px 60px;font-weight:800;font-size:50px">Free to start · Link in bio</span></div>
+  <div class="cap" id="e4" style="top:1190px;font-size:36px;color:#c9c7c0;line-height:1.5">First 6 customers: <b style="color:#C6FF3D">50% off</b> with code <b style="font-family:ui-monospace,Menlo,monospace;color:#C6FF3D">FIRST6</b><br><span style="font-size:28px;color:#8a8d95">Ends Nov 18 · 14-day refund</span></div>
+</div>
+
+<div id="flash" class="abs" style="inset:0;background:#fff;opacity:0"></div>
+<div class="abs" style="inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.65))"></div><div id="grain"></div>
+<script>
+const $=id=>document.getElementById(id);
+const P=(t,a,b)=>Math.min(1,Math.max(0,(t-a)/(b-a)));const eo=x=>1-Math.pow(1-x,3);
+const back=x=>{const c1=1.9,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+function S(el,{o=1,x=0,y=0,s=1,b=0,r=0}={}){el.style.opacity=o;el.style.transform=`translate(${x}px,${y}px) scale(${s}) rotate(${r}deg)`;el.style.filter=b?`blur(${b}px)`:"none"}
+const rise=(t,a,d=.45)=>{const p=eo(P(t,a,a+d));return{o:p,y:(1-p)*50,b:(1-p)*8}};
+const slam=(t,a)=>{const p=P(t,a,a+.16);return{o:p?1:0,s:p?1+(1-eo(p))*1.6:2.6,b:(1-p)*14}};
+// bokeh (brand colours, NOT the reference's palette)
+const bg=$("bg"),cols=["rgba(198,255,61,.22)","rgba(138,164,255,.28)","rgba(160,96,255,.22)","rgba(255,255,255,.08)"];const BK=[];
+for(let i=0;i<34;i++){const d=document.createElement("div");d.className="bk";const r=60+((i*53)%160);d.style.width=d.style.height=r+"px";d.style.background=`radial-gradient(circle,${cols[i%4]},transparent 70%)`;bg.appendChild(d);BK.push({d,x:(i*197)%1080,y:(i*331)%1920,sp:.2+(i%5)*.08,ph:i})}
+// ===== shared schedule (keep in sync with make_day3_audio.py) =====
+const CH=0.13;
+const T={hook:0,boom:2.3,phoneIn:2.3,start:3.0,f0:3.0,f1:4.35,f3:6.85,save:7.95,done:8.45,today:11.0,end:13.6,dur:17.0};
+const FIELDS=[["t0","i0","Sara M.",T.f0],["t1","i1","Website redesign",T.f1],["t3","i3","2400",T.f3]];
+window.render=function(t){
+  // bokeh drift
+  BK.forEach(b=>{b.d.style.transform=`translate(${b.x+Math.sin(t*b.sp+b.ph)*40}px,${(b.y-t*30*b.sp+1920)%1920-100}px)`});
+  const inHook=t<T.boom;
+  $("hookbg").style.opacity=inHook?1:Math.max(0,1-P(t,T.boom,T.boom+.4));
+  $("bg").style.opacity=inHook?.25:1;
+  // ---- hook: aggressive slams + shake ----
+  const hits=[.05,.62,.8,.98,1.2,1.38,1.56];
+  let sh=0;hits.forEach(h=>{if(t>=h)sh=Math.max(sh,Math.exp(-(t-h)*16))});
+  $("hook").style.transform=`translate(${Math.sin(t*113)*sh*26}px,${Math.cos(t*97)*sh*26}px)`;
+  $("hook").style.opacity=inHook?1:1-P(t,T.boom,T.boom+.2);
+  const st=slam(t,.05);S($("stop"),{...st,o:st.o*(t<.55?1:Math.max(.0,1-P(t,.55,.62))),r:(1-P(t,.05,.21))*-6});
+  for(let i=0;i<6;i++)S($("w"+i),slam(t,hits[i+1]));
+  S($("hl"),{o:t>=.6?1:0,y:t>=.6?-200*P(t,.55,.62):0});
+  S($("hsub"),rise(t,1.7,.3));
+  // ---- boom → demo ----
+  const fl=Math.max(Math.exp(-Math.max(0,t-T.boom)*14)*(t>=T.boom?1:0),...[T.end].map(a=>Math.exp(-Math.max(0,t-a)*16)*(t>=a?.8:0)),...hits.map(h=>Math.exp(-Math.max(0,t-h)*30)*(t>=h&&t<2?.35:0)));
+  $("flash").style.opacity=fl;
+  const din=P(t,T.phoneIn,T.phoneIn+.55),dout=P(t,T.end-.25,T.end);
+  $("demo").style.opacity=Math.min(din*2,1-dout);
+  const ph=$("phone");const pi=eo(din);
+  ph.style.transform=`translateY(${(1-pi)*500+Math.sin(t*1.3)*10}px) rotateX(${6+(1-pi)*20}deg) rotateY(${-10+Math.sin(t*.7)*3}deg) rotateZ(${-2+(1-pi)*-6}deg) scale(${.92+pi*.08+dout*.25})`;
+  S($("dtitle"),rise(t,T.phoneIn+.2));
+  // timer: runs from first keystroke until "saved"
+  const el=Math.max(0,Math.min(t,T.done)-T.start);
+  $("timer").textContent=`0:${String(Math.floor(el)).padStart(2,"0")}.${Math.floor((el%1)*10)}`;
+  $("timer").style.opacity=t<T.start-.2?0:1;$("timer").style.transform=`scale(${t>=T.done&&t<T.done+.4?1+Math.sin(P(t,T.done,T.done+.4)*Math.PI)*.18:1})`;
+  // typing
+  FIELDS.forEach(([tid,iid,txt,a],k)=>{const n=Math.max(0,Math.min(txt.length,Math.floor((t-a-.25)/CH)+1));
+    $(tid).textContent=t<a+.25?"":txt.slice(0,n);
+    const nextA=k<FIELDS.length-1?FIELDS[k+1][3]:T.save;const focused=t>=a&&t<nextA;
+    $(iid).classList.toggle("f",focused);
+    $(tid).innerHTML=(t<a+.25?"":txt.slice(0,n))+(focused&&Math.floor(t*3)%2===0?'<span class="caret"></span>':"");});
+  $("p1").style.display=t>=T.f1+.25?"none":"inline";
+  // scroll form for amount + save button
+  $("formScroll").style.transform=`translateY(${-eo(P(t,T.f3-.4,T.f3))*230-eo(P(t,T.save-.5,T.save-.1))*140}px)`;
+  // save button press
+  const pressing=t>=T.save&&t<T.done;$("save").textContent=pressing?"Saving…":"Save quote";$("save").style.transform=`scale(${t>=T.save&&t<T.save+.15?.94:1})`;
+  // view switching
+  $("vDone").style.opacity=P(t,T.done,T.done+.2)*(1-P(t,T.today,T.today+.25));
+  $("vForm").style.opacity=1-P(t,T.done,T.done+.2);
+  $("vToday").style.opacity=P(t,T.today,T.today+.25);
+  S($("notice"),{o:P(t,T.done+.1,T.done+.35),y:(1-eo(P(t,T.done+.1,T.done+.4)))*-30});
+  S($("todayCard"),{...rise(t,T.today+.3),s:1+Math.exp(-Math.max(0,t-(T.today+.8))*5)*(t>T.today+.8?.04:0)});
+  // tap indicator
+  const taps=[[T.f0,300,250],[T.f1,300,355],[T.f3,300,320],[T.save,140,690],[T.today+1.6,190,560]];
+  let tp=null;taps.forEach(([a,x,y])=>{if(t>=a-.05&&t<a+.35)tp=[a,x,y]});
+  if(tp){const q=P(t,tp[0]-.05,tp[0]+.35);$("tap").style.opacity=1-q;$("tap").style.left=tp[1]+"px";$("tap").style.top=tp[2]+"px";$("tap").style.transform=`scale(${.6+q*.8})`}else $("tap").style.opacity=0;
+  // step captions
+  const steps=[[T.start,"ADD THE CUSTOMER"],[T.f1,"WHAT'S THE JOB"],[T.f3,"THE AMOUNT"],[T.save,"SAVE"],[T.done,"FOLLOW-UP: SCHEDULED FOR YOU"],[T.today,"3 DAYS LATER · MESSAGE READY"]];
+  let cur="";steps.forEach(([a,s])=>{if(t>=a)cur=s});$("stepTxt").textContent=cur;
+  const lastA=steps.filter(s=>t>=s[0]).pop();const sp=lastA?P(t,lastA[0],lastA[0]+.3):0;
+  S($("stepCap"),{o:t>=T.start?eo(sp):0,y:(1-eo(sp))*20});
+  // ---- end ----
+  const ei=P(t,T.end,T.end+.4);$("end").style.opacity=ei;
+  S($("e1"),{...rise(t,T.end+.05,.5)});S($("e2"),{o:Math.min(1,P(t,T.end+.9,T.end+1.3)*2.5),s:P(t,T.end+.9,T.end+1.35)?back(P(t,T.end+.9,T.end+1.35)):.6});
+  S($("e3"),{o:Math.min(1,P(t,T.end+1.4,T.end+1.85)*2.5),s:(P(t,T.end+1.4,T.end+1.85)?back(P(t,T.end+1.4,T.end+1.85)):.6)*(1+Math.sin(t*6)*.012)});S($("e4"),rise(t,T.end+1.9));
+};
+window.render(0);
+</script></body></html>
