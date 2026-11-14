@@ -1,19 +1,23 @@
 import "server-only";
 import { publicEnv } from "./env";
 
-/** Instagram API with Instagram Login (no Facebook Page needed). Requires a professional (Business/Creator) account. */
+/** Instagram API with Unified Login (Meta's only option for new apps, Nov 2026): Facebook Login for Business with a
+ *  configuration (config_id). The person logs in with Instagram or Facebook, picks the Instagram professional account,
+ *  and we receive a Business Integration System User Access Token. API host: graph.facebook.com.
+ *  Credentials are the Meta app's own App ID and App secret (App settings → Basic). */
 export const IG_VERSION = process.env.INSTAGRAM_API_VERSION || "v27.0";
-const GRAPH = "https://graph.instagram.com";
-export const IG_SCOPES = ["instagram_business_basic", "instagram_business_content_publish"];
+const GRAPH = "https://graph.facebook.com";
 
 const appId = (): string => (process.env.INSTAGRAM_APP_ID ?? "").trim();
 const appSecret = (): string => (process.env.INSTAGRAM_APP_SECRET ?? "").trim();
+const configId = (): string => (process.env.INSTAGRAM_CONFIG_ID ?? "").trim();
+export const igConfigIdForDisplay = () => configId();
 
 /** The app ID is public (it appears in the login URL), so it is safe to display for troubleshooting. */
 export const igAppIdForDisplay = () => appId();
 
 export function igConfigured(): boolean {
-  return Boolean(appId() && appSecret() && process.env.SUPABASE_SERVICE_ROLE_KEY);
+  return Boolean(appId() && appSecret() && configId() && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 export const igRedirectUri = () => `${publicEnv.siteUrl}/api/instagram/callback`;
 
@@ -48,46 +52,30 @@ const form = (params: Record<string, string>) => ({
 });
 
 export function authorizeUrl(state: string): string {
-  const u = new URL("https://www.instagram.com/oauth/authorize");
+  const u = new URL(`https://www.facebook.com/${IG_VERSION}/dialog/oauth`);
   u.searchParams.set("client_id", appId());
+  u.searchParams.set("config_id", configId());
   u.searchParams.set("redirect_uri", igRedirectUri());
   u.searchParams.set("response_type", "code");
-  u.searchParams.set("scope", IG_SCOPES.join(","));
   u.searchParams.set("state", state);
-  u.searchParams.set("enable_fb_login", "false");
+  u.searchParams.set("prompt", "login");
   return u.toString();
 }
 
-/** code -> short-lived token -> long-lived (60-day) token + profile. */
-export async function exchangeCode(code: string) {
-  const short = await call<{ data?: { access_token: string; user_id: string | number }[]; access_token?: string; user_id?: string | number }>(
-    "https://api.instagram.com/oauth/access_token",
-    form({
-      client_id: appId(),
-      client_secret: appSecret(),
-      grant_type: "authorization_code",
-      redirect_uri: igRedirectUri(),
-      code: code.replace(/#_$/, ""),
-    }),
-  );
-  const shortToken = short.data?.[0]?.access_token ?? short.access_token;
-  if (!shortToken) throw new IgError("Instagram did not return an access token", false);
-  const long = await call<{ access_token: string; expires_in: number }>(
-    `${GRAPH}/access_token?${new URLSearchParams({ grant_type: "ig_exchange_token", client_secret: appSecret(), access_token: shortToken })}`,
-  );
-  const me = await call<{ user_id?: string | number; id?: string; username: string }>(
-    `${GRAPH}/${IG_VERSION}/me?${new URLSearchParams({ fields: "user_id,username", access_token: long.access_token })}`,
-  );
-  const igId = String(me.user_id ?? me.id ?? "");
-  if (!igId) throw new IgError("Instagram did not return an account ID", false);
-  return { token: long.access_token, expiresAt: new Date(Date.now() + long.expires_in * 1000), igId, username: me.username };
-}
+export type ConnectedAccount = { igId: string; username: string };
 
-export async function refreshToken(token: string) {
-  const r = await call<{ access_token: string; expires_in: number }>(
-    `${GRAPH}/refresh_access_token?${new URLSearchParams({ grant_type: "ig_refresh_token", access_token: token })}`,
+/** code -> Business Integration System User Access Token -> the Instagram accounts the person shared. */
+export async function exchangeCode(code: string): Promise<{ token: string; expiresAt: Date | null; accounts: ConnectedAccount[] }> {
+  const tok = await call<{ access_token: string; expires_in?: number }>(
+    `${GRAPH}/${IG_VERSION}/oauth/access_token?${new URLSearchParams({ client_id: appId(), client_secret: appSecret(), redirect_uri: igRedirectUri(), code })}`,
   );
-  return { token: r.access_token, expiresAt: new Date(Date.now() + r.expires_in * 1000) };
+  if (!tok.access_token) throw new IgError("Meta did not return an access token", false);
+  const list = await call<{ data?: { id: string; username?: string }[] }>(
+    `${GRAPH}/${IG_VERSION}/me/assigned_instagram_accounts?${new URLSearchParams({ fields: "id,username", access_token: tok.access_token })}`,
+  );
+  const accounts = (list.data ?? []).filter((a) => a.id).map((a) => ({ igId: String(a.id), username: a.username ?? String(a.id) }));
+  if (!accounts.length) throw new IgError("No Instagram account was shared. Connect again and select the Instagram account.", false);
+  return { token: tok.access_token, expiresAt: tok.expires_in ? new Date(Date.now() + tok.expires_in * 1000) : null, accounts };
 }
 
 export type ContainerInput =

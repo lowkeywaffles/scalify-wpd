@@ -1,8 +1,8 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { composeCaption } from "./captions";
-import { decryptSecret, encryptSecret } from "./crypto";
-import { containerStatus, createContainer, IgError, mediaPermalink, publishContainer, refreshToken } from "./instagram";
+import { decryptSecret } from "./crypto";
+import { containerStatus, createContainer, IgError, mediaPermalink, publishContainer } from "./instagram";
 import { mediaProblem, type Format } from "./rules";
 import { supabaseAdmin } from "./supabase/server";
 
@@ -112,28 +112,6 @@ async function claim(db: SupabaseClient, id: string): Promise<Post | null> {
   return (data as Post | null) ?? null;
 }
 
-async function refreshTokens(db: SupabaseClient): Promise<number> {
-  const soon = new Date(Date.now() + 10 * 86400_000).toISOString();
-  const dayAgo = new Date(Date.now() - 86400_000).toISOString();
-  const { data } = await db.from("studio_accounts").select("id, token_expires_at, token_refreshed_at, created_at")
-    .lt("token_expires_at", soon).gt("token_expires_at", new Date().toISOString()).limit(5);
-  let n = 0;
-  for (const a of data ?? []) {
-    if ((a.token_refreshed_at ?? a.created_at) > dayAgo) continue; // Instagram requires the token to be 24 h old
-    try {
-      const auth = await accountToken(db, a.id);
-      if (!auth) continue;
-      const r = await refreshToken(auth.token);
-      await db.from("studio_secrets").update({ token_ciphertext: encryptSecret(r.token), updated_at: new Date().toISOString() }).eq("account_id", a.id);
-      await db.from("studio_accounts").update({ token_expires_at: r.expiresAt.toISOString(), token_refreshed_at: new Date().toISOString() }).eq("id", a.id);
-      n++;
-    } catch (e) {
-      console.error("[studio] token refresh failed", a.id, e instanceof Error ? e.message : e);
-    }
-  }
-  return n;
-}
-
 /** One scheduler pass. With postId, only that post (used by "Publish now"). */
 export async function tick(opts: { postId?: string } = {}): Promise<TickReport> {
   const db = supabaseAdmin();
@@ -141,7 +119,7 @@ export async function tick(opts: { postId?: string } = {}): Promise<TickReport> 
   const nowIso = new Date().toISOString();
 
   if (!opts.postId) {
-    report.refreshed = await refreshTokens(db);
+    // Unified Login system-user tokens from our configuration don't expire, so there is nothing to refresh.
     // TikTok posts are prepared, not auto-posted: when due they move to "ready" and show as a reminder.
     const { data: tt } = await db.from("studio_posts").update({ status: "ready", updated_at: nowIso })
       .eq("platform", "tiktok").eq("status", "scheduled").lte("scheduled_at", nowIso).select("id");

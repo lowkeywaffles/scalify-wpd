@@ -1,7 +1,7 @@
 import { ActionButton } from "@/components/ActionButton";
 import { LocalTime } from "@/components/LocalTime";
 import { listAccounts } from "@/lib/data";
-import { igAppIdForDisplay, igConfigured, igRedirectUri } from "@/lib/instagram";
+import { igAppIdForDisplay, igConfigIdForDisplay, igConfigured, igRedirectUri } from "@/lib/instagram";
 import { requireMember } from "@/lib/members";
 import { disconnectAccount } from "../actions";
 
@@ -10,8 +10,8 @@ const MSG: Record<string, { ok: boolean; text: string }> = {
   connected: { ok: true, text: "Instagram connected." },
   denied: { ok: false, text: "Instagram access was declined." },
   state: { ok: false, text: "The connection link expired or didn't match. Try again." },
-  error: { ok: false, text: "Instagram connection failed. Check that the account is a Business or Creator account and is added as a tester on the Meta app (see Setup)." },
-  not_configured: { ok: false, text: "Add the Instagram app keys in Vercel first (see Setup)." },
+  error: { ok: false, text: "Instagram connection failed. Check that the account is a Business or Creator account, that you selected it during login, and that it is an Instagram Tester on the Meta app (see Setup)." },
+  not_configured: { ok: false, text: "Add the Meta app keys and configuration ID in Vercel first (see Setup)." },
 };
 
 export default async function AccountsPage({ searchParams }: { searchParams: Promise<{ ig?: string }> }) {
@@ -35,7 +35,7 @@ export default async function AccountsPage({ searchParams }: { searchParams: Pro
             </div>
           ))}
           {igConfigured() && (
-            <p className="text-xs text-muted">App ID in use: <code>{igAppIdForDisplay()}</code>. This must be the <strong>Instagram app ID</strong> from Meta → Instagram → API setup with Instagram login, not the Facebook App ID from App settings → Basic. Redirect URL Meta must allow: <code className="break-all">{igRedirectUri()}</code></p>
+            <p className="text-xs text-muted">Meta app ID: <code>{igAppIdForDisplay()}</code> · configuration ID: <code>{igConfigIdForDisplay()}</code>. Redirect URL saved in Meta (Unified Login → Redirect URL): <code className="break-all">{igRedirectUri()}</code></p>
           )}
           {igConfigured() ? <a href="/api/instagram/connect" className="btn-primary">{accounts.some((a) => a.platform === "instagram") ? "Reconnect / add account" : "Connect Instagram"}</a>
             : <p className="text-sm text-warn">Instagram app keys aren't set yet. <a href="/studio/setup" className="underline">Setup guide</a></p>}

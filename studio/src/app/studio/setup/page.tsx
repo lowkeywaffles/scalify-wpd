@@ -24,20 +24,24 @@ export default async function SetupPage() {
         <Step n={1} title="Make the Instagram account a professional account">
           <p>In the Instagram app: Settings → <em>Account type and tools</em> → <em>Switch to professional account</em> → choose <strong>Business</strong> or <strong>Creator</strong>. It's free and you can switch back.</p>
         </Step>
-        <Step n={2} title="Create a Meta developer app" done={igConfigured()}>
+        <Step n={2} title="Set up Unified Login in your Meta app" done={igConfigured()}>
           <ol className="list-decimal space-y-1 pl-5">
-            <li>Go to <a className="underline" href="https://developers.facebook.com/apps" target="_blank" rel="noopener noreferrer">developers.facebook.com/apps</a> → <em>Create app</em>. Pick the use case for managing content/messaging on <strong>Instagram</strong>. Meta renames these screens often, so look for “Instagram API”.</li>
-            <li>Open <em>Instagram → API setup with Instagram login</em>. Under <em>Set up Instagram business login</em>, add this redirect URL exactly:
+            <li>At <a className="underline" href="https://developers.facebook.com/apps" target="_blank" rel="noopener noreferrer">developers.facebook.com/apps</a>, open your app. Then go to <em>Use cases → Instagram API → Customize → API setup with Unified login</em>.</li>
+            <li><strong>1. Configure your app:</strong> choose <em>Create new configuration</em>, then <em>Use this configuration</em>. Copy its <strong>Configuration ID</strong>.</li>
+            <li>Under <em>Redirect URL</em>, register this URL exactly and click Save:
               <code className="mt-1 block break-all rounded-lg bg-surface-2 p-2">{igRedirectUri()}</code></li>
-            <li>On the same page, copy the <strong>Instagram app ID</strong> and <strong>Instagram app secret</strong>. These are different from the Facebook App ID.</li>
-            <li><em>App roles → Roles → Add people → Instagram Tester</em>: add the Instagram username. Then accept the invite on instagram.com (Settings → <em>Apps and websites</em> → <em>Tester invites</em>).</li>
-            <li>Leave the app in <strong>Development</strong> mode. For accounts that have a role on the app, no App Review should be needed. Only your own accounts can connect, which is what you want.</li>
+            <li><strong>2. Generate access tokens → Add account:</strong> invite the Instagram account as an Instagram Tester. Accept the invite on instagram.com: Settings → <em>Website permissions → Apps and websites → Tester invites</em>.</li>
+            <li>Leave the app in <strong>Development</strong> mode. Accounts with a role on the app get standard access, so no App Review is needed for your own accounts.</li>
           </ol>
         </Step>
         <Step n={3} title="Add the keys in Vercel" done={igConfigured()}>
-          <p>Vercel → project <strong>scalify-studio</strong> → Settings → Environment Variables. Add each one as <strong>Sensitive</strong>, for Production:</p>
-          <ul className="list-disc pl-5"><li><code>INSTAGRAM_APP_ID</code>: the Instagram app ID</li><li><code>INSTAGRAM_APP_SECRET</code>: the Instagram app secret</li></ul>
-          <p>Then redeploy (Deployments → ⋯ → Redeploy). Come back to <a className="underline" href="/studio/accounts">Accounts</a> and press <em>Connect Instagram</em>.</p>
+          <p>Vercel → project <strong>scalify-studio</strong> → Settings → Environment Variables (Production):</p>
+          <ul className="list-disc pl-5">
+            <li><code>INSTAGRAM_APP_ID</code>: the Meta <strong>App ID</strong> (App settings → Basic)</li>
+            <li><code>INSTAGRAM_APP_SECRET</code>: the Meta <strong>App secret</strong> (App settings → Basic). Mark it <strong>Sensitive</strong>.</li>
+            <li><code>INSTAGRAM_CONFIG_ID</code>: the Configuration ID from step 2. It isn't secret.</li>
+          </ul>
+          <p>Redeploy, then go to <a className="underline" href="/studio/accounts">Accounts</a> → <em>Connect Instagram</em>, log in, and select the Instagram account.</p>
         </Step>
         <Step n={4} title="Optional: free AI captions with Gemini" done={activeProvider() !== "templates"}>
           <ol className="list-decimal space-y-1 pl-5">

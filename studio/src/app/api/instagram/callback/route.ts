@@ -28,13 +28,15 @@ export async function GET(req: NextRequest) {
   try {
     const r = await exchangeCode(code);
     const db = supabaseAdmin();
-    const { data: acc, error } = await db.from("studio_accounts").upsert(
-      { platform: "instagram", external_id: r.igId, username: r.username, token_expires_at: r.expiresAt.toISOString(), token_refreshed_at: new Date().toISOString(), connected_by: me.email },
-      { onConflict: "platform,external_id" },
-    ).select("id").single();
-    if (error || !acc) throw new Error(error?.message ?? "save failed");
-    const { error: secErr } = await db.from("studio_secrets").upsert({ account_id: acc.id, token_ciphertext: encryptSecret(r.token), updated_at: new Date().toISOString() });
-    if (secErr) throw new Error(secErr.message);
+    for (const a of r.accounts) {
+      const { data: acc, error } = await db.from("studio_accounts").upsert(
+        { platform: "instagram", external_id: a.igId, username: a.username, token_expires_at: r.expiresAt?.toISOString() ?? null, token_refreshed_at: new Date().toISOString(), connected_by: me.email },
+        { onConflict: "platform,external_id" },
+      ).select("id").single();
+      if (error || !acc) throw new Error(error?.message ?? "save failed");
+      const { error: secErr } = await db.from("studio_secrets").upsert({ account_id: acc.id, token_ciphertext: encryptSecret(r.token), updated_at: new Date().toISOString() });
+      if (secErr) throw new Error(secErr.message);
+    }
     return back("connected");
   } catch (e) {
     console.error("[studio] instagram connect failed", e instanceof Error ? e.message : e);
