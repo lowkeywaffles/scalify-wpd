@@ -13,12 +13,12 @@
     },
     {
       "source": "/quoterevive",
-      "destination": "https://quoterevive-ebon.vercel.app",
+      "destination": "https://quoterevivepro.vercel.app",
       "permanent": false
     },
     {
       "source": "/quoterevive/:path*",
-      "destination": "https://quoterevive-ebon.vercel.app",
+      "destination": "https://quoterevivepro.vercel.app",
       "permanent": false
     },
     {

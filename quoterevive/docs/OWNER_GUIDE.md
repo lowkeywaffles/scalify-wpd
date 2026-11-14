@@ -3,8 +3,8 @@
 ## Where things are
 | What | Where |
 |---|---|
-| Live site | https://quoterevive-ebon.vercel.app |
-| Customer how-to | https://quoterevive-ebon.vercel.app/guide |
+| Live site | https://quoterevivepro.vercel.app |
+| Customer how-to | https://quoterevivepro.vercel.app/guide |
 | Hosting | vercel.com → project **quoterevive** |
 | Database & logins | supabase.com → project `yardudilkrhhhhtvgyuh` |
 | Code | GitHub `lowkeywaffles/scalify-wpd`, folder `quoterevive/` |
