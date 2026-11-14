@@ -245,6 +245,36 @@ main{position:relative;z-index:1}
 }
 @media (max-width:900px){.m3d .cube.c2,.m3d .cube.c3{display:none}}
 .allp{display:inline-block;margin-top:18px;font-weight:700}
+
+.cc-caps{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px;counter-reset:none}
+.cc-caps li{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--card-line);border-radius:14px;padding:14px 16px}
+.cc-caps b{flex:none;font:700 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;background:var(--accent);color:var(--on-accent);border-radius:6px;padding:6px 8px}
+.cc-caps strong{display:block;font-size:18px;letter-spacing:-.02em;line-height:1.2}
+.cc-caps span{color:var(--muted);font-size:15px}.cc-caps strong{color:var(--ink)}
+.ccs .cc-pause{display:none}
+.ccs .cc-body3d{perspective:1400px}
+.ccs .cc-win{transform-style:preserve-3d;will-change:transform}
+.ccs .cc-capstage{position:relative;height:118px;margin-top:18px;perspective:900px;perspective-origin:50% 0}
+.ccs .cc-caps{position:absolute;inset:0;margin:0;display:block;transform-style:preserve-3d}
+.ccs .cc-caps li{position:absolute;left:0;right:0;top:0;transform-origin:50% 0;backface-visibility:hidden;will-change:transform,opacity;box-shadow:0 18px 40px -24px rgba(0,0,0,.5)}
+.ccs .cc-caps li.on{border-color:var(--ink);box-shadow:6px 6px 0 var(--accent),0 18px 40px -24px rgba(0,0,0,.5)}
+.ccs .cc-dots{display:flex;gap:6px;margin-top:12px}
+.ccs .cc-dots i{width:22px;height:4px;border-radius:4px;background:var(--line);transition:background .3s}
+.ccs .cc-dots i.on{background:var(--ink)}
+.cc-dots{display:none}
+@media (max-width:999px){
+  .ccs h3#cc-h{font-size:clamp(24px,7vw,34px);margin-bottom:6px}
+  .ccs .cc-sub{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .ccs .cc-capstage{height:84px;margin-top:12px}
+  .ccs .cc-caps li{padding:10px 12px;gap:10px}.ccs .cc-caps strong{font-size:16px}.ccs .cc-caps span{font-size:13.5px}
+  .ccs .cc-dots{margin-top:8px}
+}
+@media (max-width:999px) and (max-height:780px){.ccs h3#cc-h{font-size:22px;margin-bottom:4px}.ccs .cc-capstage{margin-top:8px}}
+@media (min-width:1000px){
+  .ccs .cc-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:center}
+  .ccs .cc-capstage{height:150px;margin-top:0}
+  .ccs .cc-caps strong{font-size:21px}
+}
 </style>
 </head>
 <body>
@@ -362,7 +392,7 @@ SCALIFY <small>WPD</small></a>
 <div class="cc" role="group" aria-labelledby="cc-h">
 <h3 id="cc-h">From raw clips to finished content.</h3>
 <p class="cc-sub">A look at how we cut social and media content: drag, trim, title, export.</p>
-<div class="cc-win" role="img" aria-label="Animated demo of a video editor: three clips are dragged onto a timeline, trimmed, given a title, played back and exported.">
+<div class="cc-grid"><div class="cc-body3d"><div class="cc-win" role="img" aria-label="Animated demo of a video editor: three clips are dragged onto a timeline, trimmed, given a title, played back and exported.">
 <div aria-hidden="true">
 <div class="cc-top"><i></i><i></i><i></i><b>SCALIFY STUDIO</b><span class="cc-exp"><u></u><span class="cc-exp-t">Export</span></span></div>
 <div class="cc-main">
@@ -379,6 +409,15 @@ SCALIFY <small>WPD</small></a>
 <div class="cc-head"></div></div></div>
 <div class="cc-cursor"><div class="cc-ghost"></div><div class="cc-ring"></div><svg viewBox="0 0 20 20"><path d="M2 1l14 8-6 1.5L7 17z" fill="#fff" stroke="#0E0F12" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
 </div></div>
+</div><div class="cc-side"><div class="cc-capstage"><ol class="cc-caps" aria-label="What the editor is doing, step by step">
+<li><b>01</b><span><strong>Drop in the first clip</strong>Footage goes straight onto the timeline.</span></li>
+<li><b>02</b><span><strong>Line up the next shot</strong>Clips snap into order, no gaps.</span></li>
+<li><b>03</b><span><strong>Build the story</strong>Three shots: hook, value, payoff.</span></li>
+<li><b>04</b><span><strong>Trim the dead air</strong>Every second has to earn its place.</span></li>
+<li><b>05</b><span><strong>Add titles &amp; captions</strong>Most people watch with the sound off.</span></li>
+<li><b>06</b><span><strong>Preview the cut</strong>Check the pacing before anyone else sees it.</span></li>
+<li><b>07</b><span><strong>Export for Reels &amp; TikTok</strong>9:16, sharp and ready to post.</span></li>
+</ol></div><div class="cc-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>
 <button class="cc-pause" type="button" aria-pressed="false">Pause animation</button>
 </div>
 <h2>The people behind it</h2>
@@ -399,7 +438,7 @@ SCALIFY <small>WPD</small></a>
 <p class="note">Plain-language policies for this site. Highlighted items are details we must confirm. Last updated: <span class="tbd">4 November 2026</span>.</p>
 <details><summary>Privacy policy</summary><div>
 <h3>Who we are</h3><p>SCALIFY WPD, Bole, Addis Ababa, Ethiopia, skelifywpd@gmail.com, 0969803580.</p>
-<h3>What this website collects</h3><p>This website has no forms, accounts, analytics, advertising or tracking tools, and it loads no third-party scripts or fonts. We do not collect personal data through the site itself. Like any website, the hosting provider may log technical data such as IP address and browser type for security and operations.</p>
+<h3>What this website collects</h3><p>This website has no forms, accounts, analytics, advertising or tracking tools, and it loads no third-party scripts or fonts. (Our animations use the GSAP library, which we host on this site ourselves, so your browser does not contact any other company for it.) We do not collect personal data through the site itself. Like any website, the hosting provider may log technical data such as IP address and browser type for security and operations.</p>
 <h3>If you email or call us</h3><p>We receive what you send (for example your name, email address and project details). We use it only to reply, prepare a quote and deliver work you ask for. Legal basis: your request and our contract with you. We keep it for <span class="tbd">12 months after our last contact</span>, and do not sell it or share it except with service providers needed to do the work or where law requires.</p>
 <h3>Your rights</h3><p>You can ask to see, correct or delete your data, or object to our use of it, by emailing us. You may also complain to the data-protection authority that applies to you.</p>
 </div></details>
@@ -481,8 +520,12 @@ if('IntersectionObserver' in window){new IntersectionObserver(function(e){visibl
 loop();
 })();
 </script>
+<script src="/vendor/gsap.min.js"></script>
+<script src="/vendor/ScrollTrigger.min.js"></script>
+<script>window.__ccScroll=!!(window.gsap&&window.ScrollTrigger&&!matchMedia('(prefers-reduced-motion: reduce)').matches);</script>
 <script>
 (function(){
+if(window.__ccScroll)return; /* the scroll-driven version below takes over */
 var demo=document.querySelector(".cc");
 var q=function(s,r){return(r||demo).querySelector(s)},qa=function(s,r){return Array.prototype.slice.call((r||demo).querySelectorAll(s))};
 var win=q('.cc-win'),cur=q('.cc-cursor'),ghost=q('.cc-ghost'),ring=q('.cc-ring'),lanes=q('.cc-lanes'),head=q('.cc-head'),screen=q('.cc-screen'),word=q('.cc-screen em'),title=q('.cc-title'),btn=q('.cc-pause'),expT=q('.cc-exp-t'),expU=q('.cc-exp u');
@@ -519,6 +562,72 @@ loop();
 })();
 </script>
 
+
+<script>
+/* Video editor, scroll-driven (GSAP ScrollTrigger). Each scroll step performs one edit and flips in its caption. */
+(function(){
+if(!window.__ccScroll)return;
+gsap.registerPlugin(ScrollTrigger);
+var d=document,demo=d.querySelector('.cc');
+var q=function(s){return demo.querySelector(s)},qa=function(s){return [].slice.call(demo.querySelectorAll(s))};
+var win=q('.cc-win'),cur=q('.cc-cursor'),ghost=q('.cc-ghost'),ring=q('.cc-ring'),lanes=q('.cc-lanes'),head=q('.cc-head'),screen=q('.cc-screen'),word=q('.cc-screen em'),title=q('.cc-title'),expT=q('.cc-exp-t'),expU=q('.cc-exp u'),exp=q('.cc-exp');
+var vl=q('[data-lane=v]'),tl=q('[data-lane=t]'),clips=qa('[data-lane=v] .cc-clip'),txt=q('.cc-txt'),thumbs=qa('.cc-bin div'),aud=q('.cc-aud'),play=q('.cc-play');
+var caps=qa('.cc-caps li'),dots=qa('.cc-dots i'),words=['WEB','DESIGN','MEDIA'];
+[10,24,16,28,12,30,18,26,14,22,30,12,20,28,16,24,10,26,18,30,14,22,28,16,12,24,20,30].forEach(function(h,i){var s=d.createElement('s');s.style.setProperty('--h',(h/30).toFixed(2));s.style.setProperty('--i',i);aud.appendChild(s)});
+demo.classList.add('ccs');
+// layout position inside the window (unaffected by 3D transforms)
+function at(el,fx,fy){var x=0,y=0,e=el;while(e&&e!==win){x+=e.offsetLeft;y+=e.offsetTop;e=e.offsetParent}return[x+el.offsetWidth*fx,y+el.offsetHeight*fy]}
+function lane(l,pct){var p=at(l,0,.5);return[p[0]+l.offsetWidth*pct/100,p[1]]}
+var SRC=[null,thumbs[0],thumbs[1],thumbs[2],null,thumbs[3],null,null];
+function dest(k){return k===0?[win.clientWidth-40,win.clientHeight-20]:k<=3?lane(vl,[16,47,77][k-1]):k===4?lane(vl,84):k===5?lane(tl,40):k===6?at(play,.5,.5):at(exp,.5,.5)}
+gsap.set(cur,{x:dest(0)[0],y:dest(0)[1],opacity:1});
+var shown=0,step=-1,anim=null;
+function click(){ring.classList.remove('go');void ring.offsetWidth;ring.classList.add('go')}
+function discrete(k){ // everything that switches on at a step
+  clips.forEach(function(c,i){c.classList.toggle('in',k>i)});
+  clips[2].style.width=k>=4?'22%':'30%';
+  txt.classList.toggle('in',k>=5);title.classList.toggle('on',k>=5);
+}
+function scrubbed(k,sub){ // things that move continuously with the scroll
+  head.style.left=(k<6?0:k===6?84*sub:84)+'%';
+  lanes.classList.toggle('play',k===6&&sub>0&&sub<1);
+  if(k<6){screen.className='cc-screen';word.textContent='WEB'}else{var sc=k===6?Math.min(2,Math.floor(sub*3)):2;screen.className='cc-screen s'+(sc+1);word.textContent=words[sc]}
+  expU.style.width=(k===7?Math.min(100,sub*115):0)+'%';expT.textContent=k===7&&sub>.88?'Done ✓':'Export';
+}
+function captions(k){
+  caps.forEach(function(li,i){var dd=i-(k-1);li.classList.toggle('on',dd===0);
+    var wide=innerWidth>=1000,v=k===0?{rotationX:-80,y:40,z:-60,opacity:0}:dd===0?{rotationX:0,y:0,z:0,opacity:1}:dd<0?(wide?{rotationX:58,y:-34*Math.min(-dd,3),z:-110*Math.min(-dd,3),opacity:Math.max(0,.42+.14*dd)}:{rotationX:70,y:-18,z:-90,opacity:0}):{rotationX:-80,y:46,z:-60,opacity:0};
+    gsap.to(li,Object.assign({duration:.65,ease:'power3.out',overwrite:'auto'},v))});
+  dots.forEach(function(dt,i){dt.classList.toggle('on',i<k)});
+}
+function go(k,sub){
+  scrubbed(k,sub);
+  if(k===step)return;
+  var prev=step;step=k;captions(k);
+  if(anim){anim.kill();anim=null;ghost.className='cc-ghost'}
+  var p=dest(k);
+  if(k===prev+1&&SRC[k]){ // forward drag: pick from the bin, carry, drop
+    var s=at(SRC[k],.5,.5);discrete(k-1);
+    anim=gsap.timeline({onComplete:function(){anim=null}})
+      .to(cur,{x:s[0],y:s[1],duration:.32,ease:'power2.inOut'}).call(function(){click();ghost.className='cc-ghost on cc-t'+Math.min(k-1,2)})
+      .to(cur,{x:p[0],y:p[1],duration:.42,ease:'power2.inOut'}).call(function(){ghost.className='cc-ghost';discrete(k)});
+  }else{
+    discrete(k);
+    anim=gsap.timeline({onComplete:function(){anim=null}}).to(cur,{x:p[0],y:p[1],duration:.4,ease:'power2.inOut'}).call(function(){if(k>prev&&k>=4)click()});
+  }
+}
+var N=8;
+ScrollTrigger.create({trigger:demo,start:'top top+='+(d.querySelector('header').offsetHeight+8),end:function(){return '+='+Math.round(innerHeight*3.2)},pin:true,anticipatePin:1,
+  onUpdate:function(st){var p=st.progress*N,k=Math.min(N-1,Math.floor(p));go(k,Math.min(1,p-k))}});
+// the window itself swings in 3D across the pinned scroll
+gsap.timeline({scrollTrigger:{trigger:demo,start:'top bottom',end:function(){return '+='+Math.round(innerHeight*4.2)},scrub:1}})
+  .fromTo(win,{rotationX:24,rotationY:-16,z:-120,transformOrigin:'50% 100%'},{rotationX:0,rotationY:0,z:0,ease:'power2.out',duration:.3})
+  .to(win,{rotationY:7,rotationX:-3,ease:'none',duration:.55})
+  .to(win,{rotationY:0,rotationX:0,ease:'power1.inOut',duration:.15});
+go(0,0);
+addEventListener('load',function(){ScrollTrigger.refresh()});
+})();
+</script>
 <script>
 /* 3D scroll motion: one rAF loop, transforms only, smoothed scroll. Off for reduced motion. */
 (function(){
@@ -528,7 +637,7 @@ r.classList.add('m3d');
 var hero=d.querySelector('.hero'),hw=d.querySelector('.hero .wrap'),ho=d.querySelector('.hero-orbit .hero-mark');
 var orbit=d.querySelector('.orbit'),ring=d.querySelector('.ring'),panels=[].slice.call(d.querySelectorAll('.panel')),meta=d.querySelector('.orbit-meta'),on=meta&&meta.querySelector('.on');
 var cubes=[].slice.call(d.querySelectorAll('.cube'));
-var tilts=[].slice.call(d.querySelectorAll('#services .card,.steps .card,.product,.cd-win,.cc-win,#legal details'));
+var tilts=[].slice.call(d.querySelectorAll('#services .card,.steps .card,.product,.cd-win,#legal details'+(window.__ccScroll?'':',.cc-win')));
 tilts.forEach(function(e){e.removeAttribute('data-reveal');e.classList.add('tilt');e.parentElement.style.perspective='1200px'});
 var N=panels.length,R=380,cur=scrollY,tgt=scrollY,vh=innerHeight,vw=innerWidth,raf=0,last=-1;
 function size(){vh=innerHeight;vw=innerWidth;var pw=Math.min(300,vw*.62),ph=pw*.7;R=Math.max(pw*.95,Math.min(420,vw*.36));r.style.setProperty('--pw',pw+'px');r.style.setProperty('--ph',ph+'px')}
