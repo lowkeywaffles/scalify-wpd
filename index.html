@@ -119,15 +119,15 @@ details[open]>div{animation:fade .4s both}
 .cd-top{display:flex;align-items:center;gap:6px;padding:2px 4px 10px}
 .cd-top i{flex:none;width:9px;height:9px;border-radius:50%;background:#3A3E47}
 .cd-tab{margin-left:8px;padding:4px 10px;border-radius:6px 6px 0 0;background:#0B0C0F;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#F4F3EE}
-.cd-tab.dim{margin-left:0;background:none;color:#6B717D}
+.cd-tab.dim{margin-left:0;background:none;color:#9097A3}
 .cd-top .sp{flex:1}
 .cd-run{background:#C6FF3D;color:#0E0F12;font-weight:700;border-radius:6px;padding:5px 12px;min-width:84px;text-align:center}
 .cd-run.busy{background:#9AA0AC}
 .cd-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:10px}
 .cd-code{background:#0B0C0F;border-radius:10px;padding:10px 6px 10px 0;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;height:calc(17*1.55em + 20px);overflow:hidden;white-space:pre;counter-reset:n;color:#D5D8DE}
 .cd-code .l{display:block;min-height:1.55em;counter-increment:n;padding-left:34px;position:relative}
-.cd-code .l::before{content:counter(n);position:absolute;left:0;width:24px;text-align:right;color:#4A4F59}
-.cd-code i{font-style:normal}.c{color:#6B717D}.s{color:#C6FF3D}.k{color:#7FB0FF}.f{color:#FFB86B}.n{color:#FF8FA3}
+.cd-code .l::before{content:counter(n);position:absolute;left:0;width:24px;text-align:right;color:#7A808B}
+.cd-code i{font-style:normal}.c{color:#9097A3}.s{color:#C6FF3D}.k{color:#7FB0FF}.f{color:#FFB86B}.n{color:#FF8FA3}
 .cd-caret{display:inline-block;width:2px;height:1.1em;background:#C6FF3D;vertical-align:text-bottom;margin-left:1px;animation:cd-b 1s steps(1) infinite}
 @keyframes cd-b{50%{opacity:0}}
 .cd-prev{position:relative;background:#F4F3EE;color:#0E0F12;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:190px}
@@ -181,7 +181,7 @@ details[open]>div{animation:fade .4s both}
 .cc-ruler{margin:0 0 6px 34px;height:10px;background:repeating-linear-gradient(90deg,#3A3E47 0 1px,transparent 1px 8.33%)}
 .cc-lanes{position:relative;margin-left:34px}
 .cc-lane{position:relative;height:30px;margin-bottom:6px;background:#15171C;border-radius:5px}
-.cc-lane>span{position:absolute;left:-30px;top:8px;color:#6B717D;font-weight:700}
+.cc-lane>span{position:absolute;left:-30px;top:8px;color:#9097A3;font-weight:700}
 .cc-clip{font-style:normal;position:absolute;top:3px;bottom:3px;border-radius:5px;opacity:0;transform:scale(.7);transition:opacity .25s,transform .25s,width .5s}
 .cc-clip.in{opacity:1;transform:none}
 .cc-v0{background:#C6FF3D}.cc-v1{background:#9AA0AC}.cc-v2{background:#F4F3EE}
@@ -202,10 +202,55 @@ details[open]>div{animation:fade .4s both}
 .cc-pause{margin-top:14px;min-height:44px;padding:10px 18px;border-radius:10px;border:2px solid var(--ink);background:transparent;color:var(--ink);font:700 15px system-ui,sans-serif;cursor:pointer}
 @media (max-width:560px){.cc-main{grid-template-columns:minmax(0,1fr)}.cc-bin{grid-template-columns:repeat(4,1fr)}.cc-bin .cc-tool{grid-column:auto;aspect-ratio:16/10}}
 @media (prefers-reduced-motion:reduce){.cc-clip,.cc-screen,.cc-title{transition:none}.cc-pause{display:none}}
+
+/* ===== 3D scroll motion (all motion is off for prefers-reduced-motion) ===== */
+main{position:relative;z-index:1}
+.orbit{position:relative}
+.orbit-sticky{padding:64px 0}
+.orbit h2{margin:0 0 8px}
+.orbit .sub{margin-bottom:28px}
+.ring{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:14px}
+.panel{background:#0E0F12;color:#F4F3EE;border:1px solid #2B2E35;border-radius:20px;padding:22px;min-height:170px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.panel::after{content:"";position:absolute;inset:auto -30% -60% auto;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(198,255,61,.28),transparent 65%);pointer-events:none}
+.panel b{font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:#C6FF3D}
+.panel h3{margin:18px 0 6px;font-size:26px;letter-spacing:-.03em;line-height:1.05}
+.panel p{margin:0;color:#B9BDC6;font-size:15px}
+.panel.lime{background:#C6FF3D;color:#0E0F12;border-color:#C6FF3D}.panel.lime b{color:#0E0F12}.panel.lime p{color:#2B2E35}
+.panel.lime::after{background:radial-gradient(circle,rgba(14,15,18,.18),transparent 65%)}
+.orbit-meta{display:none}
+.cube{display:none}
+@media (prefers-reduced-motion:no-preference){
+  .m3d .orbit{height:340vh}
+  .m3d .orbit-sticky{position:sticky;top:0;height:100vh;height:100svh;padding:0;display:grid;grid-template-rows:auto 1fr auto;align-items:center;overflow:hidden}
+  .m3d .orbit-head{padding-top:clamp(96px,13vh,130px);text-align:center}
+  @media (max-width:760px){.m3d .orbit-head{padding-top:118px}}
+  .m3d .orbit .sub{margin:0 auto}
+  .m3d .stage{position:relative;height:100%;perspective:1400px;perspective-origin:50% 40%}
+  .m3d .ring{position:absolute;left:50%;top:50%;width:0;height:0;display:block;transform-style:preserve-3d;will-change:transform}
+  .m3d .panel{position:absolute;width:var(--pw,300px);min-height:0;height:var(--ph,210px);left:calc(var(--pw,300px)/-2);top:calc(var(--ph,210px)/-2);backface-visibility:hidden;transition:filter .3s;will-change:transform,filter}
+  .m3d .orbit-meta{display:flex;justify-content:center;gap:14px;align-items:center;padding-bottom:clamp(28px,6vh,56px);font:700 14px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em}
+  .m3d .orbit-meta .bar3{width:160px;height:3px;background:var(--line);border-radius:3px;overflow:hidden}
+  .m3d .orbit-meta .bar3 i{display:block;height:100%;background:var(--ink);transform-origin:left;transform:scaleX(var(--op,0))}
+  .m3d .tilt{transform-origin:50% 100%}
+  .m3d .hero .wrap{transform-origin:50% 0;will-change:transform,opacity}
+  .m3d .hero-orbit{position:absolute;right:-50px;top:30px;width:min(46vw,440px);aspect-ratio:1;perspective:900px;pointer-events:none}
+  .m3d .hero-orbit .hero-mark{position:static;width:100%;height:100%}
+  .m3d .cube{display:block;position:fixed;z-index:0;width:var(--s);height:var(--s);transform-style:preserve-3d;pointer-events:none;will-change:transform}
+  .m3d .cube i{position:absolute;inset:0;border:1.5px solid var(--ink);opacity:.18;background:rgba(198,255,61,.05)}
+  .m3d .cube i:nth-child(1){transform:translateZ(calc(var(--s)/2))}.m3d .cube i:nth-child(2){transform:rotateY(180deg) translateZ(calc(var(--s)/2))}
+  .m3d .cube i:nth-child(3){transform:rotateY(90deg) translateZ(calc(var(--s)/2))}.m3d .cube i:nth-child(4){transform:rotateY(-90deg) translateZ(calc(var(--s)/2))}
+  .m3d .cube i:nth-child(5){transform:rotateX(90deg) translateZ(calc(var(--s)/2));background:rgba(198,255,61,.22);opacity:.35}.m3d .cube i:nth-child(6){transform:rotateX(-90deg) translateZ(calc(var(--s)/2))}
+  .m3d .product{transition:box-shadow .4s;transform-style:preserve-3d}
+  .m3d .product:hover{box-shadow:0 30px 60px -30px rgba(0,0,0,.45),8px 8px 0 var(--accent)}
+}
+@media (max-width:900px){.m3d .cube.c2,.m3d .cube.c3{display:none}}
+.allp{display:inline-block;margin-top:18px;font-weight:700}
 </style>
 </head>
 <body>
 <div class="progress" aria-hidden="true"></div>
+<div class="cube c1" aria-hidden="true" style="--s:90px"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="cube c2" aria-hidden="true" style="--s:56px"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="cube c3" aria-hidden="true" style="--s:120px"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
 <a class="skip" href="#main">Skip to main content</a>
 <header>
 <div class="bar">
@@ -214,7 +259,7 @@ details[open]>div{animation:fade .4s both}
 SCALIFY <small>WPD</small></a>
 <nav aria-label="Main"><ul>
 <li><a href="#services">Services</a></li>
-<li><a href="#products">Products</a></li>
+<li><a href="/products">Products</a></li>
 <li><a href="#process">Process</a></li>
 <li><a href="#about">About</a></li>
 <li><a href="#contact">Contact</a></li>
@@ -224,7 +269,7 @@ SCALIFY <small>WPD</small></a>
 </div>
 </header>
 <main id="main">
-<div class="hero" id="top"><div class="glow" aria-hidden="true"></div><svg class="hero-mark" aria-hidden="true" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="10" stroke-width=".6"/><path pathLength="1" d="M32 15H20a5 5 0 0 0 0 10h8a5 5 0 0 1 0 10H16" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="wrap">
+<div class="hero" id="top"><div class="glow" aria-hidden="true"></div><div class="hero-orbit" aria-hidden="true"><svg class="hero-mark" aria-hidden="true" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="10" stroke-width=".6"/><path pathLength="1" d="M32 15H20a5 5 0 0 0 0 10h8a5 5 0 0 1 0 10H16" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="wrap">
 <span class="eyebrow">Web Production &amp; Design</span>
 <h1><span class="w" style="--i:0">We</span> <span class="w" style="--i:1">design</span> <span class="w" style="--i:2">and</span> <span class="w" style="--i:3">build</span> <span class="w" style="--i:4">the</span> <span class="w" style="--i:5">web.</span></h1>
 <p class="lead">SCALIFY WPD is a small team that designs and builds websites and web apps, and produces social media and media content to go with them.</p>
@@ -232,6 +277,19 @@ SCALIFY <small>WPD</small></a>
 </div></div>
 
 <div class="marquee" aria-hidden="true"><div class="track"><div class="grp" style="display:contents"><span>Web design</span><span>•</span><span>Web development</span><span>•</span><span>Web apps</span><span>•</span><span>Social media</span><span>•</span><span>Media production</span><span>•</span></div><div class="dup"><span>Web design</span><span>•</span><span>Web development</span><span>•</span><span>Web apps</span><span>•</span><span>Social media</span><span>•</span><span>Media production</span><span>•</span></div></div></div>
+
+<section class="orbit" id="make" aria-labelledby="make-h"><div class="orbit-sticky">
+<div class="orbit-head wrap"><h2 id="make-h">What we make</h2><p class="sub">Six things, one team. Scroll to spin through them.</p></div>
+<div class="stage"><ul class="ring">
+<li class="panel lime"><b>01</b><div><h3>Websites</h3><p>Fast, clear sites that turn visitors into enquiries.</p></div></li>
+<li class="panel"><b>02</b><div><h3>Web apps</h3><p>Logins, payments and email, built in. Like QuoteRevive.</p></div></li>
+<li class="panel"><b>03</b><div><h3>Video &amp; reels</h3><p>Motion promos and reels for TikTok and Instagram.</p></div></li>
+<li class="panel lime"><b>04</b><div><h3>Social content</h3><p>Posts and visuals that match your brand.</p></div></li>
+<li class="panel"><b>05</b><div><h3>Design</h3><p>Layouts, branding and visuals that are easy to use.</p></div></li>
+<li class="panel"><b>06</b><div><h3>Security-first</h3><p>A cybersecurity specialist on the team from day one.</p></div></li>
+</ul></div>
+<div class="orbit-meta" aria-hidden="true"><span class="on">01</span><span class="bar3"><i></i></span><span>06</span></div>
+</div></section>
 
 <section id="services"><div class="wrap">
 <h2>Services</h2>
@@ -266,6 +324,7 @@ SCALIFY <small>WPD</small></a>
 <p class="product-price"><strong>Free to start</strong> (10 quotes) · Founding Access <strong>$39 one-time</strong>, no subscription</p>
 <a class="btn" href="https://quoterevive-ebon.vercel.app" rel="noopener">Try QuoteRevive free</a> <a class="btn alt" href="https://quoterevive-ebon.vercel.app/demo" rel="noopener">See the demo</a>
 </article>
+<a class="allp" href="/products">See all products →</a>
 </div></section>
 
 <section id="process" class="alt-bg"><div class="wrap">
@@ -351,7 +410,7 @@ SCALIFY <small>WPD</small></a>
 <h3>Liability and law</h3><p>We do our best to keep this site accurate but do not guarantee it is error-free. Nothing here limits rights you have under law. Governing law and courts: the laws of Ethiopia.</p>
 </div></details>
 <details><summary>Cookie policy</summary><div>
-<p>This website does not use cookies or similar storage technologies, so there is no cookie banner. If we add analytics, embeds or forms later, we will update this policy and ask for your consent first where the law requires it.</p>
+<p>This website does not use cookies. If you use the light/dark button, your choice is saved in your own browser (local storage) so the site remembers it; it never leaves your device and is not used for tracking. You can clear it in your browser settings. Because it only does what you asked, no cookie banner is needed. If we add analytics, embeds or forms later, we will update this policy and ask for your consent first where the law requires it.</p>
 </div></details>
 <details><summary>Refund policy</summary><div>
 <p>We offer refunds. The amount depends on the project price, the work already completed and the circumstances, and we always explain it in writing. Each quote also sets out its payment and refund terms before you agree. If delivered work does not match the agreed quote, we will fix it at no extra charge. To ask for a refund, email or call us and we will reply within <span class="tbd">3 business days</span>. Nothing here limits your statutory rights.</p>
@@ -457,6 +516,48 @@ if(reduce){finalState();btn.hidden=true;return}
 btn.addEventListener('click',function(){userPaused=!userPaused;btn.setAttribute('aria-pressed',userPaused);btn.textContent=userPaused?'Play animation':'Pause animation'});
 if('IntersectionObserver' in window){new IntersectionObserver(function(e){visible=e[0].isIntersecting},{threshold:.2}).observe(win)}
 loop();
+})();
+</script>
+
+<script>
+/* 3D scroll motion: one rAF loop, transforms only, smoothed scroll. Off for reduced motion. */
+(function(){
+var d=document,r=d.documentElement;
+if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('requestAnimationFrame' in window))return;
+r.classList.add('m3d');
+var hero=d.querySelector('.hero'),hw=d.querySelector('.hero .wrap'),ho=d.querySelector('.hero-orbit .hero-mark');
+var orbit=d.querySelector('.orbit'),ring=d.querySelector('.ring'),panels=[].slice.call(d.querySelectorAll('.panel')),meta=d.querySelector('.orbit-meta'),on=meta&&meta.querySelector('.on');
+var cubes=[].slice.call(d.querySelectorAll('.cube'));
+var tilts=[].slice.call(d.querySelectorAll('#services .card,.steps .card,.product,.cd-win,.cc-win,#legal details'));
+tilts.forEach(function(e){e.removeAttribute('data-reveal');e.classList.add('tilt');e.parentElement.style.perspective='1200px'});
+var N=panels.length,R=380,cur=scrollY,tgt=scrollY,vh=innerHeight,vw=innerWidth,raf=0,last=-1;
+function size(){vh=innerHeight;vw=innerWidth;var pw=Math.min(300,vw*.62),ph=pw*.7;R=Math.max(pw*.95,Math.min(420,vw*.36));r.style.setProperty('--pw',pw+'px');r.style.setProperty('--ph',ph+'px')}
+size();addEventListener('resize',function(){size();kick()},{passive:true});
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function frame(){
+  raf=0;tgt=scrollY;cur+=(tgt-cur)*.14;if(Math.abs(tgt-cur)<.4)cur=tgt;var y=cur;
+  // hero: content recedes into the screen, mark spins in 3D
+  if(hero){var hp=clamp(y/(hero.offsetHeight||1),0,1);hw.style.transform='perspective(1100px) translate3d(0,'+(hp*60)+'px,'+(-hp*260)+'px) rotateX('+(hp*16)+'deg)';hw.style.opacity=1-hp*1.1;
+    if(ho)ho.parentElement.style.transform='rotateY('+(y*.25)+'deg) rotateX('+(hp*30)+'deg)';}
+  // orbit: ring of panels spins with scroll
+  if(orbit){var top=orbit.offsetTop,h=orbit.offsetHeight-vh,op=clamp((y-top)/(h||1),0,1),rot=-op*360*(N-1)/N;
+    ring.style.transform='translateZ('+(-R)+'px) rotateX('+(-8+Math.sin(op*Math.PI)*6)+'deg) rotateY('+rot+'deg)';
+    var front=0,best=-9;panels.forEach(function(pn,i){var a=i*360/N;pn.style.transform='rotateY('+a+'deg) translateZ('+R+'px)';var face=Math.cos((a+rot)*Math.PI/180);if(face>best){best=face;front=i}
+      pn.style.filter=face>.85?'none':'brightness('+(.45+face*.3).toFixed(2)+') saturate(.8)'});
+    meta.style.setProperty('--op',op);if(on&&front!==last){on.textContent=('0'+(front+1)).slice(-2);last=front}}
+  // floating wireframe cubes
+  cubes.forEach(function(c,i){var sp=[.12,.2,.08][i],x=[.06,.9,.82][i],y0=[.3,.62,.16][i];
+    c.style.transform='translate3d('+(x*vw-40)+'px,'+(y0*vh+Math.sin(y*sp*.01+i*2)*vh*.18)+'px,0) rotateX('+(y*.18+i*40)+'deg) rotateY('+(y*.24+i*70)+'deg)';});
+  // cards tip up from the floor as they enter the viewport
+  tilts.forEach(function(e){var b=e.getBoundingClientRect();if(b.bottom<-50||b.top>vh+50)return;var v=clamp((vh-b.top)/(vh*.55),0,1);
+    e.style.rotate='x '+((1-v)*28).toFixed(2)+'deg';e.style.translate='0 '+((1-v)*40).toFixed(1)+'px';e.style.opacity=(.25+v*.75).toFixed(3)});
+  if(cur!==tgt)kick();
+}
+function kick(){if(!raf)raf=requestAnimationFrame(frame)}
+addEventListener('scroll',kick,{passive:true});kick();
+// pointer tilt on the product card (desktop only)
+var pr=d.querySelector('.product');
+if(pr&&matchMedia('(pointer:fine)').matches){pr.addEventListener('pointermove',function(e){var b=pr.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;pr.style.transform='perspective(900px) rotateY('+(x*8)+'deg) rotateX('+(-y*8)+'deg)'});pr.addEventListener('pointerleave',function(){pr.style.transform=''})}
 })();
 </script>
 </body>

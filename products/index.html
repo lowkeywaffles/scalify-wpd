@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Products · SCALIFY WPD</title>
+<meta name="description" content="Products designed, built and run by SCALIFY WPD, starting with QuoteRevive: follow up on unanswered quotes and win back clients.">
+<meta property="og:title" content="SCALIFY WPD · Products">
+<meta property="og:description" content="Tools we design, build and run ourselves. Start with QuoteRevive.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<script>
+try { const t = localStorage.getItem('scalify-theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch {}
+</script>
+<style>
+:root{--bg:#F4F3EE;--ink:#0E0F12;--muted:#4A4F59;--line:#C9C7BD;--card:#FFFFFF;--accent:#C6FF3D;--on-accent:#0E0F12;--btn-bg:#0E0F12;--btn-fg:#C6FF3D;--focus:#0B5FFF;--grid:rgba(14,15,18,.07);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E0F12;--ink:#F4F3EE;--muted:#A8ADB7;--line:#404550;--card:#1B1E26;--btn-bg:#C6FF3D;--btn-fg:#0E0F12;--focus:#7FB0FF;--grid:rgba(244,243,238,.06);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E0F12;--ink:#F4F3EE;--muted:#A8ADB7;--line:#404550;--card:#1B1E26;--btn-bg:#C6FF3D;--btn-fg:#0E0F12;--focus:#7FB0FF;--grid:rgba(244,243,238,.06);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--ink);font:400 17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:36px 36px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--btn-bg);color:var(--btn-fg);padding:10px 14px;border-radius:8px;z-index:20}.skip:focus{left:12px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px;max-width:1080px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:-.5px}
+.brand small{background:var(--accent);color:var(--on-accent);padding:1px 7px;border-radius:5px;font-size:13px;letter-spacing:2px}
+.logo-bg{fill:var(--btn-bg)}.logo-fg{stroke:var(--btn-fg)}
+nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0}
+nav a{display:inline-block;padding:10px 12px;text-decoration:none;font-weight:500;border-radius:8px}
+nav a:hover{background:var(--line)}
+nav a[aria-current]{background:var(--btn-bg);color:var(--btn-fg)}
+.intro{padding:64px 0 24px}
+.eyebrow{display:inline-block;background:var(--accent);color:var(--on-accent);padding:4px 12px;border-radius:6px;font-weight:700;font-size:14px;letter-spacing:3px;text-transform:uppercase}
+h1{font-size:clamp(44px,9vw,88px);line-height:.98;letter-spacing:-.04em;margin:18px 0 14px;max-width:13ch}
+.lead{font-size:clamp(18px,2.4vw,21px);color:var(--muted);max-width:52ch;margin:0}
+.list{display:grid;gap:22px;padding:28px 0 72px}
+/* product stage */
+.prod{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:center;background:#0E0F12;color:#F4F3EE;border:1px solid #2B2E35;border-radius:28px;padding:clamp(22px,4vw,44px);overflow:hidden}
+.prod::before{content:"";position:absolute;width:560px;height:560px;right:-160px;top:-200px;border-radius:50%;background:radial-gradient(circle,rgba(138,164,255,.45),transparent 65%);pointer-events:none}
+.prod::after{content:"";position:absolute;width:420px;height:420px;left:-140px;bottom:-220px;border-radius:50%;background:radial-gradient(circle,rgba(198,255,61,.22),transparent 65%);pointer-events:none}
+.prod>*{position:relative;z-index:1}
+.tag{display:inline-flex;align-items:center;gap:8px;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:#C6FF3D}
+.tag::before{content:"";width:8px;height:8px;border-radius:50%;background:#C6FF3D;box-shadow:0 0 0 4px rgba(198,255,61,.2)}
+.prod h2{font-size:clamp(36px,6vw,58px);letter-spacing:-.04em;line-height:1;margin:14px 0 12px}
+.prod h2 i{font-family:Georgia,"Times New Roman",serif;font-weight:400;color:#8aa4ff}
+.prod .pitch{color:#C9CCD4;margin:0 0 18px;max-width:46ch}
+.feats{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:8px}
+.feats li{padding-left:28px;position:relative;color:#E4E2DB}
+.feats li::before{content:"";position:absolute;left:2px;top:.5em;width:13px;height:7px;border-left:2.5px solid #C6FF3D;border-bottom:2.5px solid #C6FF3D;transform:rotate(-45deg)}
+.price{margin:0 0 20px;color:#C9CCD4}.price strong{color:#F4F3EE}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:12px 22px;border-radius:12px;font-weight:700;text-decoration:none;border:2px solid #C6FF3D;background:#C6FF3D;color:#0E0F12;transition:transform .25s,box-shadow .25s}
+.btn.alt{background:transparent;color:#F4F3EE;border-color:#6B717D}
+.btn:hover{transform:translateY(-3px);box-shadow:5px 5px 0 #8aa4ff}
+.fine{display:block;margin-top:14px;font-size:13.5px;color:#9AA0AB}
+/* 3D phone */
+.scene{perspective:1100px;display:grid;place-items:center;min-height:480px}
+.phone{width:248px;height:500px;border-radius:44px;background:#0b0c0f;border:2px solid #3a3d45;box-shadow:inset 0 0 0 9px #16171b,0 50px 90px -30px rgba(0,0,0,.9);position:relative;transform:rotateY(-18deg) rotateX(8deg) rotateZ(-3deg);transform-style:preserve-3d}
+.phone .scr{position:absolute;inset:11px;border-radius:34px;overflow:hidden;background:#F7F4EE;color:#17181C;padding:44px 14px 14px;font-size:12px}
+.phone .isl{position:absolute;left:50%;top:18px;width:74px;height:22px;margin-left:-37px;background:#000;border-radius:14px;z-index:2}
+.scr .d{color:#565961;font-size:11px}.scr .t{font-family:Georgia,serif;font-size:28px;line-height:1.1;margin:0 0 10px}
+.q{display:flex;gap:9px;align-items:center;background:#fff;border:1.5px solid #DDD7CC;border-radius:14px;padding:9px;margin-bottom:8px}
+.q .r{width:34px;height:34px;flex:none;border-radius:50%;border:4px solid #2348e0;display:grid;place-items:center;font-weight:800;font-size:11px}
+.q b{display:block;font-size:12px}.q span{color:#565961;font-size:10.5px}.q em{margin-left:auto;font-style:normal;font-family:Georgia,serif;font-size:15px}
+.wa{display:inline-block;margin-top:4px;background:#25d366;color:#05210f;font-weight:800;border-radius:999px;padding:8px 12px;font-size:11px}
+.chip{position:absolute;background:#C6FF3D;color:#0E0F12;font-weight:800;font-size:13px;border-radius:999px;padding:8px 14px;box-shadow:0 18px 30px -12px rgba(0,0,0,.6);white-space:nowrap}
+.chip.c1{left:-56px;top:110px;transform:translateZ(60px)}.chip.c2{right:-48px;bottom:120px;transform:translateZ(90px);background:#F4F3EE}
+.demo-note{font-size:12px;color:#9AA0AB;text-align:center;margin-top:10px}
+/* other cards */
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:10px;transition:transform .35s,box-shadow .35s,border-color .35s}
+.card:hover{transform:translateY(-6px);border-color:var(--ink);box-shadow:6px 6px 0 var(--accent)}
+.card .k{font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:var(--muted)}
+.card h2{font-size:30px;letter-spacing:-.03em;line-height:1.05;margin:4px 0 0}
+.card p{margin:0;color:var(--muted)}
+.card .go{margin-top:auto;padding-top:12px;font-weight:700}
+.card .go a{display:inline-flex;align-items:center;min-height:44px}
+.soon{border-style:dashed}
+footer{border-top:1px solid var(--line);padding:28px 0 36px;color:var(--muted);font-size:15px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+@media (max-width:820px){.prod{grid-template-columns:minmax(0,1fr)}.scene{min-height:440px;order:-1}.chip.c1{left:-30px}.chip.c2{right:-24px}}
+@media (max-width:520px){.bar{flex-wrap:wrap;row-gap:4px}.bar nav{width:100%}.bar nav ul{justify-content:flex-start}.bar nav a{padding:8px 10px}.brand{font-size:18px}}
+/* motion */
+@keyframes rise{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -12px}}
+@media (prefers-reduced-motion:no-preference){
+  .intro>*{animation:rise .9s both cubic-bezier(.2,.7,.2,1)}.intro>*:nth-child(2){animation-delay:.1s}.intro>*:nth-child(3){animation-delay:.2s}
+  .phone{animation:bob 6s ease-in-out infinite;will-change:transform}
+  .js3d .reveal{opacity:0;rotate:x 22deg;translate:0 50px;transform-origin:50% 100%;transition:opacity .9s,rotate .9s cubic-bezier(.2,.7,.2,1),translate .9s cubic-bezier(.2,.7,.2,1)}
+  .js3d .reveal.in{opacity:1;rotate:x 0deg;translate:0 0}
+  .list,.row2{perspective:1300px}
+}
+@media (prefers-reduced-motion:reduce){.btn,.card{transition:none}.btn:hover,.card:hover{transform:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header><div class="bar">
+  <a class="brand" href="/" aria-label="SCALIFY WPD home">
+    <svg width="34" height="34" viewBox="0 0 48 48" aria-hidden="true"><rect class="logo-bg" width="48" height="48" rx="11"/><path class="logo-fg" d="M32 15H20a5 5 0 0 0 0 10h8a5 5 0 0 1 0 10H16" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    SCALIFY <small>WPD</small></a>
+  <nav aria-label="Main"><ul><li><a href="/">Home</a></li><li><a href="/products" aria-current="page">Products</a></li><li><a href="/#contact">Contact</a></li></ul></nav>
+</div></header>
+
+<main id="main" class="wrap">
+  <section class="intro" aria-labelledby="pg-h">
+    <span class="eyebrow">Products</span>
+    <h1 id="pg-h">Tools we build and run ourselves.</h1>
+    <p class="lead">Everything SCALIFY WPD makes as its own product lives here. Each one is something we use, support and keep improving.</p>
+  </section>
+
+  <div class="list">
+    <article class="prod reveal" aria-labelledby="qr-h">
+      <div>
+        <span class="tag">LIVE NOW</span>
+        <h2 id="qr-h">Quote<i>Revive</i></h2>
+        <p class="pitch">Stop losing clients to unanswered quotes. QuoteRevive shows which quotes need a follow-up today, writes the message for WhatsApp or email, and lets your client accept with one tap.</p>
+        <ul class="feats">
+          <li>Daily follow-up queue with an explained priority score</li>
+          <li>Ready-to-send messages in English, Arabic, French and Spanish</li>
+          <li>Customer quote links: accept, ask a question or "not now"</li>
+          <li>Secure accounts; each business's data kept separate</li>
+        </ul>
+        <p class="price"><strong>Free to start</strong> (10 quotes) · Founding Access <strong>$39 one-time</strong>, no subscription · 14-day refund</p>
+        <div class="btns">
+          <a class="btn" href="https://quoterevive-ebon.vercel.app/?ref=scalify-products" rel="noopener">Start free <span aria-hidden="true">→</span></a>
+          <a class="btn alt" href="https://quoterevive-ebon.vercel.app/demo" rel="noopener">Try the demo</a>
+        </div>
+        <span class="fine">Payments are handled securely by Whop inside the app.</span>
+      </div>
+      <div>
+        <div class="scene" aria-hidden="true">
+          <div class="phone" id="phone"><div class="isl"></div><div class="scr">
+            <div class="d">Tuesday</div><div class="t">Today</div>
+            <div class="q"><span class="r">75</span><span><b>Sara M. · Website</b><span>Follow-up due today</span></span><em>$2,400</em></div>
+            <div class="q"><span class="r" style="border-color:#19703f">70</span><span><b>Daniel · Shop sign</b><span>Expires in 3 days</span></span><em>$1,150</em></div>
+            <div class="q"><span class="r" style="border-color:#8a5300">52</span><span><b>Hana · Logo</b><span>Waiting 6 days</span></span><em>$400</em></div>
+            <span class="wa">Send on WhatsApp ➜</span>
+          </div>
+          <span class="chip c1">⏱ Follow-up due today</span><span class="chip c2">🎉 Quote won</span></div>
+        </div>
+        <p class="demo-note">Illustration with fictional customers</p>
+      </div>
+    </article>
+
+    <div class="row2">
+      <article class="card reveal" aria-labelledby="c-h">
+        <span class="k">FOR YOUR BUSINESS</span>
+        <h2 id="c-h">Your own web app</h2>
+        <p>Need a tool like QuoteRevive for your business? We design and build custom web apps with logins, payments and email, with security built in from day one. Every project starts with a written quote.</p>
+        <p class="go"><a href="https://wa.me/251969803580?text=Hi%20Scalify%20WPD%2C%20I%27d%20like%20to%20talk%20about%20a%20web%20app.">Talk to us on WhatsApp →</a></p>
+      </article>
+      <article class="card soon reveal" aria-labelledby="n-h">
+        <span class="k">IN THE WORKS</span>
+        <h2 id="n-h">More products coming</h2>
+        <p>We're building the next tool now. Follow us to see it first. No dates or promises until it's ready.</p>
+        <p class="go"><a href="https://www.instagram.com/scalifywpd" rel="noopener noreferrer">Instagram @scalifywpd →</a> &nbsp; <a href="https://www.tiktok.com/@scalifywpd" rel="noopener noreferrer">TikTok →</a></p>
+      </article>
+    </div>
+  </div>
+</main>
+<footer><div class="wrap"><span>© <span id="yr">2026</span> SCALIFY WPD · Bole, Addis Ababa</span><span><a href="/#legal">Privacy &amp; terms</a> · <a href="/links">All links</a></span></div></footer>
+<script>
+(function(){
+document.getElementById('yr').textContent = new Date().getFullYear();
+if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+var d = document; d.documentElement.classList.add('js3d');
+var io = new IntersectionObserver(function(es){ es.forEach(function(x){ if (x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }); }, { threshold: .12 });
+d.querySelectorAll('.reveal').forEach(function(e){ io.observe(e); });
+// phone turns with scroll and follows the pointer
+var ph = d.getElementById('phone'), scene = ph.parentElement, mx = 0, my = 0, raf = 0;
+function frame(){ raf = 0; var b = scene.getBoundingClientRect(), v = Math.max(-1, Math.min(1, (b.top + b.height / 2 - innerHeight / 2) / innerHeight));
+  ph.style.transform = 'rotateY(' + (-18 + v * 22 + mx * 14) + 'deg) rotateX(' + (8 - v * 10 - my * 10) + 'deg) rotateZ(-3deg)'; }
+function kick(){ if (!raf) raf = requestAnimationFrame(frame); }
+addEventListener('scroll', kick, { passive: true }); addEventListener('resize', kick, { passive: true }); kick();
+if (matchMedia('(pointer:fine)').matches) scene.parentElement.addEventListener('pointermove', function(e){ var b = scene.getBoundingClientRect(); mx = (e.clientX - b.left) / b.width - .5; my = (e.clientY - b.top) / b.height - .5; kick(); });
+})();
+</script>
+</body>
+</html>
