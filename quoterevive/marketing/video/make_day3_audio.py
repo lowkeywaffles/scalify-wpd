@@ -106,10 +106,10 @@ def chime():
 # hook: dark drone + slams + riser
 n = int(T0*SR); t = np.arange(n)/SR
 put("bass", (np.sin(2*np.pi*41.2*t)+.4*np.sin(2*np.pi*82.4*t))*np.clip(t/.3,0,1), 0, .3)
-for i, h in enumerate(HITS): put("drums", impact(big=(i == 0)), h, .9 if i == 0 else .6, pan=(-.2 if i % 2 else .2))
+# hook impacts now come from real SFX (mix_day3_sfx.py)
 rn = int(.7*SR); rt = np.arange(rn)/SR
 put("fx", np.sin(2*np.pi*(200+2400*(rt/.7)**2.2)*rt)*(rt/.7)**2*.3 + hp(noise(.7),4)*(rt/.7)**2.4*.3, T0-.7, .8)
-put("drums", impact(big=True), T0, 1.0); put("fx", lp(noise(.6),30)*env(int(.6*SR),d=.15), T0, .5)
+put("fx", lp(noise(.6),30)*env(int(.6*SR),d=.15), T0, .35)
 
 # beat
 step_i = 0; tt = T0
@@ -132,7 +132,7 @@ while tt < DUR - .02:
 for txt, a in FIELDS:
     put("fx", tap(), a, .5)                                    # tap on field
     for k in range(len(txt)): put("fx", tap(), a + .25 + k*CH, .55, pan=(rng.random()-.5)*.3)
-put("fx", tap(), T["save"], .7); put("fx", chime(), T["done"], .35)
+put("fx", tap(), T["save"], .7)  # save "ding" is a real SFX now
 for s_ in (T["today"], T["end"]):
     rn = int(.5*SR); rt = np.arange(rn)/SR
     put("fx", hp(noise(.5),5)*(rt/.5)**2*.3, s_-.5, .8); put("fx", lp(noise(.4),35)*env(int(.4*SR),d=.12), s_, .4)
@@ -146,8 +146,6 @@ while tt < DUR:
 mix = drums*.85 + (bass*.9 + lead + pad)*g[:,None] + fx
 mix = np.stack([lp(mix[:,0],2), lp(mix[:,1],2)],1)*.35 + mix*.65
 mix = np.tanh(mix*1.3)*.92; mix *= min(1, .98/np.abs(mix).max())
-with wave.open("day3_raw.wav","wb") as w:
+with wave.open("day3_music.wav","wb") as w:
     w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes((np.clip(mix,-1,1)*32767).astype("<i2").tobytes())
-import subprocess
-subprocess.run(["ffmpeg","-v","error","-y","-i","day3_raw.wav","-af","loudnorm=I=-14:TP=-1.2:LRA=9","-ar","44100","day3_audio.wav"],check=True)
-print("wrote day3_audio.wav")
+print("wrote day3_music.wav (pre-SFX)")
