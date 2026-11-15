@@ -20,6 +20,6 @@ export default handler(["POST"], async (req, res) => {
   console.log(`[whop-hook] ${type} -> ${outcome}`);
   if (outcome === "retry") return send(res, 502, { error: "verification failed" });
   if (outcome === "approved") await announceNew().catch(() => 0);
-  if (outcome === "orphan" && type === "payment.succeeded") await sendAlert(`⚠️ A Brimful Plus card payment (${id}) came in without a licence key, so nothing unlocked. Find the buyer in Whop and refund or help them.`).catch(() => false);
+  if (outcome === "orphan" && type === "payment.succeeded") await sendAlert("✅ Brimful Plus sold on your Whop store page. The buyer unlocks it in the app with their Whop receipt number (Plus → Already bought it?).").catch(() => false);
   return send(res, 200, { ok: true, outcome });
 });

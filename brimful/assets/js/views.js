@@ -171,7 +171,7 @@ function updateSplit(app) {
 const ago = (t) => {
   if (!t) return "not yet";
   const m = Math.round((Date.now() - t) / 60000);
-  return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : new Date(t).toLocaleDateString();
+  return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : new Date(t).toLocaleDateString(document.documentElement.lang === "am" ? "am-ET" : undefined);
 };
 function cloudPanel(app) {
   const c = app.state.settings.cloud;
@@ -192,6 +192,7 @@ export function settingsView(app) {
       <a class="btn ${plus ? "ghost" : "brass"} small" href="#/unlock" data-vars="justify-self:start">${plus ? "Licence details" : l?.status === "pending" ? "Payment status" : "See Brimful Plus"}</a></section>
     <section class="panel" aria-labelledby="s-look"><h2 id="s-look">Look and feel</h2>
       <div class="setting"><div><span class="label" id="l-cur">Currency</span><p>Changing this relabels your amounts. It doesn't convert them.</p></div><select class="input" data-vars="width:auto" aria-labelledby="l-cur" data-change="currency">${CURRENCIES.map((c) => `<option${c === st.currency ? " selected" : ""}>${c}</option>`).join("")}</select></div>
+      <div class="setting"><div><span class="label">Language</span>${st.lang === "am" || (st.lang === "auto" && document.documentElement.lang === "am") ? `<p>Amharic is new. If something reads wrong, tell us at skelifywpd@gmail.com. Legal pages are in English.</p>` : ""}</div>${seg("lang", [["auto", "Auto"], ["en", "English"], ["am", "አማርኛ"]], st.lang)}</div>
       <div class="setting"><span class="label">Theme</span>${seg("theme", [["system", "Auto"], ["light", "Light"], ["dark", "Dark"]], st.theme)}</div>
       <div class="setting"><div><span class="label">3D motion</span><p>Turn off to stop coins falling, tilting and flipping.</p></div>${seg("motion", [["auto", "On"], ["off", "Reduced"]], st.motion)}</div>
       <div class="setting"><div><span class="label" id="l-snd">Coin sounds</span><p>A soft clink when money lands.</p></div><label class="switch"><input type="checkbox" name="sound"${st.sound ? " checked" : ""} data-change="setting" aria-labelledby="l-snd"><span></span></label></div></section>
@@ -232,7 +233,7 @@ export function unlockView(app) {
     ${status === "refunded" ? `<p class="note warn">Your earlier purchase was refunded, so this device is back on Free. Your jars are all still here.</p>` : ""}
     <section class="panel" id="paypanel" aria-labelledby="pay-h"><h2 id="pay-h">How to pay</h2><p class="fine" id="pay-load">Loading payment details…</p></section>
     <section class="panel" aria-labelledby="res-h"><h2 id="res-h">Already bought it?</h2>
-      <form id="restore" novalidate class="view"><div class="field"><label for="r-key">Licence key</label><input id="r-key" name="key" class="input num" autocomplete="off" spellcheck="false" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"><span class="err" data-err="key" role="alert"></span></div>
+      <form id="restore" novalidate class="view"><div class="field"><label for="r-key">Licence key or Whop receipt number</label><input id="r-key" name="key" class="input num" autocomplete="off" spellcheck="false" placeholder="xxxxxxxx-xxxx-… or pay_…" aria-describedby="r-hint"><span class="hint" id="r-hint">Bought Plus on Whop's website? Paste the receipt number from Whop's email (it starts with pay_).</span><span class="err" data-err="key" role="alert"></span></div>
       <button class="btn ghost" type="button" data-act="restore">Restore Plus</button></form></section>
     <p class="fine">Brimful is free to use without Plus, and your existing jars are never locked. <a href="/legal/terms">Terms</a> · <a href="/legal/refund">14-day refund</a> · <a href="/legal/privacy">Privacy</a></p>`;
 }
@@ -367,6 +368,7 @@ export function installViews(app, register) {
       const s = structuredClone(app.state);
       if (el.name === "sound") s.settings.sound = el.checked; else s.settings[el.name] = el.value;
       app.commit(s);
+      if (el.name === "lang") location.reload(); // simplest way to redraw every screen in the new language
     },
     export: () => {
       const url = URL.createObjectURL(new Blob([S.exportData(app.state)], { type: "application/json" }));
@@ -491,12 +493,21 @@ export function installViews(app, register) {
         app.go("#/");
       }),
     restore: async () => {
-      const form = $("#restore"), key = form.elements.key.value.trim().toLowerCase();
-      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(key)) return app.fieldError(form, "key", "That doesn't look like a licence key. It has 36 characters with dashes.");
-      const r = await fetchStatus(key);
-      if (!r.ok) return app.fieldError(form, "key", r.status === 404 ? "We can't find that key. Check it and try again." : r.body.error ?? "Couldn't check right now.");
+      const form = $("#restore"), raw = form.elements.key.value.trim();
+      let r, key;
+      if (/^pay_/i.test(raw)) {
+        r = await createOrder({ method: "whop_claim", payment_id: "pay_" + raw.slice(4) });
+        if (!r.ok) return app.fieldError(form, "key", r.body.error ?? "Couldn't check right now.");
+        key = r.body.key;
+      } else {
+        key = raw.toLowerCase();
+        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(key)) return app.fieldError(form, "key", "Paste your licence key (36 characters with dashes) or your Whop receipt number (starts with pay_).");
+        r = await fetchStatus(key);
+        if (!r.ok) return app.fieldError(form, "key", r.status === 404 ? "We can't find that key. Check it and try again." : r.body.error ?? "Couldn't check right now.");
+      }
       const s = structuredClone(app.state);
       s.license = { key, status: r.body.status, note: r.body.note ?? "", checkedAt: Date.now() };
+      if (r.body.method) s.license.method = r.body.method;
       app.commit(s);
       if (r.body.status === "active") { confetti({ count: 200 }); app.toast("Brimful Plus restored."); }
       app.render();

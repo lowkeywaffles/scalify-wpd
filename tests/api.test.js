@@ -204,3 +204,29 @@ test("missing settings give a clear 503 instead of a crash", async () => {
     assert.equal(out.json.missing, "SUPABASE_SERVICE_ROLE_KEY");
   } finally { process.env.SUPABASE_SERVICE_ROLE_KEY = saved; }
 });
+
+test("Whop store purchase: a receipt number gives exactly one licence key", async () => {
+  on("GET", /api\/v1\/payments\/pay_store1/, { json: { id: "pay_store1", status: "paid", product_id: "prod_brim", refunded_at: null, metadata: null, total: 7 } });
+  on("GET", /store_orders\?select=id,status&method=eq\.whop&reference=eq\.pay_store1/, { json: [] });
+  on("POST", /rest\/v1\/store_orders$/, (u, i) => ({ status: 201, json: [{ id: KEY, ...JSON.parse(i.body) }] }));
+  let out = await run("../api/store/order.js", req({ method: "POST", query: { product: "brimful" }, headers: BRIM, body: { method: "whop_claim", payment_id: "pay_store1" } }));
+  assert.equal(out.statusCode, 200);
+  assert.equal(out.json.key, KEY);
+  const ins = calls.find((c) => c.method === "POST" && /store_orders$/.test(c.url)).body;
+  assert.equal(ins.reference, "pay_store1");
+  assert.equal(ins.status, "approved");
+  assert.equal(ins.amount_usd, 7);
+
+  routes = []; calls = [];
+  on("GET", /api\/v1\/payments\/pay_otherqr1/, { json: { id: "pay_otherqr1", status: "paid", product_id: "prod_AOn93RN2TsMSs", refunded_at: null } });
+  out = await run("../api/store/order.js", req({ method: "POST", query: { product: "brimful" }, headers: BRIM, body: { method: "whop_claim", payment_id: "pay_otherqr1" } }));
+  assert.equal(out.statusCode, 404, "a QuoteRevive receipt can't unlock Brimful");
+  assert.ok(!calls.some((c) => c.method === "POST" && /store_orders/.test(c.url)));
+
+  routes = []; calls = [];
+  on("GET", /api\/v1\/payments\/pay_store1/, { json: { id: "pay_store1", status: "paid", product_id: "prod_brim", refunded_at: null, metadata: null } });
+  on("GET", /store_orders\?select=id,status&method=eq\.whop&reference=eq\.pay_store1/, { json: [{ id: KEY, status: "approved" }] });
+  out = await run("../api/store/order.js", req({ method: "POST", query: { product: "brimful" }, headers: BRIM, body: { method: "whop_claim", payment_id: "pay_store1" } }));
+  assert.equal(out.json.key, KEY, "claiming again returns the same key, never a second one");
+  assert.ok(!calls.some((c) => c.method === "POST" && /store_orders/.test(c.url)));
+});

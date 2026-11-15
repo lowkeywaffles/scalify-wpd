@@ -3,7 +3,7 @@
 import { db } from "../_lib/db.js";
 import { body, cors, handler, ipOf, rateLimit, send, UUID } from "../_lib/http.js";
 import { announceNew } from "../_lib/notify.js";
-import { recheckCardOrder } from "../_lib/orders.js";
+import { claimWhopPayment, recheckCardOrder } from "../_lib/orders.js";
 import { isStoreProduct, STORE_PRODUCTS } from "../_lib/products.js";
 import { createCheckout } from "../_lib/whop.js";
 
@@ -40,6 +40,13 @@ export default handler(["GET", "POST"], async (req, res) => {
   if (!rateLimit(`store:${ip}`, 6, 3600_000)) return send(res, 429, { error: "Too many attempts. Please try again in an hour." });
   const b = await body(req);
   if (!b) return send(res, 400, { error: "Invalid request" });
+  if (b.method === "whop_claim") {
+    const id = typeof b.payment_id === "string" ? b.payment_id.trim() : "";
+    if (!/^pay_[A-Za-z0-9]{6,40}$/.test(id)) return send(res, 400, { error: "A Whop receipt number starts with pay_ followed by letters and numbers.", field: "key" });
+    if (!rateLimit(`claim:${ip}`, 10, 3600_000)) return send(res, 429, { error: "Too many tries. Please wait an hour." });
+    const c = await claimWhopPayment(id);
+    return c.ok ? send(res, 200, { key: c.key, status: "active", method: "whop" }) : send(res, c.status, { error: c.error, field: "key" });
+  }
   if (b.age_ok !== true) return send(res, 400, { error: "Please confirm you're 18 or older, or that a parent or guardian agreed.", field: "age_ok" });
   const method = b.method;
   if (!["telebirr", "boa", "whop"].includes(method)) return send(res, 400, { error: "Choose how you'd like to pay.", field: "method" });

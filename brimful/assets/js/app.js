@@ -3,9 +3,11 @@ import * as S from "./lib/store.js";
 import { fmt, toMinor, toInput, quickAmounts, CURRENCIES, isCurrency, minorDigits } from "./lib/money.js";
 import { clink, chime, buzz, confetti, paintGuilloche, applyVars, esc } from "./lib/fx.js";
 import { fetchStatus } from "./lib/api.js";
+import { startI18n } from "./lib/i18n.js";
 import { challengesView, challengeView, splitView, settingsView, unlockView, installViews } from "./views.js";
 
 const $ = (sel, root = document) => root.querySelector(sel);
+const dateLocale = () => (document.documentElement.lang === "am" ? "am-ET" : undefined);
 const view = $("#view"), dlg = $("#dlg"), toastEl = $("#toast");
 
 /* ---------- shared context handed to every screen ---------- */
@@ -139,7 +141,7 @@ function shelfView() {
       <div><h2>${esc(j.name)}</h2>
         <p class="amt num"><b>${app.money(bal, { short: true })}</b> of ${app.money(j.target, { short: true })}</p>
         <progress max="100" value="${Math.round(p * 100)}" aria-label="${esc(j.name)}: ${Math.round(p * 100)}% full"></progress>
-        ${p >= 1 ? `<p class="need">Brimful. Goal reached.</p>` : need ? `<p class="need">${need.overdue ? "Past its date." : `${app.money(need.perWeek, { short: true })} a week gets you there by ${new Date(j.deadline + "T12:00").toLocaleDateString(undefined, { month: "short", day: "numeric" })}.`}</p>` : ""}
+        ${p >= 1 ? `<p class="need">Brimful. Goal reached.</p>` : need ? `<p class="need">${need.overdue ? "Past its date." : `${app.money(need.perWeek, { short: true })} a week gets you there by ${new Date(j.deadline + "T12:00").toLocaleDateString(dateLocale(), { month: "short", day: "numeric" })}.`}</p>` : ""}
       </div></a>`;
   }).join("");
   return `<h1 tabindex="-1">Your jars</h1>
@@ -189,7 +191,7 @@ function disposeJar() { jar3d?.dispose(); jar3d = null; }
 
 function jarBody(j) {
   const bal = S.balance(j), p = S.progress(j), need = S.weeklyNeed(j, Date.now(), 10 ** minorDigits(app.cur())), quick = quickAmounts(j.target, app.cur());
-  const hist = [...j.entries].reverse().slice(0, 60).map((e) => `<li><div><div>${e.amt > 0 ? "Added" : "Took out"}${e.note ? ` · ${esc(e.note)}` : ""}</div><div class="when">${new Date(e.t).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}</div></div>
+  const hist = [...j.entries].reverse().slice(0, 60).map((e) => `<li><div><div>${e.amt > 0 ? "Added" : "Took out"}${e.note ? ` · ${esc(e.note)}` : ""}</div><div class="when">${new Date(e.t).toLocaleDateString(dateLocale(), { weekday: "short", month: "short", day: "numeric" })}</div></div>
       <span class="num ${e.amt > 0 ? "plus" : "minus"}">${app.money(e.amt, { sign: true })}</span>
       <button class="iconbtn" data-act="undo-entry" data-id="${esc(e.id)}" aria-label="Remove this entry of ${app.money(Math.abs(e.amt))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></li>`).join("");
   return `<div class="figure"><span class="big num" id="jar-amt">${app.money(bal, { short: true })}</span>
@@ -339,6 +341,7 @@ if (!app.state.settings.onboarded) {
   s.settings.onboarded = true;
   app.commit(s);
 }
+startI18n(app.state.settings.lang);
 syncChrome();
 const boot = () => render();
 if (window.gsap || document.readyState === "complete") boot(); else addEventListener("load", boot, { once: true });

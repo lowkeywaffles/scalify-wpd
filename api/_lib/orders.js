@@ -61,3 +61,37 @@ export async function recheckCardOrder(order) {
   if (full.ok && paymentUnlocks(full.data, product.whopProduct(), order.id)) return approveCard(order, full.data.id);
   return order.status;
 }
+
+/**
+ * Bought Brimful Plus on the Whop store page (not from inside the app)? The buyer pastes their Whop receipt number
+ * (pay_…). We confirm it with Whop and give them a licence key. A receipt can only ever back one key.
+ * Returns { ok, key } or { ok:false, status, error }.
+ */
+export async function claimWhopPayment(payId) {
+  const product = STORE_PRODUCTS.brimful;
+  const p = await getPayment(payId);
+  if (!p.ok) return { ok: false, status: [400, 404, 422].includes(p.status) ? 404 : 502, error: [400, 404, 422].includes(p.status) ? "We couldn't find that receipt. Check it starts with pay_ and was copied in full." : "Couldn't check with Whop right now. Try again in a minute." };
+  const pay = p.data;
+  if (pay?.product_id !== product.whopProduct()) return { ok: false, status: 404, error: "That receipt isn't for Brimful Plus." };
+  if (pay.status !== "paid" || pay.refunded_at) return { ok: false, status: 409, error: "That payment isn't completed, or it was refunded." };
+  // Already linked to a key (bought in the app, or claimed before): hand back the same key.
+  const linked = await db(`store_orders?select=id,status&method=eq.whop&reference=eq.${encodeURIComponent(pay.id)}`);
+  if (linked.ok && linked.data?.[0]) return linked.data[0].status === "approved" ? { ok: true, key: linked.data[0].id } : { ok: false, status: 409, error: "That purchase was refunded." };
+  const appKey = pay.metadata?.brimful_key;
+  if (typeof appKey === "string" && UUID.test(appKey)) {
+    await applyWhopPayment(pay.id);
+    return { ok: true, key: appKey };
+  }
+  const usd = Number(pay.total?.amount ?? pay.total ?? product.priceUsd());
+  const ins = await db("store_orders", {
+    method: "POST",
+    body: { product: "brimful", method: "whop", amount_usd: Number.isFinite(usd) && usd > 0 ? usd : product.priceUsd(), reference: pay.id, status: "approved", reviewed_at: new Date().toISOString(), reviewed_by: "whop store", notified_at: new Date().toISOString() },
+    prefer: "return=representation",
+  });
+  if (ins.ok && ins.data?.[0]) return { ok: true, key: ins.data[0].id };
+  if (ins.code === "23505") { // claimed at the same moment by another request
+    const again = await db(`store_orders?select=id&method=eq.whop&reference=eq.${encodeURIComponent(pay.id)}`);
+    if (again.data?.[0]) return { ok: true, key: again.data[0].id };
+  }
+  return { ok: false, status: 500, error: "Couldn't save that. Please try again." };
+}
