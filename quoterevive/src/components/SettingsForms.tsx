@@ -61,6 +61,7 @@ export function PreferencesForm({ b }: { b: Business }) {
       <Field id="first_follow_up_days" label="First follow-up after (days)" error={e.first_follow_up_days}><input {...aria("first_follow_up_days", e.first_follow_up_days)} className="input" type="number" min={1} max={60} defaultValue={b.first_follow_up_days} /></Field>
       <Field id="follow_up_interval_days" label="Days between follow-ups (reminder frequency)" error={e.follow_up_interval_days}><input {...aria("follow_up_interval_days", e.follow_up_interval_days)} className="input" type="number" min={1} max={60} defaultValue={b.follow_up_interval_days} /></Field>
       <Field id="max_follow_ups" label="Stop after this many unanswered follow-ups" error={e.max_follow_ups}><input {...aria("max_follow_ups", e.max_follow_ups)} className="input" type="number" min={1} max={10} defaultValue={b.max_follow_ups} /></Field>
+      <div className="sm:col-span-2"><Field id="payment_instructions" label="How customers can pay you" optional hint="Shown on your customer quote links, e.g. Telebirr name and number, or bank name and account. Only add details you're happy for customers to see." error={e.payment_instructions}><textarea {...aria("payment_instructions", e.payment_instructions, true)} className="input min-h-20" defaultValue={b.payment_instructions ?? ""} maxLength={600} /></Field></div>
       <div className="flex items-center gap-3 sm:col-span-2"><button className="btn btn-primary" disabled={pending}>Save settings</button><Result s={s} /></div>
     </form>
   );

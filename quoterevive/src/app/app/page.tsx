@@ -4,7 +4,7 @@ import { loadWorkspace } from "@/lib/data";
 import { computeMetrics } from "@/lib/metrics";
 import { today } from "@/lib/dates";
 import { buildQueue, nextSteps } from "@/lib/workspace";
-import { AgingChart, MetricsGrid } from "@/components/Metrics";
+import { AgingChart, MetricsGrid, WonBack } from "@/components/Metrics";
 import { QueueList } from "@/components/QueueList";
 import { Timeline } from "@/components/Timeline";
 import { EmptyState } from "@/components/ui";
@@ -61,6 +61,7 @@ export default async function Dashboard() {
         <EmptyState title="No quotes yet" body="Add the quotes you've sent recently — even ones from weeks ago. QuoteRevive will tell you who to follow up with first." action={<div className="flex gap-2"><Link href="/app/quotes/new" className="btn btn-primary">Add your first quote</Link><Link href="/app/import" className="btn btn-ghost">Import CSV</Link></div>} />
       ) : (
         <>
+          <WonBack m={m} currency={business.currency} />
           <div data-tour="metrics"><MetricsGrid m={m} currency={business.currency} /></div>
           {otherCurrencies.size > 0 && <p className="text-xs text-muted">Totals include only {business.currency} quotes. {[...otherCurrencies].join(", ")} quotes are counted but not summed.</p>}
           <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">

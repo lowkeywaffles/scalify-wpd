@@ -28,3 +28,12 @@ Every stored item and why it exists. If a field has no purpose, delete it.
 | Cookie `qr_theme` | No | Theme preference (set only on click) | 1 year |
 
 Not collected: analytics, IP addresses in our database, device fingerprints, marketing consents, the text of follow-up messages, payment details.
+
+## Added 15 November 2026
+| Data | Where | Why | Who can read it | Retention |
+|---|---|---|---|---|
+| Local payment requests: method (Telebirr / Bank of Abyssinia), amount in ETB, payer name, transaction ID, review status and reason, reviewer email | `manual_payments` | Match a birr transfer to a workspace and unlock access; refunds | The workspace owner (read only, via RLS); operators listed in `OPERATOR_EMAILS` through the server | Life of account; longer only where tax/accounting law requires |
+| Quote line items (description, quantity, unit price) | `quotes.items` | Quote breakdown on the customer link | Workspace owner; the customer holding the share link | Until edited/deleted |
+| Payment instructions (free text the business enters) | `businesses.payment_instructions` | Shown to that business's customers on quote links | Workspace owner; customers holding a share link | Until edited/deleted |
+
+Not collected: Telebirr PINs, bank passwords, card numbers, payment screenshots.

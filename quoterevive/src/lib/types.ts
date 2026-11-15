@@ -42,6 +42,7 @@ export interface Quote {
   notes: string | null;
   archived: boolean;
   opted_out: boolean;
+  items?: { d: string; q: number; p: number }[];
   share_token?: string | null;
   share_enabled?: boolean;
   created_at: string;

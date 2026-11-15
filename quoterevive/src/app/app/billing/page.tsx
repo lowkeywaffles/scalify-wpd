@@ -3,7 +3,10 @@ import { whopConfigured } from "@/lib/whop";
 import { LinkWhopForm } from "@/components/LinkWhopForm";
 import { Notice } from "@/components/ui";
 import { BadgeCheck } from "lucide-react";
-import { PRICE } from "@/lib/offer";
+import { etbWithPromo, ETB_PRICE, first6Active, formatEtb, LOCAL_PAY, PRICE } from "@/lib/offer";
+import { first6Remaining, isOperator } from "@/lib/local-pay";
+import { LocalPayment } from "@/components/LocalPayment";
+import Link from "next/link";
 import { startCheckout } from "../actions";
 import { PaymentPending } from "@/components/PaymentPending";
 
@@ -16,12 +19,16 @@ const MESSAGES: Record<string, { kind: "info" | "error"; text: string }> = {
 };
 
 export default async function Billing({ searchParams }: { searchParams: Promise<{ checkout?: string }> }) {
-  const { paid, quotes } = await loadWorkspace();
+  const { paid, quotes, supabase, user } = await loadWorkspace();
+  const { data: lastPay } = await supabase.from("manual_payments").select("status, amount_etb, reference, review_note, created_at").order("created_at", { ascending: false }).limit(1).maybeSingle();
+  const spotsLeft = paid ? 0 : await first6Remaining();
+  const operator = isOperator(user.email);
   const checkout = (await searchParams).checkout ?? "";
   const msg = checkout === "done" ? undefined : MESSAGES[checkout];
   return (
     <div className="max-w-2xl space-y-6">
       <h1 className="font-display text-4xl">Access</h1>
+      {operator && <p><Link href="/app/admin/payments" className="font-semibold underline">Review local payments →</Link></p>}
       {checkout === "done" && !paid && <PaymentPending />}
       {msg && !paid && <Notice kind={msg.kind}>{msg.text}</Notice>}
       {paid ? (
@@ -37,6 +44,20 @@ export default async function Billing({ searchParams }: { searchParams: Promise<
           <h2 className="font-display text-2xl">{PRICE.name} — {PRICE.display}</h2>
           <p className="text-sm text-muted">{PRICE.summary}</p>
           <p className="text-sm text-muted">{PRICE.term}</p>
+          <section aria-labelledby="etb-h" className="space-y-3 rounded-2xl border border-line p-4 sm:p-5">
+            <h3 id="etb-h" className="font-display text-xl">Pay in birr: Telebirr or Bank of Abyssinia</h3>
+            <p className="text-sm text-muted">{formatEtb(ETB_PRICE)} one-time{first6Active() && spotsLeft > 0 ? `, or ${formatEtb(etbWithPromo(true))} with code FIRST6` : ""}. Same Founding Access as the card option.</p>
+            {lastPay?.status === "pending" ? (
+              <Notice kind="info">We&apos;re checking your payment of {formatEtb(Number(lastPay.amount_etb))} (transaction ID {lastPay.reference}). Your account unlocks as soon as it&apos;s confirmed, usually within 24 hours.</Notice>
+            ) : (
+              <>
+                {lastPay?.status === "rejected" && <Notice kind="error">We couldn&apos;t confirm your last payment ({lastPay.reference}): {lastPay.review_note} You can submit it again below, or message us on WhatsApp.</Notice>}
+                <LocalPayment priceEtb={formatEtb(ETB_PRICE)} promoPriceEtb={formatEtb(etbWithPromo(true))} promoOpen={first6Active() && spotsLeft > 0} spotsLeft={spotsLeft}
+                  telebirr={LOCAL_PAY.telebirr} boa={LOCAL_PAY.boa} />
+              </>
+            )}
+          </section>
+          <h3 className="font-display text-xl">Or pay by card</h3>
           {whopConfigured() ? (
             <form action={startCheckout}>
               <button className="btn btn-primary">Buy Founding Access — $39 one-time</button>

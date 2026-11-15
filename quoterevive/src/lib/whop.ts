@@ -109,3 +109,13 @@ export async function fetchWhopMembership(id: string): Promise<{ ok: true; membe
   if (r.value.product_id !== c.product) return { ok: false, error: "That membership is for a different product." };
   return { ok: true, membership: r.value };
 }
+
+/** FIRST6 is shared between Whop checkout and local (ETB) payments, so both draw on the same 6 spots. */
+export const getPromo = (id: string) => whop<{ stock: number; uses: number; unlimited_stock: boolean; status: string }>(`/promo_codes/${encodeURIComponent(id)}`);
+/** Called when a local FIRST6 payment is approved: removes one spot from the Whop code too. */
+export async function takeOnePromoSpot(id: string): Promise<boolean> {
+  const p = await getPromo(id);
+  if (!p.ok) return false;
+  const r = await whop(`/promo_codes/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify({ stock: Math.max(0, p.value.stock - 1) }) });
+  return r.ok;
+}

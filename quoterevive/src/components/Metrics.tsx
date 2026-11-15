@@ -52,3 +52,19 @@ export function AgingChart({ m, currency }: { m: Metrics; currency: string }) {
     </figure>
   );
 }
+
+/** Headline: money from quotes accepted after a follow-up. The number that shows QuoteRevive paying for itself. */
+export function WonBack({ m, currency }: { m: Metrics; currency: string }) {
+  const w = m.wonBack;
+  return (
+    <section aria-labelledby="won-h" className="card relative overflow-hidden p-5 sm:p-6">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-good/20 blur-3xl" />
+      <h2 id="won-h" className="relative text-xs font-semibold uppercase tracking-wide text-muted">Won back after a follow-up</h2>
+      <div className="relative mt-2 flex flex-wrap items-end gap-x-8 gap-y-2">
+        <p><span className="font-display text-4xl text-good sm:text-5xl">{formatMoney(w.thisMonthValue, currency)}</span> <span className="text-sm text-muted">this month · {w.thisMonthCount} quote{w.thisMonthCount === 1 ? "" : "s"}</span></p>
+        <p className="text-sm"><strong className="tabular-nums">{formatMoney(w.value, currency)}</strong> <span className="text-muted">all time · {w.count} quote{w.count === 1 ? "" : "s"}</span></p>
+      </div>
+      <p className="relative mt-2 text-xs text-muted">Quotes you marked accepted after logging at least one follow-up in QuoteRevive. Only {currency} amounts are counted.</p>
+    </section>
+  );
+}

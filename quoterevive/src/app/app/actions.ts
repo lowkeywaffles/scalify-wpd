@@ -151,7 +151,8 @@ export async function saveSettings(_: ActionState, fd: FormData): Promise<Action
     follow_up_interval_days: z.coerce.number().int().min(1).max(60),
     max_follow_ups: z.coerce.number().int().min(1).max(10),
     display_name: z.string().trim().max(80).transform((v) => v || null),
-    message_language: z.enum(["en", "ar", "fr", "es"]),
+    message_language: z.enum(["en", "am", "ar", "fr", "es"]),
+    payment_instructions: z.string().trim().max(600).optional().transform((v) => v || null),
   });
   const parsed = schema.safeParse(formObject(fd));
   if (!parsed.success) return { fieldErrors: z.flattenError(parsed.error).fieldErrors };

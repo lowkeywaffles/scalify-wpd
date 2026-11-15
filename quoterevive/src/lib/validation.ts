@@ -8,8 +8,28 @@ const optDate = z
   .transform((v) => (v ? v : null))
   .refine((v) => v === null || /^\d{4}-\d{2}-\d{2}$/.test(v), "Use a valid date");
 
+/** Optional line items. Short keys keep the stored JSON small: d = description, q = quantity, p = unit price. */
+export const lineItemsSchema = z.array(z.object({
+  d: z.string().trim().min(1).max(160),
+  q: z.number().finite().min(0).max(1e6),
+  p: z.number().finite().min(0).max(1e10),
+})).max(50);
+export type LineItem = z.infer<typeof lineItemsSchema>[number];
+export const itemsTotal = (items: LineItem[]) => Math.round(items.reduce((s, i) => s + i.q * i.p, 0) * 100) / 100;
+
+const itemsField = z.string().optional().transform((v, ctx) => {
+  if (!v) return [] as LineItem[];
+  let raw: unknown;
+  try { raw = JSON.parse(v); } catch { ctx.addIssue({ code: "custom", message: "Check the line items" }); return z.NEVER; }
+  const rows = Array.isArray(raw) ? raw.filter((r) => r && typeof r === "object" && String((r as { d?: unknown }).d ?? "").trim()) : raw;
+  const r = lineItemsSchema.safeParse(rows);
+  if (!r.success) { ctx.addIssue({ code: "custom", message: "Each line needs a description, a quantity and a price (max 50 lines)" }); return z.NEVER; }
+  return r.data;
+});
+
 export const quoteSchema = z
   .object({
+    items: itemsField,
     customer_name: z.string().trim().min(1, "Customer name is required").max(120),
     customer_email: z.string().trim().max(200).optional().transform((v) => (v ? v : null)).refine((v) => v === null || z.string().email().safeParse(v).success, "Enter a valid email"),
     customer_phone: optText(40),
@@ -26,7 +46,9 @@ export const quoteSchema = z
   .refine((q) => !q.sent_at || !q.expires_at || q.expires_at >= q.sent_at, {
     message: "Expiry must be on or after the sent date",
     path: ["expires_at"],
-  });
+  })
+  // With line items, the total is always their sum, so the amount can't disagree with the breakdown.
+  .transform((q) => (q.items.length ? { ...q, amount: itemsTotal(q.items) } : q));
 export type QuoteInput = z.infer<typeof quoteSchema>;
 
 export const onboardingSchema = z.object({

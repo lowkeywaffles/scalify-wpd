@@ -6,9 +6,9 @@ export const TONES = ["friendly", "professional", "concise", "final"] as const;
 export type Tone = (typeof TONES)[number];
 export const TONE_LABEL: Record<Tone, string> = { friendly: "Friendly", professional: "Professional", concise: "Concise", final: "Final check-in" };
 
-export const LANGUAGES = ["en", "ar", "fr", "es"] as const;
+export const LANGUAGES = ["en", "am", "ar", "fr", "es"] as const;
 export type Lang = (typeof LANGUAGES)[number];
-export const LANGUAGE_LABEL: Record<Lang, string> = { en: "English", ar: "العربية (Arabic)", fr: "Français (French)", es: "Español (Spanish)" };
+export const LANGUAGE_LABEL: Record<Lang, string> = { en: "English", am: "አማርኛ (Amharic)", ar: "العربية (Arabic)", fr: "Français (French)", es: "Español (Spanish)" };
 export const isRtl = (l: Lang) => l === "ar";
 
 function firstName(name: string): string {
@@ -18,6 +18,7 @@ function firstName(name: string): string {
 const AGO: Record<Lang, [string, string, string, string, string]> = {
   // [recently, yesterday, a few days ago, last week, a while ago]
   en: ["recently", "yesterday", "a few days ago", "last week", "a little while ago"],
+  am: ["በቅርቡ", "ትናንት", "ከጥቂት ቀናት በፊት", "ባለፈው ሳምንት", "ከተወሰነ ጊዜ በፊት"],
   ar: ["مؤخراً", "أمس", "قبل بضعة أيام", "الأسبوع الماضي", "منذ فترة"],
   fr: ["récemment", "hier", "il y a quelques jours", "la semaine dernière", "il y a quelque temps"],
   es: ["recientemente", "ayer", "hace unos días", "la semana pasada", "hace un tiempo"],
@@ -41,6 +42,12 @@ const T: Record<Lang, Record<Tone, (c: Ctx) => string>> = {
     professional: (c) => `Hello ${c.name || "there"},\n\nI'm following up on the quotation for ${c.item} sent ${c.ago}. Please let me know if you have any questions, or if you'd like any changes to the scope or timeline.\n\nKind regards${c.biz ? `,\n${c.biz}` : ""}`,
     concise: (c) => `Hi ${c.name || "there"}, any thoughts on the ${c.item} quote? Happy to help with questions.${sign(c.biz)}`,
     final: (c) => `Hi ${c.name || "there"}, I wanted to check in one last time about the ${c.item} quotation. If now isn't the right time, no problem at all — just let me know and I'll close it on my side. You're always welcome to reach out later.${sign(c.biz)}`,
+  },
+  am: {
+    friendly: (c) => `ሰላም ${c.name}፣ ${c.ago} ስለ «${c.item}» የላክሁልዎትን የዋጋ ማቅረቢያ (ፕሮፎርማ) በተመለከተ ${c.again ? "እንደገና " : ""}ለመጠየቅ ነው። ጥያቄ ካለዎት ወይም ማስተካከያ ካስፈለገ በደስታ እረዳዎታለሁ።${sign(c.biz)}`,
+    professional: (c) => `ጤና ይስጥልኝ ${c.name}፣\n\n${c.ago} ስለ «${c.item}» የተላከውን የዋጋ ማቅረቢያ በተመለከተ እየተከታተልኩ ነው። ማንኛውም ጥያቄ ካለዎት ወይም በሥራው ወሰን ወይም በጊዜ ሰሌዳው ላይ ለውጥ ከፈለጉ እባክዎ ያሳውቁኝ።\n\nከአክብሮት ጋር${c.biz ? `፣\n${c.biz}` : ""}`,
+    concise: (c) => `ሰላም ${c.name}፣ ስለ «${c.item}» የላክሁትን ዋጋ ተመለከቱት? ጥያቄ ካለዎት ይንገሩኝ።${sign(c.biz)}`,
+    final: (c) => `ሰላም ${c.name}፣ ስለ «${c.item}» የዋጋ ማቅረቢያ ለመጨረሻ ጊዜ ልጠይቅዎ ፈልጌ ነው። አሁን አመቺ ጊዜ ካልሆነ ችግር የለም፤ ብቻ ያሳውቁኝ እና በእኔ በኩል እዘጋዋለሁ። በኋላም በማንኛውም ጊዜ ሊያገኙኝ ይችላሉ።${sign(c.biz)}`,
   },
   ar: {
     friendly: (c) => `مرحباً ${c.name}، ${c.again ? "أردت المتابعة مجدداً" : "أردت فقط الاطمئنان"} بخصوص عرض السعر الخاص بـ${c.item} الذي أرسلته ${c.ago}. يسعدني الإجابة عن أي أسئلة أو تعديل النطاق إذا لزم الأمر.${sign(c.biz)}`,

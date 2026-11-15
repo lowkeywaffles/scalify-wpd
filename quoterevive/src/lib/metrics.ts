@@ -15,6 +15,14 @@ export interface Metrics {
   /** Share of scheduled follow-ups (due up to today) that were completed. */
   followUpCompletionRate: number | null;
   aging: { label: string; count: number; value: number }[];
+  /** Accepted quotes that had at least one recorded follow-up before they were accepted (from activity history). */
+  wonBack: { count: number; value: number; thisMonthCount: number; thisMonthValue: number };
+}
+
+/** When a quote became accepted: its latest status change to "accepted", else its last update. */
+function acceptedAt(q: Quote, acts: Activity[]): string {
+  const ch = acts.filter((a) => a.quote_id === q.id && a.kind === "status_change" && a.to_status === "accepted").map((a) => a.occurred_at).sort();
+  return ch.length ? ch[ch.length - 1] : q.updated_at;
 }
 
 /** Amounts are summed only for quotes in `currency`; others are ignored to avoid mixing currencies. */
@@ -46,6 +54,13 @@ export function computeMetrics(quotes: Quote[], activities: Activity[], todayIso
   });
 
   const scheduledTotal = followUps.length + due.length;
+  const month = todayIso.slice(0, 7);
+  const won = accepted.filter(same).map((q) => {
+    const at = acceptedAt(q, acts);
+    const followedUp = followUps.some((f) => f.quote_id === q.id && f.occurred_at <= at);
+    return { q, at, followedUp };
+  }).filter((w) => w.followedUp);
+  const wonMonth = won.filter((w) => w.at.slice(0, 7) === month);
   return {
     outstandingValue: active.filter(same).reduce((s, q) => s + q.amount, 0),
     acceptedValue: accepted.filter(same).reduce((s, q) => s + q.amount, 0),
@@ -56,5 +71,9 @@ export function computeMetrics(quotes: Quote[], activities: Activity[], todayIso
     acceptanceRate: decided.length ? accepted.length / decided.length : null,
     followUpCompletionRate: scheduledTotal ? followUps.length / scheduledTotal : null,
     aging,
+    wonBack: {
+      count: won.length, value: won.reduce((s, w) => s + w.q.amount, 0),
+      thisMonthCount: wonMonth.length, thisMonthValue: wonMonth.reduce((s, w) => s + w.q.amount, 0),
+    },
   };
 }

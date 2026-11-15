@@ -17,7 +17,8 @@ export interface Business {
   avatar_data_url: string | null;
   onboarded_at: string | null;
   tour_seen: string[];
-  message_language: "en" | "ar" | "fr" | "es";
+  message_language: "en" | "am" | "ar" | "fr" | "es";
+  payment_instructions: string | null;
 }
 
 /** Returns the signed-in user + their business. Redirects to login otherwise. Authorization = RLS + this check. */

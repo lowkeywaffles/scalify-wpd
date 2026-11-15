@@ -3,6 +3,7 @@ import { useActionState } from "react";
 import { saveQuote, type ActionState } from "@/app/app/actions";
 import { Quote, QUOTE_STATUSES, STATUS_LABEL } from "@/lib/types";
 import { aria, Field, Notice } from "./ui";
+import { LineItems } from "./LineItems";
 
 export function QuoteForm({ quote, currency }: { quote?: Quote; currency: string }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(saveQuote, {});
@@ -16,6 +17,7 @@ export function QuoteForm({ quote, currency }: { quote?: Quote; currency: string
       <Field id="customer_phone" label="Customer WhatsApp / phone" optional hint="Include country code for WhatsApp, e.g. +251…" error={e.customer_phone}><input {...aria("customer_phone", e.customer_phone, true)} className="input" type="tel" defaultValue={v("customer_phone")} maxLength={40} autoComplete="off" /></Field>
       <Field id="customer_email" label="Customer email" optional error={e.customer_email}><input {...aria("customer_email", e.customer_email)} className="input" type="email" defaultValue={v("customer_email")} maxLength={200} autoComplete="off" /></Field>
       <Field id="amount" label="Quote amount" error={e.amount}><input {...aria("amount", e.amount)} className="input" inputMode="decimal" defaultValue={quote ? String(quote.amount) : ""} required /></Field>
+      <LineItems initial={quote?.items} currency={quote?.currency ?? currency} />
       <Field id="currency" label="Currency" hint="3-letter code, e.g. USD, ETB, EUR" error={e.currency}><input {...aria("currency", e.currency, true)} className="input uppercase" defaultValue={quote?.currency ?? currency} maxLength={3} required /></Field>
       <Field id="sent_at" label="Date sent" optional hint="Needed for follow-up suggestions" error={e.sent_at}><input {...aria("sent_at", e.sent_at, true)} className="input" type="date" defaultValue={v("sent_at") || (quote ? "" : new Date().toISOString().slice(0, 10))} /></Field>
       <Field id="expires_at" label="Expiry date" optional error={e.expires_at}><input {...aria("expires_at", e.expires_at)} className="input" type="date" defaultValue={v("expires_at")} /></Field>
