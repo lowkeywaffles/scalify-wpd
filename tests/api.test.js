@@ -143,18 +143,27 @@ test("backups: only well-formed ciphertext is stored, by hashed id", async () =>
 });
 
 /* ---------- admin ---------- */
-test("admin sign-in: non-operators never reach Supabase; cookies are HttpOnly + SameSite=Strict", async () => {
-  let out = await run("../api/admin/session.js", req({ method: "POST", headers: SELF, body: { email: "someone@else.com", password: "x" } }));
-  assert.equal(out.statusCode, 401);
-  assert.equal(calls.length, 0);
-  out = await run("../api/admin/session.js", req({ method: "POST", headers: { origin: "https://evil.example" }, body: { email: "boss@example.com", password: "x" } }));
-  assert.equal(out.statusCode, 403, "cross-site sign-in blocked");
-  on("POST", /auth\/v1\/token\?grant_type=password/, { json: { access_token: "AT", refresh_token: "RT", expires_in: 3600, user: { email: "second@example.com", email_confirmed_at: "2026-01-01" } } });
-  out = await run("../api/admin/session.js", req({ method: "POST", headers: SELF, body: { email: "second@example.com", password: "pw" } }));
+test("admin sign-in by email code: non-operators get no code; cookies are HttpOnly + SameSite=Strict", async () => {
+  let out = await run("../api/admin/session.js", req({ method: "POST", headers: SELF, body: { email: "someone@else.com" } }));
+  assert.equal(out.statusCode, 200, "same answer for any email");
+  assert.equal(calls.length, 0, "but no code is sent to non-operators");
+  out = await run("../api/admin/session.js", req({ method: "POST", headers: { origin: "https://evil.example" }, body: { email: "boss@example.com" } }));
+  assert.equal(out.statusCode, 403, "cross-site requests blocked");
+  on("POST", /auth\/v1\/otp/, { json: {} });
+  out = await run("../api/admin/session.js", req({ method: "POST", headers: SELF, body: { email: "Second@Example.com" } }));
   assert.equal(out.statusCode, 200);
+  assert.equal(calls[0].body.create_user, false, "never creates accounts");
+  on("POST", /auth\/v1\/verify/, { json: { access_token: "AT", refresh_token: "RT", expires_in: 3600, user: { email: "second@example.com", email_confirmed_at: "2026-01-01" } } });
+  out = await run("../api/admin/session.js", req({ method: "POST", headers: SELF, body: { email: "second@example.com", code: "1234 5678" } }));
+  assert.equal(out.statusCode, 200);
+  assert.equal(calls.at(-1).body.token, "12345678");
   const cookies = out.headers["set-cookie"];
   assert.equal(cookies.length, 2);
   for (const c of cookies) { assert.match(c, /^__Host-/); assert.match(c, /HttpOnly/); assert.match(c, /Secure/); assert.match(c, /SameSite=Strict/); }
+  routes = [];
+  on("POST", /auth\/v1\/verify/, { status: 403, json: {} });
+  out = await run("../api/admin/session.js", req({ method: "POST", headers: SELF, body: { email: "second@example.com", code: "00000000" } }));
+  assert.equal(out.statusCode, 401, "wrong code refused");
 });
 
 test("admin data needs a valid operator session", async () => {

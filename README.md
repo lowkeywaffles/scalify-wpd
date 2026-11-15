@@ -11,7 +11,7 @@ Open `index.html` in a browser to preview.
 ## Payments admin (`/admin`) and store API (`/api`)
 
 One page to review payments for every product: <https://scalify-wpd.vercel.app/admin>.
-Sign in with the email and password of your QuoteRevive account; only emails in `OPERATOR_EMAILS` can sign in.
+Sign in with a one-time code sent to your email; only emails in `OPERATOR_EMAILS` get a code.
 
 - QuoteRevive birr payments: approve (unlocks the workspace, and takes a FIRST6 spot on Whop when the code was used), reject with a reason, or mark refunded.
 - Brimful: birr orders (approve / reject / refund) and card orders through Whop (unlocked automatically; "Refund on Whop" refunds through the Whop API).

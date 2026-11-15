@@ -1,4 +1,4 @@
-// Operator sign-in for /admin, using the existing Supabase accounts (same email + password as QuoteRevive).
+// Operator sign-in for /admin with a one-time code sent by email (Supabase Auth, same project as QuoteRevive).
 // Only emails listed in OPERATOR_EMAILS can sign in. Tokens live in HttpOnly, Secure, SameSite=Strict cookies.
 import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "./db.js";
 import { ConfigError, fetchT } from "./http.js";
@@ -40,12 +40,21 @@ async function authCall(path, init) {
   return { ok: r.ok, status: r.status, data };
 }
 
-/** Email + password sign-in. Checks the operator list BEFORE contacting Supabase. */
-export async function signIn(res, email, password) {
-  const nope = { ok: false, error: "Wrong email or password, or this account can't use the admin." }; // same message either way
+/** Step 1: email a one-time code. Only operator emails get one, and the answer is the same either way. */
+export async function sendCode(email) {
+  if (!isOperator(email)) return { ok: true };
+  const r = await authCall("otp", { method: "POST", body: JSON.stringify({ email: String(email).trim(), create_user: false }) });
+  if (r.status === 429) return { ok: false, error: "Too many codes requested. Wait a few minutes." };
+  if (!r.ok) console.error(`[auth] otp send failed: ${r.status}`);
+  return { ok: true };
+}
+
+/** Step 2: check the code and start a session. */
+export async function verifyCode(res, email, code) {
+  const nope = { ok: false, error: "That code is wrong or has expired. Request a new one." };
   if (!isOperator(email)) return nope;
-  const r = await authCall("token?grant_type=password", { method: "POST", body: JSON.stringify({ email: String(email).trim(), password }) });
-  if (!r.ok || !r.data?.access_token) return r.status === 429 ? { ok: false, error: "Too many sign-in attempts. Wait a few minutes." } : nope;
+  const r = await authCall("verify", { method: "POST", body: JSON.stringify({ type: "email", email: String(email).trim(), token: String(code) }) });
+  if (!r.ok || !r.data?.access_token) return r.status === 429 ? { ok: false, error: "Too many tries. Wait a few minutes." } : nope;
   const user = r.data.user;
   if (!user?.email_confirmed_at || !isOperator(user.email)) return nope;
   setSession(res, r.data, Date.now());

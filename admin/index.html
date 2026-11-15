@@ -25,14 +25,18 @@
 
   <section id="login" class="card narrow" aria-labelledby="login-h" hidden>
     <h2 id="login-h">Sign in</h2>
-    <p class="muted">Use the email and password of your QuoteRevive account. Only operator emails can sign in.</p>
+    <p class="muted">We email you a one-time code. Only operator emails can sign in.</p>
     <form id="login-form" novalidate>
       <label for="email">Email</label>
       <input id="email" name="email" type="email" autocomplete="username" required>
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" autocomplete="current-password" required>
+      <div id="code-step" hidden>
+        <label for="code">Code from the email</label>
+        <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10">
+        <p class="muted small">It can take a minute. Check spam too.</p>
+      </div>
       <p id="login-msg" class="msg" role="alert"></p>
-      <button class="btn" type="submit">Sign in</button>
+      <button class="btn" type="submit" id="login-btn">Email me a code</button>
+      <button class="btn ghost" type="button" id="resend" hidden>Send a new code</button>
     </form>
   </section>
 

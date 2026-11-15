@@ -51,18 +51,31 @@ function showLogin() {
   $("#login").hidden = false;
   stopAuto();
 }
+async function requestCode() {
+  const msg = $("#login-msg"), email = $("#email").value.trim();
+  if (!email) { msg.textContent = "Enter your email."; $("#email").focus(); return; }
+  msg.className = "msg"; msg.textContent = "";
+  const r = await api("/api/admin/session", { method: "POST", body: JSON.stringify({ email }) });
+  if (!r.ok) { msg.textContent = r.body.error || "Couldn't send a code."; return; }
+  $("#code-step").hidden = false; $("#resend").hidden = false;
+  $("#login-btn").textContent = "Sign in";
+  msg.className = "msg ok"; msg.textContent = "If this email can sign in, a code is on its way.";
+  $("#code").focus();
+}
 $("#login-form").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const msg = $("#login-msg"), btn = e.submitter || $("#login-form button");
-  const email = $("#email").value.trim(), password = $("#password").value;
-  if (!email || !password) { msg.textContent = "Enter your email and password."; return; }
-  btn.disabled = true; msg.textContent = "";
-  const r = await api("/api/admin/session", { method: "POST", body: JSON.stringify({ email, password }) });
+  const btn = $("#login-btn"), msg = $("#login-msg");
+  btn.disabled = true;
+  if ($("#code-step").hidden) { await requestCode(); btn.disabled = false; return; }
+  const email = $("#email").value.trim(), code = $("#code").value.replace(/\s/g, "");
+  if (!code) { msg.className = "msg"; msg.textContent = "Enter the code from the email."; btn.disabled = false; $("#code").focus(); return; }
+  const r = await api("/api/admin/session", { method: "POST", body: JSON.stringify({ email, code }) });
   btn.disabled = false;
-  if (!r.ok) { msg.textContent = r.body.error || "Couldn't sign in."; $("#password").focus(); return; }
-  $("#password").value = "";
+  if (!r.ok) { msg.className = "msg"; msg.textContent = r.body.error || "Couldn't sign in."; $("#code").focus(); return; }
+  $("#code").value = ""; msg.textContent = "";
   start(r.body.email);
 });
+$("#resend").addEventListener("click", requestCode);
 $("#signout").addEventListener("click", async () => { await api("/api/admin/session", { method: "DELETE" }); showLogin(); toast("Signed out."); });
 
 /* ---------- data ---------- */
