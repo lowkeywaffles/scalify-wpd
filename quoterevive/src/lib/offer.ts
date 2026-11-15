@@ -12,8 +12,8 @@ export const PRICE = {
 
 /** Local payment in Ethiopian birr, verified by hand. Price is set by env so it can follow the exchange rate. */
 export const ETB_PRICE = (() => {
-  const n = Number(process.env.ETB_PRICE_FOUNDING ?? "6000");
-  return Number.isFinite(n) && n >= 100 && n <= 100000 ? Math.round(n) : 6000;
+  const n = Number(process.env.ETB_PRICE_FOUNDING ?? "4000");
+  return Number.isFinite(n) && n >= 100 && n <= 100000 ? Math.round(n) : 4000;
 })();
 export const FIRST6 = { code: "FIRST6", percentOff: 50, endsAt: "2026-11-18T20:59:00.000Z", spots: 6, whopPromoId: "promo_IOC4zrQD2TMN" } as const;
 export const first6Active = (now = Date.now()) => now < Date.parse(FIRST6.endsAt);
