@@ -2,7 +2,7 @@
 
 | Service | What it does | Data it receives | Cookies | Consent needed | DPA |
 |---|---|---|---|---|---|
-| Vercel | Hosts the static site and Scalify's payments API (functions in Frankfurt) | Requests (IP, user agent) | None set by us | No (necessary) | Vercel DPA applies; confirm on your plan |
+| Vercel | Hosts the static site and Scalify's payments API (functions currently run in the US, Washington D.C.) | Requests (IP, user agent) | None set by us | No (necessary) | Vercel DPA applies; confirm on your plan |
 | Supabase (EU, Frankfurt) | Stores payment records and encrypted backups | Payer name, transaction ID, method, amount, status; backup ciphertext | None | No (contract / user's request) | Supabase DPA; confirm |
 | Whop | Card checkout (in-app link and public page whop.com/brimful-plus) | Buyer's card, email, country (on Whop's own pages); our order key as metadata | Whop's own, on whop.com only | Handled by Whop on its pages | Whop terms; confirm seller agreement |
 | Telegram | Payment alerts to the operator | Product, amount, method only | n/a | No | Telegram terms |
