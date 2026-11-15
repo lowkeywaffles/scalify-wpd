@@ -14,13 +14,16 @@ const now = () => Date.now();
 export function emptyState() {
   return {
     v: 1,
-    settings: { currency: "USD", theme: "system", motion: "auto", sound: true, onboarded: false },
+    settings: { currency: "USD", theme: "system", motion: "auto", sound: true, onboarded: false, lang: "auto", cloud: null }, // cloud: { code, at } when encrypted backup is on
     jars: [],
     challenges: [],
     split: [], // [{ jarId, pct }]
-    license: null, // { key, status: "pending"|"active"|"rejected"|"refunded", note, checkedAt }
+    license: null, // { key, status: "pending"|"active"|"rejected"|"refunded", note, checkedAt, method? }
   };
 }
+
+/** Recovery code for the encrypted cloud backup: 4 groups of 5 base32 characters (100 random bits). */
+export const CLOUD_CODE = /^[A-Z2-7]{5}(-[A-Z2-7]{5}){3}$/;
 
 /* ---------- validation (used for saved data and for imported backups) ---------- */
 const isStr = (v, max) => typeof v === "string" && v.length <= max;
@@ -60,6 +63,8 @@ export function sanitize(raw) {
   if (["auto", "off"].includes(st.motion)) s.settings.motion = st.motion;
   s.settings.sound = st.sound !== false;
   s.settings.onboarded = st.onboarded === true;
+  if (["auto", "en", "am"].includes(st.lang)) s.settings.lang = st.lang;
+  if (st.cloud && isStr(st.cloud.code, 40) && CLOUD_CODE.test(st.cloud.code)) s.settings.cloud = { code: st.cloud.code, at: isInt(st.cloud.at, 0, 4e12) ? st.cloud.at : 0 };
   s.jars = (Array.isArray(raw.jars) ? raw.jars : []).map(cleanJar).filter(Boolean).slice(0, 200);
   const jarIds = new Set(s.jars.map((j) => j.id));
   s.challenges = (Array.isArray(raw.challenges) ? raw.challenges : []).map((c) => cleanChallenge(c, jarIds)).filter(Boolean).slice(0, 100);
@@ -67,6 +72,7 @@ export function sanitize(raw) {
   const l = raw.license;
   if (l && isStr(l.key, 64) && /^[0-9a-f-]{36}$/.test(l.key) && ["pending", "active", "rejected", "refunded"].includes(l.status)) {
     s.license = { key: l.key, status: l.status, note: isStr(l.note, 300) ? l.note : "", checkedAt: isInt(l.checkedAt, 0, 4e12) ? l.checkedAt : 0 };
+    if (["telebirr", "boa", "whop"].includes(l.method)) s.license.method = l.method;
   }
   return s;
 }
@@ -213,7 +219,9 @@ export function splitAmount(amount, rows) {
 
 /** Backup file contents. The licence key is included so a restore keeps Plus. */
 export function exportData(state) {
-  return JSON.stringify({ app: "brimful", exported: new Date().toISOString(), ...state }, null, 2);
+  // The cloud recovery code stays on the device: it never goes into a backup file or the cloud copy.
+  const settings = { ...state.settings, cloud: null };
+  return JSON.stringify({ app: "brimful", exported: new Date().toISOString(), ...state, settings }, null, 2);
 }
 export function importData(text) {
   let raw;

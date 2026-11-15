@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Payments admin · SCALIFY WPD</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="/admin/admin.css">
+<script type="module" src="/admin/admin.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+  <div class="bar">
+    <a class="brand" href="/">SCALIFY <small>WPD</small></a>
+    <div class="who"><span id="me" class="muted"></span> <button id="signout" class="btn ghost" type="button" hidden>Sign out</button></div>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <h1>Payments</h1>
+  <p class="muted lead">One place to check and approve payments for every Scalify product. Times are Addis Ababa time.</p>
+
+  <section id="login" class="card narrow" aria-labelledby="login-h" hidden>
+    <h2 id="login-h">Sign in</h2>
+    <p class="muted">Use the email and password of your QuoteRevive account. Only operator emails can sign in.</p>
+    <form id="login-form" novalidate>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="username" required>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+      <p id="login-msg" class="msg" role="alert"></p>
+      <button class="btn" type="submit">Sign in</button>
+    </form>
+  </section>
+
+  <div id="app" hidden>
+    <section id="setup" class="card warn" aria-labelledby="setup-h" hidden>
+      <h2 id="setup-h">Finish setting up</h2>
+      <ul id="setup-list"></ul>
+    </section>
+
+    <div class="stats" id="stats" aria-live="polite"></div>
+
+    <section aria-labelledby="wait-h">
+      <div class="row">
+        <h2 id="wait-h">Waiting for you <span id="wait-n" class="count">0</span></h2>
+        <button id="refresh" class="btn ghost" type="button">Refresh</button>
+      </div>
+      <p class="muted">Before approving, find the payment in your Telebirr or Bank of Abyssinia history: same transaction ID, same amount.</p>
+      <div id="waiting" class="list"></div>
+    </section>
+
+    <section aria-labelledby="done-h">
+      <h2 id="done-h">History</h2>
+      <div class="chips" role="group" aria-label="Filter history by product">
+        <button type="button" class="chip" data-f="all" aria-pressed="true">All</button>
+        <button type="button" class="chip" data-f="quoterevive" aria-pressed="false">QuoteRevive</button>
+        <button type="button" class="chip" data-f="brimful" aria-pressed="false">Brimful</button>
+      </div>
+      <div id="done" class="list"></div>
+    </section>
+
+    <section id="tg" class="card" aria-labelledby="tg-h">
+      <h2 id="tg-h">Telegram alerts</h2>
+      <div id="tg-body"><p class="muted">Loading…</p></div>
+    </section>
+  </div>
+  <p id="toast" class="toast" role="status" aria-live="polite"></p>
+</main>
+<footer class="wrap muted small">Private page for SCALIFY WPD operators. No tracking, one sign-in cookie (needed to keep you signed in).</footer>
+</body>
+</html>

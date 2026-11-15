@@ -196,3 +196,5 @@ dialog[open] .sheet{animation:sheet .5s var(--ease)}
 .confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
 .sharewrap{display:grid;gap:12px;justify-items:center}
 .sharewrap canvas{width:min(100%,270px);height:auto;border-radius:16px;box-shadow:var(--shadow)}
+.cloud{display:grid;gap:8px;padding:12px 0 4px;border-top:1px solid var(--line)}
+.cloud .label,.panel h3.label{margin:0;font-size:15px}

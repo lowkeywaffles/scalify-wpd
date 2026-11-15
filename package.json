@@ -1,0 +1,9 @@
+{
+  "name": "scalify-wpd-site",
+  "private": true,
+  "type": "module",
+  "description": "SCALIFY WPD website, products page, and the payments admin + store API (Vercel functions in /api). No dependencies.",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  }
+}

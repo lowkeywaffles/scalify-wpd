@@ -11,13 +11,33 @@ const view = $("#view"), dlg = $("#dlg"), toastEl = $("#toast");
 /* ---------- shared context handed to every screen ---------- */
 export const app = {
   state: S.load(),
-  commit(next) { app.state = next; if (!S.save(next)) toast("Couldn't save. Your browser's storage may be full or blocked."); syncChrome(); },
+  commit(next) { app.state = next; if (!S.save(next)) toast("Couldn't save. Your browser's storage may be full or blocked."); syncChrome(); scheduleCloud(); },
   cur: () => app.state.settings.currency,
   money: (minor, o) => fmt(minor, app.state.settings.currency, o),
   reduced: () => matchMedia("(prefers-reduced-motion: reduce)").matches || app.state.settings.motion === "off",
   sound: () => app.state.settings.sound,
   toast, sheet, closeSheet, go, render, deposit, miniJar, celebrate, upsell, fieldError,
 };
+
+/* ---------- encrypted cloud backup (only when the user turned it on) ---------- */
+let cloudT = null, cloudBusy = false;
+function scheduleCloud() {
+  if (!app.state.settings.cloud) return;
+  clearTimeout(cloudT);
+  cloudT = setTimeout(runCloud, 15000); // one upload after a burst of changes
+}
+async function runCloud() {
+  cloudT = null;
+  if (cloudBusy || !app.state.settings.cloud || !navigator.onLine) return;
+  cloudBusy = true;
+  try {
+    const { backupNow } = await import("./lib/cloud.js");
+    const r = await backupNow(app.state);
+    if (r.ok && app.state.settings.cloud) { const s = structuredClone(app.state); s.settings.cloud.at = r.at; app.state = s; S.save(s); }
+  } catch { /* try again after the next change */ } finally { cloudBusy = false; }
+}
+document.addEventListener("visibilitychange", () => { if (document.hidden && cloudT) { clearTimeout(cloudT); runCloud(); } });
+addEventListener("online", () => { const c = app.state.settings.cloud; if (c && Date.now() - c.at > 3600_000) scheduleCloud(); });
 
 function toast(msg) {
   toastEl.textContent = msg;

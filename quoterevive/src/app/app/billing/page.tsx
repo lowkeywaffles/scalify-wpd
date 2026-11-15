@@ -6,7 +6,6 @@ import { BadgeCheck } from "lucide-react";
 import { etbWithPromo, ETB_PRICE, first6Active, formatEtb, LOCAL_PAY, PRICE } from "@/lib/offer";
 import { first6Remaining, isOperator } from "@/lib/local-pay";
 import { LocalPayment } from "@/components/LocalPayment";
-import Link from "next/link";
 import { startCheckout } from "../actions";
 import { PaymentPending } from "@/components/PaymentPending";
 
@@ -28,7 +27,7 @@ export default async function Billing({ searchParams }: { searchParams: Promise<
   return (
     <div className="max-w-2xl space-y-6">
       <h1 className="font-display text-4xl">Access</h1>
-      {operator && <p><Link href="/app/admin/payments" className="font-semibold underline">Review local payments →</Link></p>}
+      {operator && <p><a href="https://scalify-wpd.vercel.app/admin" className="font-semibold underline">Review payments (Scalify admin) →</a></p>}
       {checkout === "done" && !paid && <PaymentPending />}
       {msg && !paid && <Notice kind={msg.kind}>{msg.text}</Notice>}
       {paid ? (
@@ -51,6 +50,7 @@ export default async function Billing({ searchParams }: { searchParams: Promise<
               <Notice kind="info">We&apos;re checking your payment of {formatEtb(Number(lastPay.amount_etb))} (transaction ID {lastPay.reference}). Your account unlocks as soon as it&apos;s confirmed, usually within 24 hours.</Notice>
             ) : (
               <>
+                {lastPay?.status === "refunded" && <Notice kind="info">Your birr payment ({lastPay.reference}) was refunded, so this workspace is back on the free plan. Your quotes are all still here.</Notice>}
                 {lastPay?.status === "rejected" && <Notice kind="error">We couldn&apos;t confirm your last payment ({lastPay.reference}): {lastPay.review_note} You can submit it again below, or message us on WhatsApp.</Notice>}
                 <LocalPayment priceEtb={formatEtb(ETB_PRICE)} promoPriceEtb={formatEtb(etbWithPromo(true))} promoOpen={first6Active() && spotsLeft > 0} spotsLeft={spotsLeft}
                   telebirr={LOCAL_PAY.telebirr} boa={LOCAL_PAY.boa} />

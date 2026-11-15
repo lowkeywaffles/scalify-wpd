@@ -2,11 +2,10 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireBusiness } from "@/lib/data";
-import { first6Remaining, isOperator } from "@/lib/local-pay";
+import { first6Remaining } from "@/lib/local-pay";
 import { etbWithPromo, FIRST6, first6Active } from "@/lib/offer";
 import { rateLimit } from "@/lib/rate-limit";
 import { supabaseAdmin } from "@/lib/supabase/server";
-import { takeOnePromoSpot } from "@/lib/whop";
 
 export type PayState = { ok?: boolean; error?: string; message?: string; fieldErrors?: Record<string, string[] | undefined> };
 
@@ -47,69 +46,19 @@ export async function submitLocalPayment(_: PayState, fd: FormData): Promise<Pay
     console.error("[localpay] insert failed", error.message);
     return { error: "We couldn't save that. Please try again, or message us on WhatsApp." };
   }
+  await pingPaymentsAdmin();
   revalidatePath("/app/billing");
   return { ok: true, message: "Thanks! We'll check the payment and unlock your account, usually within 24 hours. This page will update." };
 }
 
-async function requireOperator() {
-  const ctx = await requireBusiness();
-  if (!isOperator(ctx.user.email)) throw new Error("Not allowed");
-  return ctx;
-}
-
-const Id = z.string().uuid();
-
-/** Operator: confirm the money arrived, then unlock the payer's workspace. */
-export async function approvePayment(id: string): Promise<PayState> {
-  const { user } = await requireOperator();
-  if (!Id.safeParse(id).success) return { error: "Invalid request." };
-  const admin = supabaseAdmin();
-  const { data: row } = await admin.from("manual_payments").update({ status: "approved", reviewed_at: new Date().toISOString(), reviewed_by: user.email })
-    .eq("id", id).eq("status", "pending").select("business_id, promo_code").maybeSingle();
-  if (!row) return { error: "Already reviewed, or not found." };
-  const { error } = await admin.from("entitlements").upsert({ business_id: row.business_id, source: "manual", status: "active", plan: "founding", updated_at: new Date().toISOString() }, { onConflict: "business_id" });
-  if (error) {
-    await admin.from("manual_payments").update({ status: "pending", reviewed_at: null, reviewed_by: null }).eq("id", id);
-    console.error("[localpay] entitlement failed", error.message);
-    return { error: "Couldn't unlock the account. Nothing was changed; try again." };
+/**
+ * Tells the Scalify payments admin that a payment may be waiting, so the operator gets a Telegram alert.
+ * Sends no data at all: the admin looks the payment up in the database itself. Never blocks the customer.
+ */
+async function pingPaymentsAdmin() {
+  try {
+    await fetch("https://scalify-wpd.vercel.app/api/hooks/payment", { method: "POST", signal: AbortSignal.timeout(3000), cache: "no-store" });
+  } catch {
+    // The daily check on the admin side sends any alert that was missed.
   }
-  let note = "";
-  if (row.promo_code === FIRST6.code && !(await takeOnePromoSpot(FIRST6.whopPromoId))) note = " (Couldn't reduce the FIRST6 count on Whop. Lower it by one in Whop by hand.)";
-  revalidatePath("/app/admin/payments");
-  return { ok: true, message: `Approved and unlocked.${note}` };
-}
-
-/** Operator: the money wasn't found (or wrong amount). Tells the customer why. */
-export async function rejectPayment(id: string, reason: string): Promise<PayState> {
-  const { user } = await requireOperator();
-  const r = z.string().trim().min(3, "Give a short reason the customer will see").max(300).safeParse(reason);
-  if (!Id.safeParse(id).success || !r.success) return { error: r.success ? "Invalid request." : r.error.issues[0].message };
-  const { data } = await supabaseAdmin().from("manual_payments").update({ status: "rejected", review_note: r.data, reviewed_at: new Date().toISOString(), reviewed_by: user.email })
-    .eq("id", id).eq("status", "pending").select("id").maybeSingle();
-  revalidatePath("/app/admin/payments");
-  return data ? { ok: true, message: "Marked as not received. The customer sees your reason." } : { error: "Already reviewed, or not found." };
-}
-
-/* ---------- Store orders (products without accounts, e.g. Brimful) ---------- */
-
-export async function reviewStoreOrder(id: string, action: "approve" | "reject" | "refund", reason = ""): Promise<PayState> {
-  const { user } = await requireOperator();
-  if (!Id.safeParse(id).success) return { error: "Invalid request." };
-  const admin = supabaseAdmin();
-  const stamp = { reviewed_at: new Date().toISOString(), reviewed_by: user.email };
-  if (action === "approve") {
-    const { data } = await admin.from("store_orders").update({ status: "approved", review_note: null, ...stamp }).eq("id", id).eq("status", "pending").select("id").maybeSingle();
-    revalidatePath("/app/admin/payments");
-    return data ? { ok: true, message: "Approved. The buyer's app unlocks next time it checks (within a minute if open)." } : { error: "Already reviewed, or not found." };
-  }
-  if (action === "reject") {
-    const r = z.string().trim().min(3, "Give a short reason the buyer will see").max(300).safeParse(reason);
-    if (!r.success) return { error: r.error.issues[0].message };
-    const { data } = await admin.from("store_orders").update({ status: "rejected", review_note: r.data, ...stamp }).eq("id", id).eq("status", "pending").select("id").maybeSingle();
-    revalidatePath("/app/admin/payments");
-    return data ? { ok: true, message: "Marked as not received." } : { error: "Already reviewed, or not found." };
-  }
-  const { data } = await admin.from("store_orders").update({ status: "refunded", ...stamp }).eq("id", id).eq("status", "approved").select("id").maybeSingle();
-  revalidatePath("/app/admin/payments");
-  return data ? { ok: true, message: "Marked as refunded. Send the money back from Telebirr or your bank; the app returns to the free plan." } : { error: "Only approved orders can be refunded." };
 }

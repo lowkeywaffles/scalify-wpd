@@ -4,6 +4,7 @@ import { toMinor, CURRENCIES } from "./lib/money.js";
 import { CHALLENGE_TYPES, challengeProgress, shuffledOrder, envelopeAmounts, weekAmounts, daysInMonth, sum } from "./lib/challenges.js";
 import { confetti, buzz, clink, esc } from "./lib/fx.js";
 import { fetchProduct, createOrder, fetchStatus } from "./lib/api.js";
+import { backupNow, fetchRestore, newCode, normalize, removeCloud } from "./lib/cloud.js";
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const check = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>`;
@@ -167,6 +168,21 @@ function updateSplit(app) {
 }
 
 /* ---------- Settings ---------- */
+const ago = (t) => {
+  if (!t) return "not yet";
+  const m = Math.round((Date.now() - t) / 60000);
+  return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : new Date(t).toLocaleDateString();
+};
+function cloudPanel(app) {
+  const c = app.state.settings.cloud;
+  if (c) return `<div class="cloud on"><h3 class="label">Cloud backup: on</h3>
+    <p class="fine" id="cloud-at" aria-live="polite">Encrypted on this device before upload. Last backed up: ${ago(c.at)}.</p>
+    <div class="row"><button class="btn ghost small" data-act="cloud-now">Back up now</button><button class="btn ghost small" data-act="cloud-code">Show recovery code</button><button class="btn ghost small" data-act="cloud-off">Turn off</button></div></div>`;
+  return `<div class="cloud"><h3 class="label">Cloud backup (optional)</h3>
+    <p class="fine">Keep an encrypted copy online, so you can get your jars back on a new phone with a recovery code. No account and no email. The copy is locked with your code before it leaves this device, so nobody else can read it, including us.</p>
+    <div class="row"><button class="btn ghost small" data-act="cloud-on">Turn on cloud backup</button><button class="btn ghost small" data-act="cloud-restore">Restore with a recovery code</button></div></div>`;
+}
+
 export function settingsView(app) {
   const st = app.state.settings, l = app.state.license, plus = S.isPlus(app.state);
   const seg = (name, opts, val) => `<div class="seg" role="radiogroup" aria-label="${name}">${opts.map(([v, t]) => `<label><input type="radio" name="${name}" value="${v}"${v === val ? " checked" : ""} data-change="setting"><span>${t}</span></label>`).join("")}</div>`;
@@ -180,8 +196,10 @@ export function settingsView(app) {
       <div class="setting"><div><span class="label">3D motion</span><p>Turn off to stop coins falling, tilting and flipping.</p></div>${seg("motion", [["auto", "On"], ["off", "Reduced"]], st.motion)}</div>
       <div class="setting"><div><span class="label" id="l-snd">Coin sounds</span><p>A soft clink when money lands.</p></div><label class="switch"><input type="checkbox" name="sound"${st.sound ? " checked" : ""} data-change="setting" aria-labelledby="l-snd"><span></span></label></div></section>
     <section class="panel" aria-labelledby="s-data"><h2 id="s-data">Your data</h2>
-      <p class="fine">Everything is stored in this browser on this device. If you clear your browser data or switch phones, it's gone unless you made a backup.</p>
-      <div class="row"><button class="btn ghost small" data-act="export">Download a backup</button><label class="btn ghost small" for="imp">Restore a backup</label><input id="imp" class="sr" type="file" accept="application/json,.json" data-change="import"></div>
+      <p class="fine">Everything is stored in this browser on this device. If you clear your browser data or lose your phone, it's gone unless you have a backup.</p>
+      ${cloudPanel(app)}
+      <h3 class="label">Backup file</h3>
+      <div class="row"><button class="btn ghost small" data-act="export">Download a backup</button><label class="btn ghost small" for="imp">Restore a backup file</label><input id="imp" class="sr" type="file" accept="application/json,.json" data-change="import"></div>
       <button class="btn danger small" data-act="wipe" data-vars="justify-self:start">Delete everything on this device</button></section>
     <section class="panel" aria-labelledby="s-about"><h2 id="s-about">About</h2>
       <p class="fine">Brimful is a tracker. It doesn't hold, move or invest money, and nothing here is financial advice. Made by SCALIFY WPD, Addis Ababa.</p>
@@ -191,16 +209,22 @@ export function settingsView(app) {
 
 /* ---------- Unlock (Brimful Plus) ---------- */
 let product = null, pollTimer = null;
+const AGE_BOX = `<label class="check"><input type="checkbox" name="age_ok"><span>I'm 18 or older, or a parent or guardian has agreed to this purchase.</span></label><span class="err" data-err="age_ok" role="alert"></span>`;
 export function unlockView(app) {
   const l = app.state.license, status = l?.status;
   const perks = `<ul><li>Unlimited jars</li><li>Run every challenge at the same time</li><li>Split: share money between jars in one tap</li><li>All six coin colours</li></ul>`;
-  const keyBox = l ? `<div class="field"><span class="label">Your licence key</span><div class="key" id="lic-key">${esc(l.key)}</div><button class="btn ghost small" type="button" data-act="copy-key" data-vars="justify-self:start">Copy key</button><span class="hint">Save this somewhere safe. It restores Plus on another device or after clearing your browser.</span></div>` : "";
+  const keyBox = l ? `<div class="field"><span class="label">Your licence key</span><div class="key" id="lic-key">${esc(l.key)}</div><button class="btn ghost small" type="button" data-act="copy-key" data-vars="justify-self:start">Copy key</button><span class="hint">Save this somewhere safe. It restores Plus on another device or after clearing your browser. Cloud backup (in Settings) keeps it for you too.</span></div>` : "";
   if (status === "active") return `<a class="back" href="#/settings">← Settings</a><h1 tabindex="-1">Brimful Plus</h1>
     <div class="plus-hero"><svg class="rosette" data-guilloche="9,4,6,4" aria-hidden="true"></svg><h2>Plus is active</h2>${perks}</div>
     <section class="panel">${keyBox}<p class="fine">Refunds: within 14 days of paying, email skelifywpd@gmail.com with this key. See the <a href="/legal/refund">refund policy</a>.</p></section>`;
-  if (status === "pending") return `<a class="back" href="#/settings">← Settings</a><h1 tabindex="-1">Checking your payment</h1>
-    <p class="note warn" id="pay-state" aria-live="polite">We check every payment by hand, usually within 24 hours. This page updates by itself, and Plus unlocks as soon as it's confirmed.</p>
-    <section class="panel">${keyBox}<button class="btn" data-act="check-pay">Check now</button></section>`;
+  if (status === "pending") {
+    const card = l.method === "whop";
+    return `<a class="back" href="#/settings">← Settings</a><h1 tabindex="-1">${card ? "Finishing your card payment" : "Checking your payment"}</h1>
+    <p class="note warn" id="pay-state" aria-live="polite">${card
+      ? "As soon as Whop confirms your card payment, Plus unlocks here. This usually takes a few seconds after you pay."
+      : "We check every payment by hand, usually within 24 hours. This page updates by itself, and Plus unlocks as soon as it's confirmed."}</p>
+    <section class="panel">${keyBox}<div class="row"><button class="btn" data-act="check-pay">Check now</button>${card ? `<button class="btn ghost" type="button" data-act="cancel-card">I didn't pay: choose again</button>` : ""}</div></section>`;
+  }
   return `<a class="back" href="#/settings">← Settings</a><h1 tabindex="-1">Brimful Plus</h1>
     <div class="plus-hero"><svg class="rosette" data-guilloche="9,4,6,4" aria-hidden="true"></svg>
       <span class="price num" id="price">…</span><h2>Pay once. Keep it.</h2>${perks}</div>
@@ -210,7 +234,7 @@ export function unlockView(app) {
     <section class="panel" aria-labelledby="res-h"><h2 id="res-h">Already bought it?</h2>
       <form id="restore" novalidate class="view"><div class="field"><label for="r-key">Licence key</label><input id="r-key" name="key" class="input num" autocomplete="off" spellcheck="false" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"><span class="err" data-err="key" role="alert"></span></div>
       <button class="btn ghost" type="button" data-act="restore">Restore Plus</button></form></section>
-    <p class="fine">Brimful is free to use without Plus, and your existing jars are never locked. Under 18? Please ask a parent or guardian before paying. <a href="/legal/terms">Terms</a> · <a href="/legal/refund">14-day refund</a> · <a href="/legal/privacy">Privacy</a></p>`;
+    <p class="fine">Brimful is free to use without Plus, and your existing jars are never locked. <a href="/legal/terms">Terms</a> · <a href="/legal/refund">14-day refund</a> · <a href="/legal/privacy">Privacy</a></p>`;
 }
 
 async function loadPay(app) {
@@ -221,22 +245,35 @@ async function loadPay(app) {
   if (!r.ok) { $("#pay-load").textContent = "You need to be online to buy Plus. Check your connection and open this page again."; $("#price").textContent = "Brimful Plus"; return; }
   product = r.body;
   const price = `${Number(product.price_etb).toLocaleString("en-US")} ETB`;
-  $("#price").innerHTML = `${price} <small>one-time · no subscription</small>`;
+  const usd = product.card ? `$${product.card.price_usd} USD` : "";
+  $("#price").innerHTML = `${price}${usd ? ` <small>or ${usd}</small>` : ""} <small>one-time · no subscription</small>`;
   const m = product.methods;
   panel.innerHTML = `<h2 id="pay-h">How to pay</h2>
-    <p class="fine">Payment is by Telebirr or Bank of Abyssinia transfer in Ethiopian birr. Card payments aren't available yet.</p>
     <form id="payform" novalidate class="view">
-      <div class="seg" role="radiogroup" aria-label="Payment method"><label><input type="radio" name="method" value="telebirr" checked data-change="pay-method"><span>Telebirr</span></label><label><input type="radio" name="method" value="boa" data-change="pay-method"><span>Bank of Abyssinia</span></label></div>
+      <div class="seg" role="radiogroup" aria-label="Payment method"><label><input type="radio" name="method" value="telebirr" checked data-change="pay-method"><span>Telebirr</span></label><label><input type="radio" name="method" value="boa" data-change="pay-method"><span>Bank transfer</span></label>${product.card ? `<label><input type="radio" name="method" value="whop" data-change="pay-method"><span>Card</span></label>` : ""}</div>
       <div class="paybox" data-m="telebirr"><img src="/assets/img/pay-telebirr.jpg" width="150" height="149" alt="Telebirr QR code to pay ${esc(m.telebirr.accountName)}"><dl><dt>1. Send exactly</dt><dd class="num">${price}</dd><dt>To (Telebirr)</dt><dd>${esc(m.telebirr.accountName)}</dd><dt>How</dt><dd>Scan the code in the Telebirr app</dd></dl></div>
       <div class="paybox" data-m="boa" hidden><dl><dt>1. Send exactly</dt><dd class="num">${price}</dd><dt>Bank</dt><dd>${esc(m.boa.label)}</dd><dt>Account number</dt><dd class="num" id="acct">${esc(m.boa.accountNumber)}</dd><dt>Account name</dt><dd>${esc(m.boa.accountName)}</dd></dl><button class="btn ghost small" type="button" data-act="copy-acct">Copy account number</button></div>
-      <p class="label">2. Tell us it's sent</p>
+      ${product.card ? `<div class="paybox" data-m="whop" hidden><dl><dt>Price</dt><dd class="num">${usd}, one-time</dd><dt>Paid through</dt><dd>Whop secure checkout (cards; other options Whop offers in your country)</dd></dl>
+        <p class="fine">Whop may add sales tax or VAT where the law requires it, and your bank may charge a foreign-transaction fee. Whop shows the final total before you pay. Plus unlocks automatically after payment.</p></div>` : ""}
+      <div data-local><p class="label">2. Tell us it's sent</p>
       <div class="field"><label for="p-name">Name the payment came from</label><input id="p-name" name="payer_name" class="input" maxlength="120" autocomplete="name"><span class="err" data-err="payer_name" role="alert"></span></div>
       <div class="field"><label for="p-ref">Transaction ID</label><input id="p-ref" name="reference" class="input num" maxlength="60" autocomplete="off" spellcheck="false"><span class="hint">From the Telebirr SMS or your bank receipt, e.g. CK12AB34CD.</span><span class="err" data-err="reference" role="alert"></span></div>
-      <label class="check"><input type="checkbox" name="confirm"><span>I have already sent the payment, and I agree to the <a href="/legal/terms">terms</a>.</span></label><span class="err" data-err="confirm" role="alert"></span>
-      <button class="btn brass block" type="button" data-act="submit-pay">Submit for checking</button>
-      <p class="fine">We use your name and transaction ID only to match your payment (see <a href="/legal/privacy">privacy</a>). We never ask for your PIN or password.</p>
+      <label class="check"><input type="checkbox" name="confirm"><span>I have already sent the payment.</span></label><span class="err" data-err="confirm" role="alert"></span></div>
+      ${AGE_BOX}
+      <p class="fine">By continuing you agree to the <a href="/legal/terms">terms</a>.</p>
+      <button class="btn brass block" type="button" data-act="submit-pay" id="pay-go">Submit for checking</button>
+      <p class="fine" data-local>We use your name and transaction ID only to match your payment (see <a href="/legal/privacy">privacy</a>). We never ask for your PIN or password.</p>
+      <p class="fine" data-card hidden>Whop handles your card details; we never see them. We only learn that a payment for your licence key went through (see <a href="/legal/privacy">privacy</a>).</p>
       <p class="err" id="pay-err" role="alert"></p>
     </form>`;
+}
+
+function setPollFor(app) {
+  clearInterval(pollTimer);
+  const l = app.state.license;
+  if (l?.status !== "pending") return;
+  const fast = l.method === "whop" && Date.now() - l.checkedAt < 10 * 60_000;
+  pollTimer = setInterval(() => { if (!document.hidden && navigator.onLine) checkLicence(app, true); }, fast ? 5000 : 30000);
 }
 
 async function checkLicence(app, quiet) {
@@ -245,11 +282,12 @@ async function checkLicence(app, quiet) {
   const r = await fetchStatus(l.key);
   if (!r.ok || !r.body.status) { if (!quiet) app.toast(r.status === 404 ? "We can't find that licence key." : r.body.error ?? "Couldn't check right now."); return; }
   const s = structuredClone(app.state);
-  s.license = { key: l.key, status: r.body.status, note: r.body.note ?? "", checkedAt: Date.now() };
+  s.license = { ...l, status: r.body.status, note: r.body.note ?? "", checkedAt: r.body.status === "pending" ? l.checkedAt : Date.now() };
+  if (r.body.method) s.license.method = r.body.method;
   app.commit(s);
   if (r.body.status === "active") { clearInterval(pollTimer); confetti({ count: 200 }); buzz([30, 40, 60]); app.toast("Brimful Plus is unlocked. Thank you!"); app.render(); }
   else if (r.body.status !== "pending") { clearInterval(pollTimer); app.render(); }
-  else if (!quiet) app.toast("Still being checked. We'll unlock it as soon as it's confirmed.");
+  else if (!quiet) app.toast(l.method === "whop" ? "Not confirmed yet. If you finished paying, give it a few seconds." : "Still being checked. We'll unlock it as soon as it's confirmed.");
 }
 
 /* ---------- wire up ---------- */
@@ -258,7 +296,8 @@ export function installViews(app, register) {
     clearInterval(pollTimer);
     if (detail.route === "unlock") {
       loadPay(app);
-      if (app.state.license?.status === "pending") pollTimer = setInterval(() => { if (!document.hidden && navigator.onLine) checkLicence(app, true); }, 30000);
+      setPollFor(app);
+      if (app.state.license?.status === "pending" && /[?&]paid=1/.test(location.hash)) checkLicence(app, true);
     }
     if (detail.route === "split" && $("#splitform")) updateSplit(app);
   });
@@ -348,34 +387,109 @@ export function installViews(app, register) {
     },
     wipe: () => app.sheet(`<h2 id="dlg-title">Delete everything?</h2><p>All jars, history, challenges and settings will be removed from this device. This can't be undone. Download a backup first if you might want them back.</p>
       <label class="check"><input type="checkbox" name="sure"><span>Yes, delete all my Brimful data on this device.</span></label><span class="err" data-err="sure" role="alert"></span>
+      ${app.state.settings.cloud ? `<label class="check"><input type="checkbox" name="cloud" checked><span>Also delete my cloud backup.</span></label>` : ""}
       <div class="row"><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn danger">Delete everything</button></div>`,
-      (fd, form) => {
+      async (fd, form) => {
         if (!fd.get("sure")) return app.fieldError(form, "sure", "Tick the box to confirm.");
+        const cloud = app.state.settings.cloud;
+        if (cloud && fd.get("cloud") && !(await removeCloud(cloud.code))) { app.toast("Couldn't reach the cloud backup to delete it. Check your connection and try again."); return false; }
         const keep = app.state.license;
-        const fresh = S.emptyState(); fresh.settings.onboarded = true; fresh.settings.currency = app.cur(); fresh.license = keep; // the purchase stays valid
+        const fresh = S.emptyState(); fresh.settings.onboarded = true; fresh.settings.currency = app.cur(); fresh.settings.lang = app.state.settings.lang; fresh.license = keep; // the purchase stays valid
+        if (cloud && !fd.get("cloud")) fresh.settings.cloud = cloud; // kept on purpose: it will be overwritten by the next backup
         app.commit(fresh); app.toast("Everything was deleted from this device."); app.go("#/");
       }),
 
-    "change:pay-method": (el) => document.querySelectorAll(".paybox").forEach((b) => (b.hidden = b.dataset.m !== el.value)),
+    "change:pay-method": (el) => {
+      const card = el.value === "whop";
+      document.querySelectorAll(".paybox").forEach((b) => (b.hidden = b.dataset.m !== el.value));
+      document.querySelectorAll("#payform [data-local]").forEach((b) => (b.hidden = card));
+      document.querySelectorAll("#payform [data-card]").forEach((b) => (b.hidden = !card));
+      $("#pay-go").textContent = card ? "Continue to secure checkout" : "Submit for checking";
+    },
     "copy-acct": async () => { try { await navigator.clipboard.writeText($("#acct").textContent); app.toast("Account number copied."); } catch { app.toast("Press and hold the number to copy it."); } },
     "copy-key": async () => { try { await navigator.clipboard.writeText($("#lic-key").textContent); app.toast("Licence key copied."); } catch { app.toast("Press and hold the key to copy it."); } },
     "submit-pay": async (el) => {
-      const form = $("#payform"), fd = new FormData(form);
+      const form = $("#payform"), fd = new FormData(form), method = String(fd.get("method"));
       form.querySelectorAll("[data-err]").forEach((e) => (e.textContent = ""));
-      const payer_name = String(fd.get("payer_name") ?? "").trim(), reference = String(fd.get("reference") ?? "").trim().toUpperCase();
-      if (payer_name.length < 2) return app.fieldError(form, "payer_name", "Enter the name the payment came from.");
-      if (!/^[A-Z0-9-]{4,60}$/.test(reference)) return app.fieldError(form, "reference", "Enter the transaction ID from your SMS or receipt (letters and numbers).");
-      if (!fd.get("confirm")) return app.fieldError(form, "confirm", "Tick the box to confirm you've sent the payment.");
-      el.disabled = true; el.textContent = "Sending…";
-      const r = await createOrder({ method: String(fd.get("method")), payer_name, reference });
-      el.disabled = false; el.textContent = "Submit for checking";
-      if (!r.ok || !r.body.key) { $("#pay-err").textContent = r.body.error ?? "Something went wrong. Please try again."; return; }
+      $("#pay-err").textContent = "";
+      let data;
+      if (method === "whop") data = { method };
+      else {
+        const payer_name = String(fd.get("payer_name") ?? "").trim(), reference = String(fd.get("reference") ?? "").trim().toUpperCase();
+        if (payer_name.length < 2) return app.fieldError(form, "payer_name", "Enter the name the payment came from.");
+        if (!/^[A-Z0-9-]{4,60}$/.test(reference)) return app.fieldError(form, "reference", "Enter the transaction ID from your SMS or receipt (letters and numbers).");
+        if (!fd.get("confirm")) return app.fieldError(form, "confirm", "Tick the box to confirm you've sent the payment.");
+        data = { method, payer_name, reference };
+      }
+      if (!fd.get("age_ok")) return app.fieldError(form, "age_ok", "Please confirm you're 18 or older, or that a parent or guardian agreed.");
+      const label = el.textContent;
+      el.disabled = true; el.textContent = method === "whop" ? "Opening checkout…" : "Sending…";
+      const r = await createOrder({ ...data, age_ok: true });
+      if (!r.ok || !r.body.key) {
+        el.disabled = false; el.textContent = label;
+        if (r.body.field && form.elements[r.body.field]) return app.fieldError(form, r.body.field, r.body.error);
+        $("#pay-err").textContent = r.body.error ?? "Something went wrong. Please try again.";
+        return;
+      }
       const s = structuredClone(app.state);
-      s.license = { key: r.body.key, status: "pending", note: "", checkedAt: Date.now() };
+      s.license = { key: r.body.key, status: "pending", note: "", checkedAt: Date.now(), method };
       app.commit(s);
+      if (method === "whop" && /^https:\/\/([a-z0-9-]+\.)*whop\.com\//.test(r.body.checkout_url || "")) { location.assign(r.body.checkout_url); return; }
       app.render();
     },
+    "cancel-card": () => app.sheet(`<h2 id="dlg-title">Choose another way to pay?</h2><p>Only do this if you didn't finish paying on Whop. If you did pay, press Check now instead, or email skelifywpd@gmail.com with your licence key.</p><div class="row"><button type="button" class="btn ghost" data-close>Go back</button><button class="btn">Choose again</button></div>`,
+      () => { const s = structuredClone(app.state); s.license = null; app.commit(s); app.render(); }),
     "check-pay": () => checkLicence(app, false),
+
+    "cloud-on": () => {
+      const code = newCode();
+      app.sheet(`<h2 id="dlg-title">Your recovery code</h2>
+        <p>Write this down or save it in your password manager. You need it to restore on another device.</p>
+        <p class="key num" id="new-code">${code}</p>
+        <button type="button" class="btn ghost small" data-act="copy-code" data-vars="justify-self:start">Copy code</button>
+        <p class="fine">If you lose this code, nobody can open the backup, not even us. Backups you don't update for 400 days are deleted.</p>
+        <label class="check"><input type="checkbox" name="saved"><span>I've saved my recovery code somewhere safe.</span></label><span class="err" data-err="saved" role="alert"></span>
+        <div class="row"><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn">Turn on backup</button></div>`,
+        async (fd, form) => {
+          if (!fd.get("saved")) return app.fieldError(form, "saved", "Save the code first, then tick the box.");
+          const s = structuredClone(app.state); s.settings.cloud = { code, at: 0 };
+          const r = await backupNow(s);
+          if (!r.ok) { app.toast(r.error); return false; }
+          s.settings.cloud.at = r.at; app.commit(s); app.toast("Cloud backup is on. It updates by itself after changes."); app.render();
+        });
+    },
+    "copy-code": async () => { try { await navigator.clipboard.writeText($("#new-code").textContent); app.toast("Recovery code copied."); } catch { app.toast("Press and hold the code to copy it."); } },
+    "cloud-now": async (el) => {
+      el.disabled = true;
+      const r = await backupNow(app.state);
+      el.disabled = false;
+      if (!r.ok) return app.toast(r.error);
+      const s = structuredClone(app.state); s.settings.cloud.at = r.at; app.commit(s);
+      $("#cloud-at").textContent = `Encrypted on this device before upload. Last backed up: ${ago(r.at)}.`;
+      app.toast("Backed up.");
+    },
+    "cloud-code": () => app.sheet(`<h2 id="dlg-title">Recovery code</h2><p class="key num" id="new-code">${esc(app.state.settings.cloud.code)}</p><button type="button" class="btn ghost small" data-act="copy-code" data-vars="justify-self:start">Copy code</button><p class="fine">Anyone with this code can open your backup. Don't share it.</p><div class="row"><button type="button" class="btn" data-close>Done</button></div>`),
+    "cloud-off": () => app.sheet(`<h2 id="dlg-title">Turn off cloud backup?</h2><p>The online copy is deleted. Your jars on this device stay as they are.</p><div class="row"><button type="button" class="btn ghost" data-close>Keep it on</button><button class="btn danger">Turn off and delete copy</button></div>`,
+      async () => {
+        if (!(await removeCloud(app.state.settings.cloud.code))) { app.toast("Couldn't reach the backup to delete it. Try again when you're online."); return false; }
+        const s = structuredClone(app.state); s.settings.cloud = null; app.commit(s); app.toast("Cloud backup is off and the online copy was deleted."); app.render();
+      }),
+    "cloud-restore": () => app.sheet(`<h2 id="dlg-title">Restore from cloud backup</h2>
+      <div class="field"><label for="rc-code">Recovery code</label><input id="rc-code" name="code" class="input num" autocomplete="off" spellcheck="false" placeholder="XXXXX-XXXXX-XXXXX-XXXXX"><span class="err" data-err="code" role="alert"></span></div>
+      <p class="fine">This replaces everything currently on this device.</p>
+      <div class="row"><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn">Restore</button></div>`,
+      async (fd, form) => {
+        const code = normalize(fd.get("code"));
+        if (!code) return app.fieldError(form, "code", "That doesn't look like a recovery code. It has 20 letters and numbers.");
+        const r = await fetchRestore(code);
+        if (!r.ok) return app.fieldError(form, "code", r.error);
+        const next = r.state;
+        if (!next.license && app.state.license) next.license = app.state.license;
+        next.settings.onboarded = true; next.settings.cloud = { code, at: Date.now() };
+        app.commit(next);
+        app.toast(`Restored ${next.jars.length} jar${next.jars.length === 1 ? "" : "s"}. Cloud backup stays on with this code.`);
+        app.go("#/");
+      }),
     restore: async () => {
       const form = $("#restore"), key = form.elements.key.value.trim().toLowerCase();
       if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(key)) return app.fieldError(form, "key", "That doesn't look like a licence key. It has 36 characters with dashes.");

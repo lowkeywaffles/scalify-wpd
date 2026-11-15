@@ -1,0 +1,6 @@
+# Other projects in this repo deploy separately (their own Vercel projects).
+quoterevive
+brimful
+marketing
+tests
+*.md
