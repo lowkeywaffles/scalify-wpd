@@ -1,0 +1,23 @@
+<!doctype html><meta charset="utf-8"><link rel="stylesheet" href="../assets/css/base.css">
+<style>body{margin:0;background:#0B1B15;color:#E9F1EA;overflow:hidden;position:relative}
+body.p{width:1080px;height:1350px}body.s{width:1080px;height:1920px}
+svg.r{position:absolute;right:-260px;top:-260px;width:1100px;color:#E5B544;opacity:.28}
+svg.r2{position:absolute;left:-300px;bottom:-320px;width:900px;color:#3CC796;opacity:.18}
+.b{position:absolute;left:70px;top:70px;font:700 40px var(--display);letter-spacing:-.03em;display:flex;gap:14px;align-items:center}.b svg{width:52px}
+h1{position:absolute;left:70px;top:170px;font-size:118px;letter-spacing:-.055em;line-height:.9}h1 em{font-style:normal;color:#E5B544}
+.s h1{top:300px;font-size:128px}
+.fan{position:absolute;left:0;right:0;bottom:150px;display:flex;justify-content:center;gap:0;perspective:1800px}
+.s .fan{bottom:330px}
+.fan img{width:330px;border-radius:34px;border:2px solid #24382F;box-shadow:0 50px 90px -30px #000}
+.fan img:nth-child(1){transform:rotateY(28deg) translateX(60px) translateZ(-120px)}
+.fan img:nth-child(2){transform:translateZ(60px) translateY(-40px);z-index:2}
+.fan img:nth-child(3){transform:rotateY(-28deg) translateX(-60px) translateZ(-120px)}
+.t{position:absolute;left:0;right:0;bottom:64px;text-align:center;font:600 26px var(--mono);color:#E5B544;letter-spacing:.06em}
+.s .t{bottom:220px}
+p{position:absolute;left:74px;top:420px;font-size:36px;color:#B5C6BC;max-width:820px;line-height:1.25}.s p{top:580px}</style>
+<svg class="r" data-guilloche="8,3,5,3"></svg><svg class="r2" data-guilloche="9,4,6,4"></svg>
+<div class="b"><svg viewBox="0 0 32 32"><rect x="9" y="2.5" width="14" height="5" rx="2" fill="#D8A531"/><path d="M8 9h16q3 2 3 6v10q0 5-5 5H10q-5 0-5-5V15q0-4 3-6z" fill="none" stroke="#E9F1EA" stroke-width="2"/><path d="M5.5 19h21v6q0 4.500-4.500 4.500H10q-4.500 0-4.500-4.500z" fill="#D8A531"/></svg>Brimful</div>
+<h1>Fill it to<br>the <em>brim.</em></h1><p>Savings jars and challenges you can watch pile up.</p>
+<div class="fan"><img src="../assets/img/screen-shelf.webp"><img src="../assets/img/screen-jar.webp"><img src="../assets/img/screen-envelopes.webp"></div>
+<div class="t">FREE TO START · NO ACCOUNT · BRIMFUL.VERCEL.APP</div>
+<script type="module">import {paintGuilloche} from "../assets/js/lib/fx.js";document.body.className=location.hash.slice(1)||"p";paintGuilloche();window.ready=true;</script>

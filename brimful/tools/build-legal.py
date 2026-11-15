@@ -12,7 +12,7 @@ PAGES = {
 <h2>What stays on your device</h2>
 <p>Jar names, targets, dates, deposits and withdrawals, notes, challenges, your split percentages and your settings (currency, theme, motion, sound) are saved in your browser's local storage. We cannot see, copy or recover them. If you clear your browser data or lose the device, they are gone unless you downloaded a backup from Settings.</p>
 <h2>What we receive, and why</h2>
-<div class="tablewrap"><table><thead><tr><th>Data</th><th>When</th><th>Why</th><th>Legal basis</th><th>Kept for</th></tr></thead><tbody>
+<div class="tablewrap" tabindex="0" role="region" aria-label="Table, scroll sideways if needed"><table><thead><tr><th>Data</th><th>When</th><th>Why</th><th>Legal basis</th><th>Kept for</th></tr></thead><tbody>
 <tr><td>Payment method (Telebirr or Bank of Abyssinia), the name the payment came from, the transaction ID you type, the amount, and whether we confirmed it</td><td>Only if you buy Plus</td><td>To match your transfer, unlock Plus, and handle refunds</td><td>Contract</td><td>While your licence is active, and afterwards only as long as tax or accounting rules require</td></tr>
 <tr><td>Your licence key (a random code)</td><td>When you buy or restore Plus, and about once a day while the app is open</td><td>To confirm the licence is valid</td><td>Contract</td><td>Same as above</td></tr>
 <tr><td>Technical request data such as IP address and browser type</td><td>Whenever any website is loaded</td><td>Delivery, security and limiting abuse. We use the IP address briefly to limit repeated payment submissions and do not store it ourselves</td><td>Legitimate interests</td><td>Hosting logs are kept by our host for a limited time under its own policy</td></tr>
@@ -73,7 +73,7 @@ PAGES = {
 <p>Brimful sets <strong>no cookies</strong> and loads nothing from advertising or analytics companies, so there is no cookie banner to accept or reject.</p>
 <h2>What is stored in your browser</h2>
 <p>To work at all, and to work offline, Brimful keeps the following on your device. All of it is strictly necessary for features you asked for, and none of it is used to track you.</p>
-<div class="tablewrap"><table><thead><tr><th>Name</th><th>Type</th><th>Purpose</th><th>Lifetime</th><th>Who can read it</th></tr></thead><tbody>
+<div class="tablewrap" tabindex="0" role="region" aria-label="Table, scroll sideways if needed"><table><thead><tr><th>Name</th><th>Type</th><th>Purpose</th><th>Lifetime</th><th>Who can read it</th></tr></thead><tbody>
 <tr><td><code>brimful:v1</code></td><td>Local storage</td><td>Your jars, history, challenges, settings and licence key</td><td>Until you delete it</td><td>Only this site, on this device</td></tr>
 <tr><td><code>brimful-v1</code></td><td>Cache storage (service worker)</td><td>Copies of the app's own files so it opens without internet</td><td>Until a new version replaces it, or you clear site data</td><td>Only this site, on this device</td></tr>
 </tbody></table></div>
