@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brimful: savings jars you can watch fill up</title>
+<meta name="description" content="Name a jar, drop money in, and watch it pile up in 3D. Savings challenges like the 100 envelopes and 52 weeks. No account, no bank login, works offline. Free to start.">
+<link rel="canonical" href="https://brimful.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Brimful: savings jars you can watch fill up">
+<meta property="og:description" content="Name a jar, drop money in, and watch it pile up. Savings challenges included. No account, no bank login. Free to start.">
+<meta property="og:image" content="https://brimful.vercel.app/assets/img/og.png">
+<meta property="og:url" content="https://brimful.vercel.app/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#ECF1EA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#09130F" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/assets/img/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/icon-180.png">
+<link rel="preload" href="/assets/fonts/bricolage-grotesque-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/landing.css">
+<script src="/assets/js/theme.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Brimful","applicationCategory":"FinanceApplication","operatingSystem":"Any (web browser)","description":"Savings jars and savings challenges tracker. Works offline, no account.","offers":{"@type":"Offer","price":"0","priceCurrency":"ETB","description":"Free plan. Optional one-time Plus upgrade."},"publisher":{"@type":"Organization","name":"SCALIFY WPD"}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <a class="brand" href="/" aria-label="Brimful home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="9" y="2.5" width="14" height="5" rx="2" fill="#D8A531"/><path d="M8 9h16q3 2 3 6v10q0 5-5 5H10q-5 0-5-5V15q0-4 3-6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 19h21v6q0 4.500-4.500 4.500H10q-4.500 0-4.500-4.500z" fill="#D8A531"/></svg>Brimful</a>
+  <nav aria-label="Main"><a href="#how">How it works</a><a href="#challenges">Challenges</a><a href="#pricing">Pricing</a><a href="#faq">Questions</a></nav>
+  <a class="btn small" href="/app">Open the app</a>
+</header>
+
+<main id="main">
+  <!-- Hero + scroll story share one sticky 3D jar -->
+  <div class="story" id="story">
+    <div class="jarcol" aria-hidden="true">
+      <svg class="rosette r1" data-guilloche="8,3,5,3"></svg>
+      <svg class="rosette r2" data-guilloche="9,4,6,4"></svg>
+      <canvas id="herojar"></canvas>
+      <img class="jarfallback" src="/assets/img/screen-jar.webp" alt="" width="600" height="1200" hidden>
+      <div class="meter"><span class="num" id="meter-amt">ETB 0</span><span class="bar"><i id="meter-bar"></i></span><span class="num" id="meter-pct">0%</span></div>
+    </div>
+    <div class="steps">
+      <section class="step hero" data-fill="0.06">
+        <span class="eyebrow">Savings jars · savings challenges</span>
+        <h1>Fill it to the <em>brim.</em></h1>
+        <p class="lead">Name a jar, drop money in, and watch it pile up. Brimful makes saving something you can see, whether it's pocket money for sneakers or a year-long emergency fund.</p>
+        <div class="cta"><a class="btn" href="/app">Start a jar. It's free</a><a class="btn ghost" href="#how">See how it works</a></div>
+        <ul class="ticks" aria-label="Good to know"><li>No account</li><li>No bank login</li><li>Works offline</li></ul>
+      </section>
+      <section class="step" id="how" data-fill="0.06">
+        <span class="stepno num">01</span>
+        <h2>Name what you're saving for.</h2>
+        <p class="lead">A phone. A trip. School fees. Give the jar a target and, if you like, a date. Brimful works out what to put aside each week.</p>
+      </section>
+      <section class="step" data-fill="0.42">
+        <span class="stepno num">02</span>
+        <h2>Drop in whatever you can.</h2>
+        <p class="lead">Tap an amount and hear the coins land. Took some out for the bus? Log that too. Every entry can be undone, so the jar always matches real life.</p>
+      </section>
+      <section class="step" data-fill="0.74">
+        <span class="stepno num">03</span>
+        <h2>Let a challenge do the nudging.</h2>
+        <p class="lead">Open one of 100 envelopes, tick this week's step, or mark a no-spend day. Each one drops its amount straight into your jar.</p>
+      </section>
+      <section class="step" data-fill="1">
+        <span class="stepno num">04</span>
+        <h2>Brimful.</h2>
+        <p class="lead">Milestones at 25, 50 and 75 percent keep you going. At 100 the jar glows, the confetti flies, and you get a card to show off, with the amounts hidden unless you choose.</p>
+        <div class="cta"><a class="btn brass" href="/app">Fill your first jar</a></div>
+      </section>
+    </div>
+  </div>
+
+  <section class="band" id="challenges" aria-labelledby="ch-h">
+    <div class="wrap two">
+      <div>
+        <span class="eyebrow">Challenges</span>
+        <h2 id="ch-h">The paper trackers people buy, made tappable.</h2>
+        <p class="lead">Savings challenge printables and cash-stuffing binders are everywhere. Brimful puts the same three favourites in your pocket, and unlike paper you can undo a tap.</p>
+        <ul class="chlist">
+          <li><b>100 envelopes</b><span>Draw one at random, save what's inside. Set any total that fits your budget, not just the classic 5,050.</span></li>
+          <li><b>52 weeks</b><span>Start small and grow, start big and ease off, or keep it flat.</span></li>
+          <li><b>No-spend month</b><span>Mark the days you spent nothing extra, and bank what you kept.</span></li>
+        </ul>
+      </div>
+      <div class="wall" aria-hidden="true"><div class="wall-in" id="wall"></div></div>
+    </div>
+  </section>
+
+  <section class="screens" aria-labelledby="sc-h">
+    <div class="wrap">
+      <span class="eyebrow">Inside the app</span>
+      <h2 id="sc-h">Built for a thumb, not a spreadsheet.</h2>
+      <div class="fan" id="fan">
+        <figure><img src="/assets/img/screen-shelf.webp" width="600" height="1200" loading="lazy" alt="Brimful home screen showing three savings jars with their progress and the total saved"><figcaption>All your jars on one shelf</figcaption></figure>
+        <figure><img src="/assets/img/screen-jar.webp" width="600" height="1200" loading="lazy" alt="A jar called New phone, a glass jar partly filled with gold coins, quick-add buttons below"><figcaption>Watch each jar fill in 3D</figcaption></figure>
+        <figure><img src="/assets/img/screen-envelopes.webp" width="600" height="1200" loading="lazy" alt="The 100 envelopes challenge: a grid of numbered envelopes, some flipped to show they are done"><figcaption>Flip envelopes as you save</figcaption></figure>
+      </div>
+      <p class="fine center">Screenshots of the real app with example jars.</p>
+    </div>
+  </section>
+
+  <section class="band dark" aria-labelledby="pv-h">
+    <div class="wrap">
+      <span class="eyebrow">Private by design</span>
+      <h2 id="pv-h">Your numbers never leave your phone.</h2>
+      <div class="cards3">
+        <article><h3>No account</h3><p>No email, no password, no profile. Open the app and start.</p></article>
+        <article><h3>No bank login</h3><p>Brimful never connects to your bank or mobile money. You type what you saved.</p></article>
+        <article><h3>Stored on your device</h3><p>Jars, amounts and history live in your browser. We can't see them, so we can't sell them.</p></article>
+        <article><h3>No ads, no trackers</h3><p>No analytics scripts, no advertising cookies, nothing loaded from other companies.</p></article>
+      </div>
+      <p class="fine">Because your data is only on your device, clearing your browser deletes it. Download a backup from Settings whenever you like. The only thing we ever receive is your name and transaction ID if you buy Plus. <a href="/legal/privacy">Privacy policy</a></p>
+    </div>
+  </section>
+
+  <section class="band" id="pricing" aria-labelledby="pr-h">
+    <div class="wrap">
+      <span class="eyebrow">Pricing</span>
+      <h2 id="pr-h">Free to save. Pay once if you want more.</h2>
+      <div class="plans">
+        <article class="plan">
+          <h3>Free</h3><p class="price num">0 <small>ETB</small></p>
+          <ul><li>2 jars</li><li>1 challenge at a time</li><li>3D jars, milestones, share cards</li><li>Backups and offline use</li></ul>
+          <a class="btn ghost block" href="/app">Start free</a>
+        </article>
+        <article class="plan plus">
+          <svg class="rosette" data-guilloche="9,4,6,4" aria-hidden="true"></svg>
+          <h3>Plus</h3><p class="price num"><span id="plus-price">500</span> <small>ETB · one-time</small></p>
+          <ul><li>Unlimited jars</li><li>Every challenge at once</li><li>Split: share money between jars in one tap</li><li>All six coin colours</li></ul>
+          <a class="btn brass block" href="/app#/unlock">Get Plus</a>
+          <p class="fine">No subscription. 14-day refund. Pay by Telebirr or Bank of Abyssinia transfer; we check each payment by hand, usually within 24 hours. Card payments aren't available yet.</p>
+        </article>
+      </div>
+      <p class="fine center">Jars you already made are never locked, whatever plan you're on.</p>
+    </div>
+  </section>
+
+  <section class="band" id="faq" aria-labelledby="fq-h">
+    <div class="wrap narrow">
+      <span class="eyebrow">Questions</span>
+      <h2 id="fq-h">Good things to know first.</h2>
+      <details><summary>Does Brimful hold my money?</summary><p>No. Brimful is a tracker. Your money stays wherever you keep it: a bank, Telebirr, an envelope, a real jar. Brimful doesn't hold, move or invest anything, and nothing in it is financial advice.</p></details>
+      <details><summary>What happens if I lose my phone or clear my browser?</summary><p>Your jars are stored only on your device, so they would be gone. Use <b>Settings → Download a backup</b> now and then, and restore it on any device.</p></details>
+      <details><summary>Is it an app I install?</summary><p>It runs in your browser, and you can add it to your home screen so it opens like an app and works offline. On iPhone use Share → Add to Home Screen; on Android use the browser menu → Install app.</p></details>
+      <details><summary>Which currencies work?</summary><p>Birr, dollars, euros, pounds, shillings, naira, rupees and more. Pick yours in Settings. Brimful doesn't convert between currencies.</p></details>
+      <details><summary>How do refunds work?</summary><p>Email us within 14 days of paying with your licence key and we send the full amount back to the same Telebirr number or bank account. Details in the <a href="/legal/refund">refund policy</a>.</p></details>
+      <details><summary>How old do I need to be?</summary><p>Brimful is for ages 13 and up. If you're under 18, ask a parent or guardian before buying Plus.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div><a class="brand" href="/">Brimful</a><p class="fine">A savings tracker by SCALIFY WPD, Bole, Addis Ababa, Ethiopia. Contact: skelifywpd@gmail.com</p></div>
+    <nav aria-label="Legal"><a href="/legal/privacy">Privacy</a><a href="/legal/terms">Terms</a><a href="/legal/refund">Refunds</a><a href="/legal/cookies">Storage &amp; cookies</a><a href="/legal/accessibility">Accessibility</a></nav>
+    <p class="fine">Brimful is a tracking tool. It doesn't hold, move or invest money and isn't financial advice. © <span id="yr">2026</span> SCALIFY WPD.</p>
+  </div>
+</footer>
+<script src="/assets/vendor/gsap.min.js" defer></script>
+<script src="/assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/assets/vendor/lenis.min.js" defer></script>
+<script type="module" src="/assets/js/landing.js"></script>
+</body>
+</html>

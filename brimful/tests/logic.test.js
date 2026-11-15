@@ -114,7 +114,8 @@ test("store: streak and weekly need", () => {
   assert.equal(S.weekStreak(a, at + 14 * 864e5), 0);
   const need = S.weeklyNeed(a.jars[0], at);
   assert.equal(need.weeks, 7);
-  assert.equal(need.perWeek, Math.ceil(97000 / 7));
+  assert.equal(need.perWeek, 13900);
+  assert.equal(S.weeklyNeed(a.jars[0], at, 1).perWeek, Math.ceil(97000 / 7));
   assert.equal(jar.deadline, "2026-12-31");
 });
 test("store: import rejects junk and strips unknown or unsafe fields", () => {

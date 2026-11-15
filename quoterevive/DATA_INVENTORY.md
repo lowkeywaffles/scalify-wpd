@@ -37,3 +37,8 @@ Not collected: analytics, IP addresses in our database, device fingerprints, mar
 | Payment instructions (free text the business enters) | `businesses.payment_instructions` | Shown to that business's customers on quote links | Workspace owner; customers holding a share link | Until edited/deleted |
 
 Not collected: Telebirr PINs, bank passwords, card numbers, payment screenshots.
+
+## Added 15 November 2026 (store orders for other Scalify products)
+| Data | Where | Why | Who can read it | Retention |
+|---|---|---|---|---|
+| Brimful Plus orders: method, amount (ETB), payer name, transaction ID, status, reviewer email | `store_orders` (RLS on, no policies: server only) | Unlock and refund Brimful Plus; the row id is the buyer's licence key | Operators via the admin page | Licence life; then as tax rules require |

@@ -1,0 +1,12 @@
+<!doctype html><meta charset="utf-8"><link rel="stylesheet" href="../assets/css/base.css">
+<style>body{width:1200px;height:630px;overflow:hidden;background:#0B1B15;color:#E9F1EA;position:relative}
+h1{font-size:112px;letter-spacing:-.055em;line-height:.9;position:absolute;left:70px;top:150px}h1 em{font-style:normal;color:#E5B544}
+p{position:absolute;left:74px;top:400px;font-size:30px;color:#B5C6BC;max-width:560px;line-height:1.3}
+.b{position:absolute;left:74px;top:64px;font:700 34px var(--display);letter-spacing:-.03em;display:flex;gap:12px;align-items:center}.b svg{width:44px}
+.t{position:absolute;left:74px;bottom:56px;font:600 22px var(--mono);color:#E5B544;letter-spacing:.06em}
+canvas{position:absolute;right:-40px;top:-30px;width:640px;height:700px}
+svg.r{position:absolute;right:-160px;top:-180px;width:900px;color:#E5B544;opacity:.3}</style>
+<svg class="r" data-guilloche="8,3,5,3"></svg><canvas id="c"></canvas>
+<div class="b"><svg viewBox="0 0 32 32"><rect x="9" y="2.5" width="14" height="5" rx="2" fill="#D8A531"/><path d="M8 9h16q3 2 3 6v10q0 5-5 5H10q-5 0-5-5V15q0-4 3-6z" fill="none" stroke="#E9F1EA" stroke-width="2"/><path d="M5.5 19h21v6q0 4.500-4.500 4.500H10q-4.500 0-4.500-4.500z" fill="#D8A531"/></svg>Brimful</div>
+<h1>Fill it to<br>the <em>brim.</em></h1><p>Savings jars and savings challenges you can watch pile up.</p><div class="t">NO ACCOUNT · NO BANK LOGIN · WORKS OFFLINE</div>
+<script type="module">import {createJar} from "../assets/js/lib/jar3d.js";import {paintGuilloche} from "../assets/js/lib/fx.js";paintGuilloche();const j=createJar(document.getElementById("c"),{fill:.78,spin:false,zoomOut:1.15});window.ready=true;</script>

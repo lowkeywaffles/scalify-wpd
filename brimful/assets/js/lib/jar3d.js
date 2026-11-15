@@ -81,7 +81,7 @@ export function createJar(canvas, opts = {}) {
   const scene = new T.Scene();
   scene.environment = studioEnv(renderer);
   const camera = new T.PerspectiveCamera(30, 1, 0.1, 50);
-  const camBase = new T.Vector3(0, 1.75, 7.6);
+  const camBase = new T.Vector3(0, 1.75, 7.6 * (opts.zoomOut ?? 1));
   camera.position.copy(camBase);
   const look = new T.Vector3(0, 1.12, 0);
   camera.lookAt(look);

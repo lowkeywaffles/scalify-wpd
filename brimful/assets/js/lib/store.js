@@ -105,13 +105,13 @@ export function weekStreak(state, at = now()) {
 }
 
 /** Amount to put aside per week to reach the target by the deadline (null if no deadline or already there). */
-export function weeklyNeed(jar, at = now()) {
+export function weeklyNeed(jar, at = now(), unit = 100) {
   if (!jar.deadline) return null;
   const left = jar.target - balance(jar);
   if (left <= 0) return null;
   const end = new Date(`${jar.deadline}T23:59:59`).getTime();
   const weeks = Math.max(1, Math.ceil((end - at) / (7 * 864e5)));
-  return { perWeek: Math.ceil(left / weeks), weeks, overdue: end < at };
+  return { perWeek: Math.min(left, Math.ceil(left / weeks / unit) * unit), weeks, overdue: end < at }; // rounded up to a whole unit
 }
 
 export const MILESTONES = [0.25, 0.5, 0.75, 1];

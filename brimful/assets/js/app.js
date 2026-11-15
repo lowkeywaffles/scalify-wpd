@@ -1,6 +1,6 @@
 // Brimful app shell: routing, shared helpers, and the Jars + Jar detail screens.
 import * as S from "./lib/store.js";
-import { fmt, toMinor, toInput, quickAmounts, CURRENCIES, isCurrency } from "./lib/money.js";
+import { fmt, toMinor, toInput, quickAmounts, CURRENCIES, isCurrency, minorDigits } from "./lib/money.js";
 import { clink, chime, buzz, confetti, paintGuilloche, applyVars, esc } from "./lib/fx.js";
 import { fetchStatus } from "./lib/api.js";
 import { challengesView, challengeView, splitView, settingsView, unlockView, installViews } from "./views.js";
@@ -114,7 +114,7 @@ function shelfView() {
   }
   const total = S.totalSaved(app.state), streak = S.weekStreak(app.state);
   const cards = jars.map((j, i) => {
-    const bal = S.balance(j), p = S.progress(j), need = S.weeklyNeed(j);
+    const bal = S.balance(j), p = S.progress(j), need = S.weeklyNeed(j, Date.now(), 10 ** minorDigits(app.cur()));
     return `<a class="jarcard" href="#/jar/${esc(j.id)}">${miniJar(j.style, p, i)}
       <div><h2>${esc(j.name)}</h2>
         <p class="amt num"><b>${app.money(bal, { short: true })}</b> of ${app.money(j.target, { short: true })}</p>
@@ -168,7 +168,7 @@ let jar3d = null, lastClink = 0;
 function disposeJar() { jar3d?.dispose(); jar3d = null; }
 
 function jarBody(j) {
-  const bal = S.balance(j), p = S.progress(j), need = S.weeklyNeed(j), quick = quickAmounts(j.target, app.cur());
+  const bal = S.balance(j), p = S.progress(j), need = S.weeklyNeed(j, Date.now(), 10 ** minorDigits(app.cur())), quick = quickAmounts(j.target, app.cur());
   const hist = [...j.entries].reverse().slice(0, 60).map((e) => `<li><div><div>${e.amt > 0 ? "Added" : "Took out"}${e.note ? ` · ${esc(e.note)}` : ""}</div><div class="when">${new Date(e.t).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}</div></div>
       <span class="num ${e.amt > 0 ? "plus" : "minus"}">${app.money(e.amt, { sign: true })}</span>
       <button class="iconbtn" data-act="undo-entry" data-id="${esc(e.id)}" aria-label="Remove this entry of ${app.money(Math.abs(e.amt))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button></li>`).join("");
@@ -203,7 +203,7 @@ async function mountJar(j) {
       const canvas = document.createElement("canvas");
       canvas.setAttribute("aria-hidden", "true");
       stage.prepend(canvas);
-      jar3d = m.createJar(canvas, { style: j.style, fill: 0, reduced: app.reduced(), onCoinLand: () => { const t = performance.now(); if (app.sound() && t - lastClink > 70) { lastClink = t; clink(0.7); } } });
+      jar3d = m.createJar(canvas, { style: j.style, fill: 0, reduced: app.reduced(), zoomOut: 1.12, onCoinLand: () => { const t = performance.now(); if (app.sound() && t - lastClink > 70) { lastClink = t; clink(0.7); } } });
       jar3d.setFill(S.progress(j), { animate: !app.reduced() });
       ok = true;
     }
