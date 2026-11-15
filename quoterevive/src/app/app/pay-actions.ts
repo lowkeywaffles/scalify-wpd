@@ -89,3 +89,27 @@ export async function rejectPayment(id: string, reason: string): Promise<PayStat
   revalidatePath("/app/admin/payments");
   return data ? { ok: true, message: "Marked as not received. The customer sees your reason." } : { error: "Already reviewed, or not found." };
 }
+
+/* ---------- Store orders (products without accounts, e.g. Brimful) ---------- */
+
+export async function reviewStoreOrder(id: string, action: "approve" | "reject" | "refund", reason = ""): Promise<PayState> {
+  const { user } = await requireOperator();
+  if (!Id.safeParse(id).success) return { error: "Invalid request." };
+  const admin = supabaseAdmin();
+  const stamp = { reviewed_at: new Date().toISOString(), reviewed_by: user.email };
+  if (action === "approve") {
+    const { data } = await admin.from("store_orders").update({ status: "approved", review_note: null, ...stamp }).eq("id", id).eq("status", "pending").select("id").maybeSingle();
+    revalidatePath("/app/admin/payments");
+    return data ? { ok: true, message: "Approved. The buyer's app unlocks next time it checks (within a minute if open)." } : { error: "Already reviewed, or not found." };
+  }
+  if (action === "reject") {
+    const r = z.string().trim().min(3, "Give a short reason the buyer will see").max(300).safeParse(reason);
+    if (!r.success) return { error: r.error.issues[0].message };
+    const { data } = await admin.from("store_orders").update({ status: "rejected", review_note: r.data, ...stamp }).eq("id", id).eq("status", "pending").select("id").maybeSingle();
+    revalidatePath("/app/admin/payments");
+    return data ? { ok: true, message: "Marked as not received." } : { error: "Already reviewed, or not found." };
+  }
+  const { data } = await admin.from("store_orders").update({ status: "refunded", ...stamp }).eq("id", id).eq("status", "approved").select("id").maybeSingle();
+  revalidatePath("/app/admin/payments");
+  return data ? { ok: true, message: "Marked as refunded. Send the money back from Telebirr or your bank; the app returns to the free plan." } : { error: "Only approved orders can be refunded." };
+}

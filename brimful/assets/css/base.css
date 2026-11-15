@@ -1,0 +1,81 @@
+/* Brimful design tokens. Identity: banknote paper + brass coin + jade ink.
+   To rebrand, change the variables in :root and the two dark blocks. All text pairs meet 4.5:1. */
+@font-face{font-family:"Bricolage";src:url(../fonts/bricolage-grotesque-latin-wght-normal.woff2) format("woff2-variations");font-weight:200 800;font-display:swap}
+@font-face{font-family:"Instrument";src:url(../fonts/instrument-sans-latin-wght-normal.woff2) format("woff2-variations");font-weight:400 700;font-display:swap}
+@font-face{font-family:"JBMono";src:url(../fonts/jetbrains-mono-latin-wght-normal.woff2) format("woff2-variations");font-weight:100 800;font-display:swap}
+
+:root{
+  --paper:#ECF1EA; --surface:#FAFCF8; --raise:#FFFFFF; --ink:#0F251E; --muted:#44584F; --line:#CBD6CC;
+  --jade:#0C6A4E; --on-jade:#FFFFFF; --jade-soft:#D5EBDF;
+  --brass:#D8A531; --brass-deep:#6B4F00; --on-brass:#22180A; --brass-soft:#F6E7BF;
+  --coral:#B93A26; --coral-soft:#F8DDD6; --focus:#0B5FFF;
+  --glass:rgba(255,255,255,.55); --shadow:0 24px 60px -28px rgba(15,37,30,.45);
+  --display:"Bricolage",ui-sans-serif,system-ui,sans-serif; --body:"Instrument",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"JBMono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r-s:10px; --r-m:18px; --r-l:28px; --ease:cubic-bezier(.2,.7,.2,1);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#09130F; --surface:#101D18; --raise:#16261F; --ink:#E9F1EA; --muted:#9BB1A6; --line:#263A31;
+  --jade:#3CC796; --on-jade:#04241A; --jade-soft:#133529;
+  --brass:#E5B544; --brass-deep:#EFC766; --on-brass:#22180A; --brass-soft:#3A2E10;
+  --coral:#FF8E7A; --coral-soft:#3D1B15; --focus:#8FB8FF;
+  --glass:rgba(22,38,31,.6); --shadow:0 24px 60px -28px rgba(0,0,0,.8); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#09130F; --surface:#101D18; --raise:#16261F; --ink:#E9F1EA; --muted:#9BB1A6; --line:#263A31;
+  --jade:#3CC796; --on-jade:#04241A; --jade-soft:#133529;
+  --brass:#E5B544; --brass-deep:#EFC766; --on-brass:#22180A; --brass-soft:#3A2E10;
+  --coral:#FF8E7A; --coral-soft:#3D1B15; --focus:#8FB8FF;
+  --glass:rgba(22,38,31,.6); --shadow:0 24px 60px -28px rgba(0,0,0,.8); color-scheme:dark}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.03em;line-height:1.02;margin:0;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+img,svg,canvas{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:8px}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.skip{position:fixed;left:12px;top:-60px;z-index:100;background:var(--ink);color:var(--paper);padding:10px 14px;border-radius:10px;font-weight:600}
+.skip:focus{top:12px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;border:1.5px solid transparent;font-weight:650;font-size:16px;text-decoration:none;cursor:pointer;background:var(--jade);color:var(--on-jade);transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px -12px var(--jade)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn[disabled]{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink);box-shadow:none}
+.btn.brass{background:var(--brass);color:var(--on-brass)}
+.btn.brass:hover{box-shadow:0 10px 24px -12px var(--brass)}
+.btn.danger{background:transparent;color:var(--coral);border-color:var(--coral)}
+.btn.small{min-height:40px;padding:0 16px;font-size:14.5px}
+.btn.block{width:100%}
+
+.field{display:grid;gap:6px}
+.field>label,.label{font-weight:600;font-size:14.5px}
+.field .hint{font-size:13.5px;color:var(--muted)}
+.field .err{font-size:13.5px;color:var(--coral);font-weight:600}
+.input{width:100%;min-height:48px;padding:10px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--raise);color:var(--ink)}
+.input:focus-visible{outline-offset:1px}
+.input[aria-invalid="true"]{border-color:var(--coral)}
+textarea.input{min-height:84px;resize:vertical}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 11px;font:600 12px/1 var(--mono);letter-spacing:.04em;border:1px solid var(--line);background:var(--surface)}
+.pill.brass{background:var(--brass-soft);border-color:transparent;color:var(--brass-deep)}
+.pill.jade{background:var(--jade-soft);border-color:transparent;color:var(--jade)}
+:root[data-theme="dark"] .pill.jade{color:var(--jade)}
+
+dialog{border:0;padding:0;background:transparent;color:inherit;max-width:min(480px,calc(100vw - 24px));width:100%}
+dialog::backdrop{background:rgba(6,14,11,.55);backdrop-filter:blur(6px)}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);padding:22px;box-shadow:var(--shadow);display:grid;gap:16px}
+.sheet h2{font-size:26px}
+.sheet .row{display:flex;gap:10px;flex-wrap:wrap}
+.sheet .row>*{flex:1}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
+:root[data-motion="off"] *,:root[data-motion="off"] *::before,:root[data-motion="off"] *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}

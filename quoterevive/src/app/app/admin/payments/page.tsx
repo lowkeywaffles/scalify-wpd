@@ -3,7 +3,8 @@ import { requireBusiness } from "@/lib/data";
 import { isOperator } from "@/lib/local-pay";
 import { formatEtb, LOCAL_PAY } from "@/lib/offer";
 import { supabaseAdmin } from "@/lib/supabase/server";
-import { PaymentReview } from "@/components/PaymentReview";
+import { PaymentReview, StoreOrderReview } from "@/components/PaymentReview";
+import { STORE_PRODUCTS, type StoreProduct } from "@/lib/store-products";
 
 export const metadata = { title: "Local payments" };
 export const dynamic = "force-dynamic";
@@ -19,6 +20,10 @@ export default async function PaymentsAdmin() {
   const ids = [...new Set(rows.map((r) => r.business_id))];
   const { data: biz } = ids.length ? await admin.from("businesses").select("id, name").in("id", ids) : { data: [] };
   const name = new Map((biz ?? []).map((b) => [b.id, b.name as string]));
+  const { data: so } = await admin.from("store_orders").select("*").order("created_at", { ascending: false }).limit(100);
+  const orders = (so ?? []) as { id: string; product: StoreProduct; method: "telebirr" | "boa"; amount_etb: number; payer_name: string; reference: string; status: string; review_note: string | null; created_at: string }[];
+  const openOrders = orders.filter((o) => o.status === "pending");
+  const pastOrders = orders.filter((o) => o.status !== "pending");
   const pending = rows.filter((r) => r.status === "pending");
   const done = rows.filter((r) => r.status !== "pending");
   const when = (s: string) => new Date(s).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Addis_Ababa" });
@@ -46,6 +51,39 @@ export default async function PaymentsAdmin() {
             <PaymentReview id={r.id} />
           </article>
         ))}
+      </section>
+      <section aria-labelledby="so-h" className="space-y-3">
+        <h2 id="so-h" className="font-display text-2xl">Other products: waiting ({openOrders.length})</h2>
+        {openOrders.length === 0 && <p className="text-muted">Nothing to check right now.</p>}
+        {openOrders.map((o) => (
+          <article key={o.id} className="card space-y-3 p-4 sm:p-5">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <p className="font-semibold">{STORE_PRODUCTS[o.product]?.name ?? o.product}</p>
+              <p className="text-sm text-muted">{when(o.created_at)}</p>
+            </div>
+            <dl className="grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
+              <div><dt className="inline text-muted">Method: </dt><dd className="inline font-semibold">{LOCAL_PAY[o.method].label}</dd></div>
+              <div><dt className="inline text-muted">Amount expected: </dt><dd className="inline font-semibold tabular-nums">{formatEtb(Number(o.amount_etb))}</dd></div>
+              <div><dt className="inline text-muted">From: </dt><dd className="inline">{o.payer_name}</dd></div>
+              <div><dt className="inline text-muted">Transaction ID: </dt><dd className="inline font-mono">{o.reference}</dd></div>
+            </dl>
+            <StoreOrderReview id={o.id} status={o.status} />
+          </article>
+        ))}
+        {pastOrders.length > 0 && (
+          <ul className="divide-y divide-line rounded-2xl border border-line">
+            {pastOrders.map((o) => (
+              <li key={o.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 p-3 text-sm">
+                <span className={`font-semibold ${o.status === "approved" ? "text-good" : "text-bad"}`}>{o.status === "approved" ? "Unlocked" : o.status === "refunded" ? "Refunded" : "Not received"}</span>
+                <span>{STORE_PRODUCTS[o.product]?.name ?? o.product}</span>
+                <span className="tabular-nums">{formatEtb(Number(o.amount_etb))}</span>
+                <span className="font-mono text-muted">{o.reference}</span>
+                <span className="text-muted">{o.payer_name} · {when(o.created_at)}</span>
+                {o.status === "approved" && <span className="w-full"><StoreOrderReview id={o.id} status={o.status} /></span>}
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
       {done.length > 0 && (
         <section aria-labelledby="d-h" className="space-y-2">
