@@ -10,5 +10,5 @@ Rebuild: `python3 tools/make_kit_xlsx.py && python3 tools/make_kit_docx.py && py
 assemble `book.html` from `part1.html` + `part2.html`, print with Playwright (preferCSSPageSize), then
 `python3 tools/fix_links.py Zero-to-Three.pdf` (makes the kit links relative).
 
-Before selling: author read-through; add links to the author's real portfolio videos (none included yet);
+Before selling: author read-through; add more real portfolio videos (one TikTok example linked so far);
 have 2-3 editors try it and note where they get stuck. The worked example is fictional and labelled so.
