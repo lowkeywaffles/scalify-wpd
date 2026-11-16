@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Products · SCALIFY WPD</title>
-<meta name="description" content="Products designed, built and run by SCALIFY WPD, starting with QuoteRevive: follow up on unanswered quotes and win back clients.">
+<meta name="description" content="Products designed, built and run by SCALIFY WPD: QuoteRevive (win back unanswered quotes), Brimful (savings jars and challenges), and something new on the way.">
 <meta property="og:title" content="SCALIFY WPD · Products">
-<meta property="og:description" content="Tools we design, build and run ourselves. Start with QuoteRevive.">
+<meta property="og:description" content="Tools we design, build and run ourselves: QuoteRevive, Brimful, and something new on the way.">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <script>
 try { const t = localStorage.getItem('scalify-theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch {}
@@ -37,38 +37,35 @@ nav a[aria-current]{background:var(--btn-bg);color:var(--btn-fg)}
 h1{font-size:clamp(44px,9vw,88px);line-height:.98;letter-spacing:-.04em;margin:18px 0 14px;max-width:13ch}
 .lead{font-size:clamp(18px,2.4vw,21px);color:var(--muted);max-width:52ch;margin:0}
 .list{display:grid;gap:22px;padding:28px 0 72px}
-/* product stage */
-.prod{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:center;background:#0E0F12;color:#F4F3EE;border:1px solid #2B2E35;border-radius:28px;padding:clamp(22px,4vw,44px);overflow:hidden}
-.prod::before{content:"";position:absolute;width:560px;height:560px;right:-160px;top:-200px;border-radius:50%;background:radial-gradient(circle,rgba(138,164,255,.45),transparent 65%);pointer-events:none}
-.prod::after{content:"";position:absolute;width:420px;height:420px;left:-140px;bottom:-220px;border-radius:50%;background:radial-gradient(circle,rgba(198,255,61,.22),transparent 65%);pointer-events:none}
-.prod>*{position:relative;z-index:1}
-.tag{display:inline-flex;align-items:center;gap:8px;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:#C6FF3D}
-.tag::before{content:"";width:8px;height:8px;border-radius:50%;background:#C6FF3D;box-shadow:0 0 0 4px rgba(198,255,61,.2)}
-.prod h2{font-size:clamp(36px,6vw,58px);letter-spacing:-.04em;line-height:1;margin:14px 0 12px}
-.prod h2 i{font-family:Georgia,"Times New Roman",serif;font-weight:400;color:#8aa4ff}
-.prod .pitch{color:#C9CCD4;margin:0 0 18px;max-width:46ch}
-.feats{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:8px}
-.feats li{padding-left:28px;position:relative;color:#E4E2DB}
-.feats li::before{content:"";position:absolute;left:2px;top:.5em;width:13px;height:7px;border-left:2.5px solid #C6FF3D;border-bottom:2.5px solid #C6FF3D;transform:rotate(-45deg)}
-.price{margin:0 0 20px;color:#C9CCD4}.price strong{color:#F4F3EE}
-.btns{display:flex;flex-wrap:wrap;gap:10px}
-.btn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:12px 22px;border-radius:12px;font-weight:700;text-decoration:none;border:2px solid #C6FF3D;background:#C6FF3D;color:#0E0F12;transition:transform .25s,box-shadow .25s}
-.btn.alt{background:transparent;color:#F4F3EE;border-color:#6B717D}
-.btn:hover{transform:translateY(-3px);box-shadow:5px 5px 0 #8aa4ff}
-.fine{display:block;margin-top:14px;font-size:13.5px;color:#9AA0AB}
-/* 3D phone */
-.scene{perspective:1100px;display:grid;place-items:center;min-height:480px}
-.phone{width:248px;height:500px;border-radius:44px;background:#0b0c0f;border:2px solid #3a3d45;box-shadow:inset 0 0 0 9px #16171b,0 50px 90px -30px rgba(0,0,0,.9);position:relative;transform:rotateY(-18deg) rotateX(8deg) rotateZ(-3deg);transform-style:preserve-3d}
-.phone .scr{position:absolute;inset:11px;border-radius:34px;overflow:hidden;background:#F7F4EE;color:#17181C;padding:44px 14px 14px;font-size:12px}
-.phone .isl{position:absolute;left:50%;top:18px;width:74px;height:22px;margin-left:-37px;background:#000;border-radius:14px;z-index:2}
-.scr .d{color:#565961;font-size:11px}.scr .t{font-family:Georgia,serif;font-size:28px;line-height:1.1;margin:0 0 10px}
-.q{display:flex;gap:9px;align-items:center;background:#fff;border:1.5px solid #DDD7CC;border-radius:14px;padding:9px;margin-bottom:8px}
-.q .r{width:34px;height:34px;flex:none;border-radius:50%;border:4px solid #2348e0;display:grid;place-items:center;font-weight:800;font-size:11px}
-.q b{display:block;font-size:12px}.q span{color:#565961;font-size:10.5px}.q em{margin-left:auto;font-style:normal;font-family:Georgia,serif;font-size:15px}
-.wa{display:inline-block;margin-top:4px;background:#25d366;color:#05210f;font-weight:800;border-radius:999px;padding:8px 12px;font-size:11px}
-.chip{position:absolute;background:#C6FF3D;color:#0E0F12;font-weight:800;font-size:13px;border-radius:999px;padding:8px 14px;box-shadow:0 18px 30px -12px rgba(0,0,0,.6);white-space:nowrap}
-.chip.c1{left:-56px;top:110px;transform:translateZ(60px)}.chip.c2{right:-48px;bottom:120px;transform:translateZ(90px);background:#F4F3EE}
-.demo-note{font-size:12px;color:#9AA0AB;text-align:center;margin-top:10px}
+/* project cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:22px}
+.pcard{position:relative;background:var(--card);border:1px solid var(--line);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;transition:transform .35s,box-shadow .35s,border-color .35s}
+.pcard:hover{border-color:var(--ink);box-shadow:6px 6px 0 var(--accent)}
+.pcard .media{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0E0F12}
+.pcard .media img{display:block;width:100%;height:100%;object-fit:cover;transition:scale .6s cubic-bezier(.2,.7,.2,1)}
+.pcard:hover .media img{scale:1.05}
+.pcard .body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pcard h2{font-size:28px;letter-spacing:-.03em;line-height:1.05;margin:2px 0 0}
+.pcard p{margin:0;color:var(--muted)}
+.pcard .meta{font-size:14.5px}
+.pcard .go{margin-top:auto;padding-top:10px;display:flex;flex-wrap:wrap;gap:4px 16px;font-weight:700}
+.pcard .go a{display:inline-flex;align-items:center;min-height:44px}
+.status{position:absolute;right:14px;top:14px;z-index:2;display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;background:rgba(14,15,18,.82);color:#F4F3EE;font:700 11.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;backdrop-filter:blur(6px)}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:#C6FF3D;box-shadow:0 0 0 3px rgba(198,255,61,.25)}
+.status.wait::before{background:#E2B13C;box-shadow:0 0 0 3px rgba(226,177,60,.25)}
+/* coming-soon artwork: blurred shapes behind frosted glass */
+.mystery{background:radial-gradient(120% 90% at 20% 10%,#2a2f3a 0,#0E0F12 60%)}
+.mystery .blob{position:absolute;border-radius:50%;filter:blur(18px)}
+.mystery .b1{width:46%;aspect-ratio:1;left:12%;top:18%;background:#8aa4ff}
+.mystery .b2{width:34%;aspect-ratio:1;right:14%;top:30%;background:#C6FF3D;opacity:.85}
+.mystery .b3{width:28%;aspect-ratio:1;left:44%;bottom:-6%;background:#E2B13C;opacity:.8}
+.mystery .glass{position:absolute;inset:16% 12%;border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,255,255,.06) 50%,rgba(255,255,255,.12));border:1.5px solid rgba(255,255,255,.4);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.7),0 24px 40px -18px rgba(0,0,0,.7);backdrop-filter:blur(16px) saturate(1.4);display:grid;place-items:center;overflow:hidden}
+.mystery .glass::after{content:"";position:absolute;top:-40%;left:-30%;width:28%;height:180%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);rotate:20deg;translate:-120% 0}
+.mystery .glass span{font:400 clamp(44px,8vw,64px)/1 Georgia,"Times New Roman",serif;font-style:italic;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.35)}
+.service{margin:22px 0 72px;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px}
+.service h2{font-size:24px}
+.service>div{flex:1 1 420px;text-align:left}.service .go{margin:0;padding:0}
+.list{padding:28px 0 0}
 /* other cards */
 .row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:22px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:10px;transition:transform .35s,box-shadow .35s,border-color .35s}
@@ -81,17 +78,18 @@ h1{font-size:clamp(44px,9vw,88px);line-height:.98;letter-spacing:-.04em;margin:1
 .soon{border-style:dashed}
 footer{border-top:1px solid var(--line);padding:28px 0 36px;color:var(--muted);font-size:15px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
-@media (max-width:820px){.prod{grid-template-columns:minmax(0,1fr)}.scene{min-height:440px;order:-1}.chip.c1{left:-30px}.chip.c2{right:-24px}}
 @media (max-width:520px){.bar{flex-wrap:wrap;row-gap:4px}.bar nav{width:100%}.bar nav ul{justify-content:flex-start}.bar nav a{padding:8px 10px}.brand{font-size:18px}}
 /* motion */
 @keyframes rise{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
+@keyframes sheen{0%,55%{translate:-120% 0}100%{translate:520% 0}}
 @keyframes bob{0%,100%{translate:0 0}50%{translate:0 -12px}}
 @media (prefers-reduced-motion:no-preference){
   .intro>*{animation:rise .9s both cubic-bezier(.2,.7,.2,1)}.intro>*:nth-child(2){animation-delay:.1s}.intro>*:nth-child(3){animation-delay:.2s}
-  .phone{animation:bob 6s ease-in-out infinite;will-change:transform}
+  .mystery .glass::after{animation:sheen 4.8s ease-in-out infinite}
+  .mystery .blob{animation:bob 7s ease-in-out infinite}.mystery .b2{animation-delay:-2s}.mystery .b3{animation-delay:-4s}
   .js3d .reveal{opacity:0;rotate:x 22deg;translate:0 50px;transform-origin:50% 100%;transition:opacity .9s,rotate .9s cubic-bezier(.2,.7,.2,1),translate .9s cubic-bezier(.2,.7,.2,1)}
   .js3d .reveal.in{opacity:1;rotate:x 0deg;translate:0 0}
-  .list,.row2{perspective:1300px}
+  .grid{perspective:1300px}
 }
 @media (prefers-reduced-motion:reduce){.btn,.card{transition:none}.btn:hover,.card:hover{transform:none}}
 </style>
@@ -113,59 +111,46 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-betw
   </section>
 
   <div class="list">
-    <article class="prod reveal" aria-labelledby="qr-h">
-      <div>
-        <span class="tag">LIVE NOW</span>
-        <h2 id="qr-h">Quote<i>Revive</i></h2>
-        <p class="pitch">Stop losing clients to unanswered quotes. QuoteRevive shows which quotes need a follow-up today, writes the message for WhatsApp or email, and lets your client accept with one tap.</p>
-        <ul class="feats">
-          <li>Daily follow-up queue with an explained priority score</li>
-          <li>Ready-to-send messages in English, Arabic, French and Spanish</li>
-          <li>Customer quote links: accept, ask a question or "not now"</li>
-          <li>Secure accounts; each business's data kept separate</li>
-        </ul>
-        <p class="price"><strong>Free to start</strong> (10 quotes) · Founding Access <strong>$39 one-time</strong>, no subscription · 14-day refund</p>
-        <div class="btns">
-          <a class="btn" href="https://quoterevivepro.vercel.app/?ref=scalify-products" rel="noopener">Start free <span aria-hidden="true">→</span></a>
-          <a class="btn alt" href="https://quoterevivepro.vercel.app/demo" rel="noopener">Try the demo</a>
+    <div class="grid">
+      <article class="pcard reveal" aria-labelledby="qr-h">
+        <div class="media"><span class="status">LIVE</span>
+          <img src="/products/img/quoterevive.webp" width="960" height="540" loading="lazy" alt="QuoteRevive: dark cover with the headline 'Your next customer might be in your unanswered quotes' next to a quote card and a WhatsApp follow-up."></div>
+        <div class="body">
+          <h2 id="qr-h">QuoteRevive</h2>
+          <p>Win back clients from unanswered quotes: a daily follow-up queue, ready-to-send WhatsApp or email messages, and one-tap quote acceptance.</p>
+          <p class="meta"><strong>Free to start</strong> · Founding Access $39 one-time · 14-day refund</p>
+          <p class="go"><a href="https://quoterevivepro.vercel.app/?ref=scalify-products" rel="noopener">Start free →</a><a href="https://quoterevivepro.vercel.app/demo" rel="noopener">Try the demo →</a></p>
         </div>
-        <span class="fine">Payments are handled securely by Whop inside the app.</span>
-      </div>
-      <div>
-        <div class="scene" aria-hidden="true">
-          <div class="phone" id="phone"><div class="isl"></div><div class="scr">
-            <div class="d">Tuesday</div><div class="t">Today</div>
-            <div class="q"><span class="r">75</span><span><b>Sara M. · Website</b><span>Follow-up due today</span></span><em>$2,400</em></div>
-            <div class="q"><span class="r" style="border-color:#19703f">70</span><span><b>Daniel · Shop sign</b><span>Expires in 3 days</span></span><em>$1,150</em></div>
-            <div class="q"><span class="r" style="border-color:#8a5300">52</span><span><b>Hana · Logo</b><span>Waiting 6 days</span></span><em>$400</em></div>
-            <span class="wa">Send on WhatsApp ➜</span>
-          </div>
-          <span class="chip c1">⏱ Follow-up due today</span><span class="chip c2">🎉 Quote won</span></div>
+      </article>
+      <article class="pcard reveal" aria-labelledby="b-h">
+        <div class="media"><span class="status">LIVE</span>
+          <img src="/products/img/brimful.webp" width="960" height="504" loading="lazy" alt="Brimful: green banner reading 'Fill it to the brim' beside a glass jar full of gold coins."></div>
+        <div class="body">
+          <h2 id="b-h">Brimful</h2>
+          <p>Savings jars you watch fill up in 3D, plus challenges like 100 envelopes and 52 weeks. No account, no bank login, works offline.</p>
+          <p class="meta"><strong>Free to start</strong> · Plus 500 ETB or $7 one-time · 14-day refund</p>
+          <p class="go"><a href="https://brimful.vercel.app/?ref=scalify-products" rel="noopener">Open Brimful →</a><a href="https://whop.com/brimful-plus/" rel="noopener">Plus on Whop →</a></p>
         </div>
-        <p class="demo-note">Illustration with fictional customers</p>
-      </div>
-    </article>
-
-    <div class="row2">
-      <article class="card reveal" aria-labelledby="b-h">
-        <span class="k">NEW · LIVE NOW</span>
-        <h2 id="b-h">Brimful</h2>
-        <p>Savings jars you can watch fill up in 3D, plus savings challenges like the 100 envelopes and 52 weeks. No account, no bank login, works offline. Free to start; Plus is a one-time 500 ETB, or $7 by card.</p>
-        <p class="go"><a href="https://brimful.vercel.app/?ref=scalify-products" rel="noopener">Open Brimful →</a> · <a href="https://whop.com/brimful-plus/" rel="noopener">Brimful Plus on Whop →</a></p>
       </article>
-      <article class="card reveal" aria-labelledby="c-h">
-        <span class="k">FOR YOUR BUSINESS</span>
-        <h2 id="c-h">Your own web app</h2>
-        <p>Need a tool like QuoteRevive for your business? We design and build custom web apps with logins, payments and email, with security built in from day one. Every project starts with a written quote.</p>
-        <p class="go"><a href="https://wa.me/251969803580?text=Hi%20Scalify%20WPD%2C%20I%27d%20like%20to%20talk%20about%20a%20web%20app.">Talk to us on WhatsApp →</a></p>
-      </article>
-      <article class="card soon reveal" aria-labelledby="n-h">
-        <span class="k">IN THE WORKS</span>
-        <h2 id="n-h">More products coming</h2>
-        <p>We're building the next tool now. Follow us to see it first. No dates or promises until it's ready.</p>
-        <p class="go"><a href="https://www.instagram.com/scalifywpd" rel="noopener noreferrer">Instagram @scalifywpd →</a> &nbsp; <a href="https://www.tiktok.com/@scalifywpd" rel="noopener noreferrer">TikTok →</a></p>
+      <article class="pcard reveal" aria-labelledby="n-h">
+        <div class="media mystery" role="img" aria-label="Coming soon: a blurred preview behind frosted glass with a question mark.">
+          <span class="status wait">COMING SOON</span>
+          <i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i>
+          <div class="glass"><span aria-hidden="true">?</span></div></div>
+        <div class="body">
+          <h2 id="n-h">Something new</h2>
+          <p>Our next product is in the works. We're keeping it under the glass for now. Follow us to see it first.</p>
+          <p class="meta">No dates or promises until it's ready.</p>
+          <p class="go"><a href="https://www.instagram.com/scalifywpd" rel="noopener noreferrer">Instagram →</a><a href="https://www.tiktok.com/@scalifywpd" rel="noopener noreferrer">TikTok →</a></p>
+        </div>
       </article>
     </div>
+
+    <article class="card service reveal" aria-labelledby="c-h">
+      <div><span class="k">FOR YOUR BUSINESS</span><h2 id="c-h">Want your own web app?</h2>
+        <p>We design and build custom tools with logins, payments and email. Every project starts with a written quote.</p></div>
+      <p class="go"><a href="https://wa.me/251969803580?text=Hi%20Scalify%20WPD%2C%20I%27d%20like%20to%20talk%20about%20a%20web%20app.">Talk to us on WhatsApp →</a></p>
+    </article>
   </div>
 </main>
 <footer><div class="wrap"><span>© <span id="yr">2026</span> SCALIFY WPD · Bole, Addis Ababa</span><span><a href="/#legal">Privacy &amp; terms</a></span></div></footer>
@@ -176,13 +161,12 @@ if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObs
 var d = document; d.documentElement.classList.add('js3d');
 var io = new IntersectionObserver(function(es){ es.forEach(function(x){ if (x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }); }, { threshold: .12 });
 d.querySelectorAll('.reveal').forEach(function(e){ io.observe(e); });
-// phone turns with scroll and follows the pointer
-var ph = d.getElementById('phone'), scene = ph.parentElement, mx = 0, my = 0, raf = 0;
-function frame(){ raf = 0; var b = scene.getBoundingClientRect(), v = Math.max(-1, Math.min(1, (b.top + b.height / 2 - innerHeight / 2) / innerHeight));
-  ph.style.transform = 'rotateY(' + (-18 + v * 22 + mx * 14) + 'deg) rotateX(' + (8 - v * 10 - my * 10) + 'deg) rotateZ(-3deg)'; }
-function kick(){ if (!raf) raf = requestAnimationFrame(frame); }
-addEventListener('scroll', kick, { passive: true }); addEventListener('resize', kick, { passive: true }); kick();
-if (matchMedia('(pointer:fine)').matches) scene.parentElement.addEventListener('pointermove', function(e){ var b = scene.getBoundingClientRect(); mx = (e.clientX - b.left) / b.width - .5; my = (e.clientY - b.top) / b.height - .5; kick(); });
+// cards lean toward the pointer (mouse only)
+if (matchMedia('(pointer:fine)').matches) d.querySelectorAll('.pcard').forEach(function(c){
+  c.addEventListener('pointermove', function(e){ var b = c.getBoundingClientRect(), x = (e.clientX - b.left) / b.width - .5, y = (e.clientY - b.top) / b.height - .5;
+    c.style.transform = 'perspective(900px) rotateY(' + (x * 8) + 'deg) rotateX(' + (-y * 6) + 'deg) translateY(-6px)'; });
+  c.addEventListener('pointerleave', function(){ c.style.transform = ''; });
+});
 })();
 </script>
 </body>
