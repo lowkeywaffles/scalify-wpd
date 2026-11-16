@@ -1,0 +1,1 @@
+Day 3 of building Brimful: it got friends. Save Together lets up to 6 people fill one savings jar, and your friend's deposit lands live on your phone. Try it at brimful.vercel.app (Save Together is part of Brimful Plus).
