@@ -1,4 +1,5 @@
-ZERO TO THREE - SCRIPTS (copy, then replace the [brackets])
+ZERO TO THREE - MESSAGE SCRIPTS
+Copy, then replace everything in [brackets]. Write the first line fresh for every business.
 
 === Write your offer sentence ===
 I make [number] short promo videos for [type of business]
@@ -39,18 +40,22 @@ Want me to put together a quick concept for [business
 name]? No cost for the concept.
 
 === Then send a one-screen proposal ===
-Thanks [name]. Here's what I'd suggest for [business]:
+Thanks [name]. My suggestion for [business]:
 
 GOAL: more [bookings] for [offer]
-WHAT: 3 vertical ads (15–20 s), captions and music included,
-      each with a different opening
-YOU SEND: 8 short phone clips (I'll send a shot list) + logo
-TIMING: first drafts 5 days after I get the clips
-REVISIONS: one round included
-PRICE: $150 (launch price, 3 spots). 50% to start, 50% on
-       delivery.
+WHAT: 1 vertical ad (20 s) + 2 other
+  openings to test. Captions, music.
+YOU SEND: 8 phone clips + logo
+  (I'll send a shot list)
+TIMING: drafts 5 days after all
+  clips arrive
+REVISIONS: 1 round included
+NOT INCLUDED: other sizes, filming
+PRICE: $90. 50% to start,
+  50% before final files.
 
-Shall I send the shot list and payment details?
+Shall I send the shot list and
+payment details?
 
 === The shot list you send them ===
 Please film these on your phone, upright (vertical),
@@ -78,7 +83,27 @@ could use videos like these? If you introduce us and they
 book, your next video is 20% off.
 
 === 3. Offer the monthly plan when results show ===
-The offer ad got [their number] views, nice. Businesses that
-post new video every week tend to keep that going. I can do
-8 videos a month for $300, two delivered each week, so you
-never have to think about it. Want to try one month?
+The offer ad got [their number] views, nice.
+If you want to post regularly, I can do
+8 short videos a month from one batch
+of footage for $320, two a week.
+Want to try one month?
+
+=== First message and follow-up (ch. 7) ===
+Hi Selam, your 6am class reel from Monday
+caught my eye, the energy is great but it
+starts with 5 seconds of the entrance.
+
+I make short promo videos for gyms. A
+15-second cut that opens on the class
+itself could do well for you.
+
+Examples: [link]
+
+Want a quick concept for Forge? No cost.
+
+=== Follow-ups (cold outreach) ===
+DAY 3:  Hi [name], just floating this up in case it got buried. Happy to send a quick concept for [business].
+DAY 7:  Saw this ad from a [lane] in another city and thought of you: [what they did well]. This format would suit your [product].
+DAY 14: I'll stop here so I'm not crowding your inbox. If video becomes a priority, my work is at [link]. Wishing you a great month.
+Then stop. If they say no or stop at any point, mark "Do not contact" in the tracker.
