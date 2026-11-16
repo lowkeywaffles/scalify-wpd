@@ -98,7 +98,10 @@ html,body{overflow-x:clip}
 .plan{position:relative;overflow:hidden;padding:28px;border-radius:var(--r-l);background:var(--surface);border:1px solid var(--line);display:grid;gap:14px;align-content:start;transform-style:preserve-3d}
 .plan h3{font-size:26px}
 .plan .price{font:700 56px/1 var(--display);letter-spacing:-.05em}
-.plan .price small{font:600 15px var(--body);letter-spacing:0;color:var(--muted)}
+.plan .price small{font:600 15px var(--body);letter-spacing:0;color:var(--muted);white-space:nowrap}
+.plan .pricebox{display:grid;gap:6px}
+.plan .alt{margin:0;font:600 13px/1.3 var(--mono);letter-spacing:.06em;color:var(--muted)}
+.plan.plus .alt{color:#A9BDB2}
 .plan ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
 .plan li{padding-left:26px;position:relative}
 .plan li::before{content:"";position:absolute;left:2px;top:.45em;width:12px;height:6px;border-left:2.5px solid var(--jade);border-bottom:2.5px solid var(--jade);transform:rotate(-45deg)}

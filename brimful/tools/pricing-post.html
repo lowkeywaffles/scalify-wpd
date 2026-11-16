@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:"Bricolage";src:url(../assets/fonts/bricolage-grotesque-latin-wght-normal.woff2) format("woff2-variations");font-weight:200 800}
+@font-face{font-family:"Instrument";src:url(../assets/fonts/instrument-sans-latin-wght-normal.woff2) format("woff2-variations");font-weight:400 700}
+@font-face{font-family:"JBMono";src:url(../assets/fonts/jetbrains-mono-latin-wght-normal.woff2) format("woff2-variations");font-weight:100 800}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:800px;height:1000px;background:#ECF1EA;color:#10241C;font-family:"Instrument",sans-serif}
+.wrap{position:absolute;inset:0;padding:64px 72px}
+.eyebrow{font:500 19px "JBMono",monospace;letter-spacing:.32em;color:#7A5608}
+h1{font:780 70px/1.02 "Bricolage",sans-serif;letter-spacing:-.045em;margin:30px 0 52px}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.plan{border-radius:26px;padding:30px 26px 32px;min-height:428px;background:#F8FAF6;border:1.5px solid #CFD8D0;position:relative}
+.plan.plus{background:#10241C;color:#F3EFE2;border-color:#10241C}
+.plan h2{font:720 27px "Bricolage",sans-serif;letter-spacing:-.02em}
+.plan.plus h2{color:#D8A531}
+.price{display:flex;align-items:baseline;gap:10px;margin-top:22px;font:780 82px/1 "Bricolage",sans-serif;letter-spacing:-.05em}
+.price small{font:600 19px "Instrument",sans-serif;letter-spacing:0;color:#5A6B63}
+.plan.plus .price small{color:#A9BDB2}
+.alt{margin-top:8px;font:500 15px "JBMono",monospace;letter-spacing:.06em;color:#5A6B63}
+.plan.plus .alt{color:#A9BDB2}
+ul{list-style:none;margin-top:26px;display:grid;gap:12px;font-size:21px;color:#3E5048}
+.plan.plus ul{color:#DDE6DF}
+li{padding-left:30px;position:relative}
+li::before{content:"";position:absolute;left:3px;top:.42em;width:13px;height:7px;border-left:2.5px solid #0C6A4E;border-bottom:2.5px solid #0C6A4E;transform:rotate(-45deg)}
+.plan.plus li::before{border-color:#D8A531}
+.foot{position:absolute;left:72px;right:72px;bottom:96px;display:flex;justify-content:space-between;align-items:center}
+.foot .note{font:500 17px "JBMono",monospace;color:#3E5048}
+.pill{background:#0C6A4E;color:#fff;font:700 24px "Bricolage",sans-serif;border-radius:999px;padding:16px 28px}
+</style></head><body><div class="wrap">
+<p class="eyebrow">PRICING</p>
+<h1>Free to save.<br>Pay once if you<br>want more.</h1>
+<div class="plans">
+  <div class="plan"><h2>Free</h2>
+    <div class="price">$0</div><p class="alt">0 ETB</p>
+    <ul><li>2 jars</li><li>1 challenge at a time</li><li>3D jars and milestones</li><li>Works offline</li></ul></div>
+  <div class="plan plus"><h2>Plus</h2>
+    <div class="price">$7 <small>once</small></div><p class="alt">or 500 ETB</p>
+    <ul><li>Unlimited jars</li><li>Every challenge at once</li><li>Split money between jars</li><li>All six coin colours</li></ul></div>
+</div>
+<div class="foot"><span class="note">No subscription · 14-day refund</span><span class="pill">brimful.vercel.app</span></div>
+</div></body></html>

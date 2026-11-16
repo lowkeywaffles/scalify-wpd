@@ -16,7 +16,11 @@ wall.innerHTML = nums.map((n) => `<div class="env"><i class="f"><span>${n}</span
 const envs = [...wall.children];
 
 // live price for the pricing card (falls back to the number in the page)
-fetchProduct().then((r) => { if (r.ok && r.body.price_etb) $("#plus-price").textContent = Number(r.body.price_etb).toLocaleString("en-US"); });
+fetchProduct().then((r) => {
+  if (!r.ok) return;
+  if (r.body.price_etb) $("#plus-price").textContent = Number(r.body.price_etb).toLocaleString("en-US");
+  if (r.body.card?.price_usd) $("#plus-usd").textContent = Number(r.body.card.price_usd).toLocaleString("en-US");
+});
 
 const TARGET = 15000;
 function meter(p) {
