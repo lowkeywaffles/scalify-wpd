@@ -21,7 +21,7 @@ export const LOCAL_PAY = {
   telebirr: { label: "Telebirr", accountName: "Amanuel" },
   boa: { label: "Bank of Abyssinia", accountName: "Amanuel Yared", accountNumber: "270290377" },
 };
-export const METHOD_LABEL = { telebirr: "Telebirr", boa: "Bank of Abyssinia", whop: "Card (Whop)" };
+export const METHOD_LABEL = { telebirr: "Telebirr", boa: "Bank of Abyssinia", whop: "Card (Whop)", comp: "Complimentary" };
 
 // QuoteRevive's FIRST6 offer: spots are shared between Whop checkout and birr payments.
 export const FIRST6 = { code: "FIRST6", whopPromoId: "promo_IOC4zrQD2TMN" };

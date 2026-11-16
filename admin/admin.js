@@ -3,7 +3,7 @@ const $ = (s) => document.querySelector(s);
 const ETB = (n) => `${Number(n).toLocaleString("en-US")} ETB`;
 const USD = (n) => `$${Number(n).toLocaleString("en-US", { minimumFractionDigits: Number(n) % 1 ? 2 : 0 })}`;
 const when = (s) => (s ? new Date(s).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Addis_Ababa" }) : "");
-const METHOD = { telebirr: "Telebirr", boa: "Bank of Abyssinia", whop: "Card (Whop)" };
+const METHOD = { telebirr: "Telebirr", boa: "Bank of Abyssinia", whop: "Card (Whop)", comp: "Complimentary" };
 const SETUP_HELP = {
   SUPABASE_SERVICE_ROLE_KEY: "Database access. Copy it from the QuoteRevive project in Vercel (or Supabase → Project Settings → API keys).",
   OPERATOR_EMAILS: "Who can sign in here.",
@@ -104,7 +104,7 @@ function rows() {
   const s = (data?.store ?? []).map((r) => ({ ...r, kind: "store", key: r.product, name: r.product_name, sub: null }));
   return [...q, ...s];
 }
-const amount = (r) => (r.amount_usd != null ? USD(r.amount_usd) : ETB(r.amount_etb));
+const amount = (r) => (r.method === "comp" ? "Free (complimentary)" : r.amount_usd != null ? USD(r.amount_usd) : ETB(r.amount_etb));
 
 function render() {
   const all = rows();

@@ -73,7 +73,7 @@ export function sanitize(raw) {
   const l = raw.license;
   if (l && isStr(l.key, 64) && /^[0-9a-f-]{36}$/.test(l.key) && ["pending", "active", "rejected", "refunded"].includes(l.status)) {
     s.license = { key: l.key, status: l.status, note: isStr(l.note, 300) ? l.note : "", checkedAt: isInt(l.checkedAt, 0, 4e12) ? l.checkedAt : 0 };
-    if (["telebirr", "boa", "whop"].includes(l.method)) s.license.method = l.method;
+    if (["telebirr", "boa", "whop", "comp"].includes(l.method)) s.license.method = l.method;
   }
   const UID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/, SECRET = /^[A-Za-z0-9_-]{43}$/;
   s.shared = (Array.isArray(raw.shared) ? raw.shared : []).filter((m) => m && UID.test(m.id) && UID.test(m.member) && SECRET.test(m.key) && SECRET.test(m.token))
