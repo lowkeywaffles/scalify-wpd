@@ -22,9 +22,9 @@ fetchProduct().then((r) => {
   if (r.body.card?.price_usd) $("#plus-usd").textContent = Number(r.body.card.price_usd).toLocaleString("en-US");
 });
 
-const TARGET = 15000;
+const TARGET = 2000;
 function meter(p) {
-  $("#meter-amt").textContent = `ETB ${(Math.round((TARGET * p) / 50) * 50).toLocaleString("en-US")}`;
+  $("#meter-amt").textContent = `$${(Math.round((TARGET * p) / 10) * 10).toLocaleString("en-US")}`;
   $("#meter-pct").textContent = `${Math.round(p * 100)}%`;
   $("#meter-bar").style.width = `${p * 100}%`;
 }

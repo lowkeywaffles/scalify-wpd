@@ -135,7 +135,7 @@ export function splitView(app) {
     return `<h1 tabindex="-1">Split</h1>
       <p class="lead">Got paid, or got pocket money? Type the amount once and Brimful shares it between your jars by the percentages you choose.</p>
       <div class="panel"><h2>Part of Brimful Plus</h2><p class="fine">Plus also includes unlimited jars, every challenge at once and all jar colours. One payment, no subscription.</p>
-        <a class="btn brass" href="#/unlock">See Brimful Plus</a></div>`;
+        <a class="btn brass" href="#/unlock">Get Plus · $7 one-time</a></div>`;
   }
   if (!jars.length) return `<h1 tabindex="-1">Split</h1><div class="card empty"><h2>No jars yet</h2><p class="lead">Create a jar first, then come back to split money between your jars.</p><a class="btn" href="#/">Go to jars</a></div>`;
   const saved = new Map(app.state.split.map((r) => [r.jarId, r.pct]));
@@ -171,7 +171,7 @@ function updateSplit(app) {
 const ago = (t) => {
   if (!t) return "not yet";
   const m = Math.round((Date.now() - t) / 60000);
-  return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : new Date(t).toLocaleDateString(document.documentElement.lang === "am" ? "am-ET" : undefined);
+  return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : new Date(t).toLocaleDateString();
 };
 function cloudPanel(app) {
   const c = app.state.settings.cloud;
@@ -189,10 +189,9 @@ export function settingsView(app) {
   return `<h1 tabindex="-1">Settings</h1>
     <section class="panel" aria-labelledby="s-plan"><h2 id="s-plan">${plus ? "Brimful Plus is active" : "You're on Free"}</h2>
       <p class="fine">${plus ? "Thank you for supporting Brimful. Keep your licence key somewhere safe so you can restore Plus on a new device." : l?.status === "pending" ? "We're checking your payment. Plus unlocks as soon as it's confirmed." : "Free includes 2 jars and 1 challenge at a time, with the brass coin colour."}</p>
-      <a class="btn ${plus ? "ghost" : "brass"} small" href="#/unlock" data-vars="justify-self:start">${plus ? "Licence details" : l?.status === "pending" ? "Payment status" : "See Brimful Plus"}</a></section>
+      <a class="btn ${plus ? "ghost" : "brass"} small" href="#/unlock" data-vars="justify-self:start">${plus ? "Licence details" : l?.status === "pending" ? "Payment status" : "Get Plus · $7 one-time"}</a></section>
     <section class="panel" aria-labelledby="s-look"><h2 id="s-look">Look and feel</h2>
       <div class="setting"><div><span class="label" id="l-cur">Currency</span><p>Changing this relabels your amounts. It doesn't convert them.</p></div><select class="input" data-vars="width:auto" aria-labelledby="l-cur" data-change="currency">${CURRENCIES.map((c) => `<option${c === st.currency ? " selected" : ""}>${c}</option>`).join("")}</select></div>
-      <div class="setting"><div><span class="label">Language</span>${st.lang === "am" || (st.lang === "auto" && document.documentElement.lang === "am") ? `<p>Amharic is new. If something reads wrong, tell us at skelifywpd@gmail.com. Legal pages are in English.</p>` : ""}</div>${seg("lang", [["auto", "Auto"], ["en", "English"], ["am", "አማርኛ"]], st.lang)}</div>
       <div class="setting"><span class="label">Theme</span>${seg("theme", [["system", "Auto"], ["light", "Light"], ["dark", "Dark"]], st.theme)}</div>
       <div class="setting"><div><span class="label">3D motion</span><p>Turn off to stop coins falling, tilting and flipping.</p></div>${seg("motion", [["auto", "On"], ["off", "Reduced"]], st.motion)}</div>
       <div class="setting"><div><span class="label" id="l-snd">Coin sounds</span><p>A soft clink when money lands.</p></div><label class="switch"><input type="checkbox" name="sound"${st.sound ? " checked" : ""} data-change="setting" aria-labelledby="l-snd"><span></span></label></div></section>
@@ -245,26 +244,28 @@ async function loadPay(app) {
   if (!panel.isConnected) return;
   if (!r.ok) { $("#pay-load").textContent = "You need to be online to buy Plus. Check your connection and open this page again."; $("#price").textContent = "Brimful Plus"; return; }
   product = r.body;
-  const price = `${Number(product.price_etb).toLocaleString("en-US")} ETB`;
-  const usd = product.card ? `$${product.card.price_usd} USD` : "";
-  $("#price").innerHTML = `${price}${usd ? ` <small>or ${usd}</small>` : ""} <small>one-time · no subscription</small>`;
+  const etb = `${Number(product.price_etb).toLocaleString("en-US")} ETB`;
+  const usdN = product.card?.price_usd ?? 7, usd = `$${usdN}`;
+  const card = Boolean(product.card), first = card ? "whop" : "telebirr";
+  $("#price").innerHTML = `${usd} <small>one-time · no subscription</small>`;
   const m = product.methods;
+  const opt = (v, label) => `<label><input type="radio" name="method" value="${v}"${v === first ? " checked" : ""} data-change="pay-method"><span>${label}</span></label>`;
   panel.innerHTML = `<h2 id="pay-h">How to pay</h2>
     <form id="payform" novalidate class="view">
-      <div class="seg" role="radiogroup" aria-label="Payment method"><label><input type="radio" name="method" value="telebirr" checked data-change="pay-method"><span>Telebirr</span></label><label><input type="radio" name="method" value="boa" data-change="pay-method"><span>Bank transfer</span></label>${product.card ? `<label><input type="radio" name="method" value="whop" data-change="pay-method"><span>Card</span></label>` : ""}</div>
-      <div class="paybox" data-m="telebirr"><img src="/assets/img/pay-telebirr.jpg" width="150" height="149" alt="Telebirr QR code to pay ${esc(m.telebirr.accountName)}"><dl><dt>1. Send exactly</dt><dd class="num">${price}</dd><dt>To (Telebirr)</dt><dd>${esc(m.telebirr.accountName)}</dd><dt>How</dt><dd>Scan the code in the Telebirr app</dd></dl></div>
-      <div class="paybox" data-m="boa" hidden><dl><dt>1. Send exactly</dt><dd class="num">${price}</dd><dt>Bank</dt><dd>${esc(m.boa.label)}</dd><dt>Account number</dt><dd class="num" id="acct">${esc(m.boa.accountNumber)}</dd><dt>Account name</dt><dd>${esc(m.boa.accountName)}</dd></dl><button class="btn ghost small" type="button" data-act="copy-acct">Copy account number</button></div>
-      ${product.card ? `<div class="paybox" data-m="whop" hidden><dl><dt>Price</dt><dd class="num">${usd}, one-time</dd><dt>Paid through</dt><dd>Whop secure checkout (cards; other options Whop offers in your country)</dd></dl>
+      <div class="seg" role="radiogroup" aria-label="Payment method">${card ? opt("whop", "Card") : ""}${opt("telebirr", "Telebirr")}${opt("boa", "Bank transfer")}</div>
+      ${card ? `<div class="paybox" data-m="whop"><dl><dt>Price</dt><dd class="num">${usd} USD, one-time</dd><dt>Paid through</dt><dd>Whop secure checkout (cards; other options Whop offers in your country)</dd></dl>
         <p class="fine">Whop may add sales tax or VAT where the law requires it, and your bank may charge a foreign-transaction fee. Whop shows the final total before you pay. Plus unlocks automatically after payment.</p></div>` : ""}
-      <div data-local><p class="label">2. Tell us it's sent</p>
+      <div class="paybox" data-m="telebirr"${first === "telebirr" ? "" : " hidden"}><img src="/assets/img/pay-telebirr.jpg" width="150" height="149" alt="Telebirr QR code to pay ${esc(m.telebirr.accountName)}"><dl><dt>1. Send exactly</dt><dd class="num">${etb}</dd><dt>To (Telebirr)</dt><dd>${esc(m.telebirr.accountName)}</dd><dt>How</dt><dd>Scan the code in the Telebirr app</dd></dl><p class="fine">Paying in Ethiopia? The local price is ${etb}.</p></div>
+      <div class="paybox" data-m="boa" hidden><dl><dt>1. Send exactly</dt><dd class="num">${etb}</dd><dt>Bank</dt><dd>${esc(m.boa.label)}</dd><dt>Account number</dt><dd class="num" id="acct">${esc(m.boa.accountNumber)}</dd><dt>Account name</dt><dd>${esc(m.boa.accountName)}</dd></dl><button class="btn ghost small" type="button" data-act="copy-acct">Copy account number</button></div>
+      <div data-local${card ? " hidden" : ""}><p class="label">2. Tell us it's sent</p>
       <div class="field"><label for="p-name">Name the payment came from</label><input id="p-name" name="payer_name" class="input" maxlength="120" autocomplete="name"><span class="err" data-err="payer_name" role="alert"></span></div>
       <div class="field"><label for="p-ref">Transaction ID</label><input id="p-ref" name="reference" class="input num" maxlength="60" autocomplete="off" spellcheck="false"><span class="hint">From the Telebirr SMS or your bank receipt, e.g. CK12AB34CD.</span><span class="err" data-err="reference" role="alert"></span></div>
       <label class="check"><input type="checkbox" name="confirm"><span>I have already sent the payment.</span></label><span class="err" data-err="confirm" role="alert"></span></div>
       ${AGE_BOX}
       <p class="fine">By continuing you agree to the <a href="/legal/terms">terms</a>.</p>
-      <button class="btn brass block" type="button" data-act="submit-pay" id="pay-go">Submit for checking</button>
-      <p class="fine" data-local>We use your name and transaction ID only to match your payment (see <a href="/legal/privacy">privacy</a>). We never ask for your PIN or password.</p>
-      <p class="fine" data-card hidden>Whop handles your card details; we never see them. We only learn that a payment for your licence key went through (see <a href="/legal/privacy">privacy</a>).</p>
+      <button class="btn brass block" type="button" data-act="submit-pay" id="pay-go">${card ? "Continue to secure checkout" : "Submit for checking"}</button>
+      <p class="fine" data-local${card ? " hidden" : ""}>We use your name and transaction ID only to match your payment (see <a href="/legal/privacy">privacy</a>). We never ask for your PIN or password.</p>
+      <p class="fine" data-card${card ? "" : " hidden"}>Whop handles your card details; we never see them. We only learn that a payment for your licence key went through (see <a href="/legal/privacy">privacy</a>).</p>
       <p class="err" id="pay-err" role="alert"></p>
     </form>`;
 }
@@ -348,7 +349,7 @@ export function installViews(app, register) {
     "input:split-range": (el) => { $(`#splitform input[data-input='split'][data-jar="${el.dataset.jar}"]`).value = el.value; updateSplit(app); },
     "do-split": () => {
       const { form, rows, amount, total } = readSplit(app);
-      if (!amount) return app.fieldError(form, "amt", "Enter the amount you received, like 8000.");
+      if (!amount) return app.fieldError(form, "amt", "Enter the amount you received, like 1500.");
       if (total > 100) return app.toast("Percentages add up to more than 100%.");
       const parts = S.splitAmount(amount, rows);
       if (!parts.length) return app.toast("Give at least one jar a percentage.");
@@ -368,7 +369,6 @@ export function installViews(app, register) {
       const s = structuredClone(app.state);
       if (el.name === "sound") s.settings.sound = el.checked; else s.settings[el.name] = el.value;
       app.commit(s);
-      if (el.name === "lang") location.reload(); // simplest way to redraw every screen in the new language
     },
     export: () => {
       const url = URL.createObjectURL(new Blob([S.exportData(app.state)], { type: "application/json" }));
@@ -396,7 +396,7 @@ export function installViews(app, register) {
         const cloud = app.state.settings.cloud;
         if (cloud && fd.get("cloud") && !(await removeCloud(cloud.code))) { app.toast("Couldn't reach the cloud backup to delete it. Check your connection and try again."); return false; }
         const keep = app.state.license;
-        const fresh = S.emptyState(); fresh.settings.onboarded = true; fresh.settings.currency = app.cur(); fresh.settings.lang = app.state.settings.lang; fresh.license = keep; // the purchase stays valid
+        const fresh = S.emptyState(); fresh.settings.onboarded = true; fresh.settings.currency = app.cur(); fresh.license = keep; // the purchase stays valid
         if (cloud && !fd.get("cloud")) fresh.settings.cloud = cloud; // kept on purpose: it will be overwritten by the next backup
         app.commit(fresh); app.toast("Everything was deleted from this device."); app.go("#/");
       }),

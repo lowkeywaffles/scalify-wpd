@@ -14,11 +14,12 @@ const now = () => Date.now();
 export function emptyState() {
   return {
     v: 1,
-    settings: { currency: "USD", theme: "system", motion: "auto", sound: true, onboarded: false, lang: "auto", cloud: null }, // cloud: { code, at } when encrypted backup is on
+    settings: { currency: "USD", theme: "system", motion: "auto", sound: true, onboarded: false, cloud: null }, // cloud: { code, at } when encrypted backup is on
     jars: [],
     challenges: [],
     split: [], // [{ jarId, pct }]
     license: null, // { key, status: "pending"|"active"|"rejected"|"refunded", note, checkedAt, method? }
+    shared: [], // Save Together memberships: [{ id, key, member, token, joinedAt }] (key and token are secrets)
   };
 }
 
@@ -63,7 +64,7 @@ export function sanitize(raw) {
   if (["auto", "off"].includes(st.motion)) s.settings.motion = st.motion;
   s.settings.sound = st.sound !== false;
   s.settings.onboarded = st.onboarded === true;
-  if (["auto", "en", "am"].includes(st.lang)) s.settings.lang = st.lang;
+  if (isStr(st.tgName, 30) && st.tgName.trim()) s.settings.tgName = st.tgName.trim();
   if (st.cloud && isStr(st.cloud.code, 40) && CLOUD_CODE.test(st.cloud.code)) s.settings.cloud = { code: st.cloud.code, at: isInt(st.cloud.at, 0, 4e12) ? st.cloud.at : 0 };
   s.jars = (Array.isArray(raw.jars) ? raw.jars : []).map(cleanJar).filter(Boolean).slice(0, 200);
   const jarIds = new Set(s.jars.map((j) => j.id));
@@ -74,6 +75,9 @@ export function sanitize(raw) {
     s.license = { key: l.key, status: l.status, note: isStr(l.note, 300) ? l.note : "", checkedAt: isInt(l.checkedAt, 0, 4e12) ? l.checkedAt : 0 };
     if (["telebirr", "boa", "whop"].includes(l.method)) s.license.method = l.method;
   }
+  const UID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/, SECRET = /^[A-Za-z0-9_-]{43}$/;
+  s.shared = (Array.isArray(raw.shared) ? raw.shared : []).filter((m) => m && UID.test(m.id) && UID.test(m.member) && SECRET.test(m.key) && SECRET.test(m.token))
+    .map((m) => ({ id: m.id, key: m.key, member: m.member, token: m.token, joinedAt: isInt(m.joinedAt, 0, 4e12) ? m.joinedAt : 0 })).slice(0, 50);
   return s;
 }
 

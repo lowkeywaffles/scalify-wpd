@@ -107,6 +107,22 @@
   ],
   "rewrites": [
     {
+      "source": "/api/store/:product/shared/:id/:sub/:subid",
+      "destination": "/api/store/shared?product=:product&id=:id&sub=:sub&subid=:subid"
+    },
+    {
+      "source": "/api/store/:product/shared/:id/:sub",
+      "destination": "/api/store/shared?product=:product&id=:id&sub=:sub"
+    },
+    {
+      "source": "/api/store/:product/shared/:id",
+      "destination": "/api/store/shared?product=:product&id=:id"
+    },
+    {
+      "source": "/api/store/:product/shared",
+      "destination": "/api/store/shared?product=:product"
+    },
+    {
       "source": "/api/store/:product/orders/:key",
       "destination": "/api/store/order?product=:product&key=:key"
     },

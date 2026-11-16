@@ -6,9 +6,12 @@
 | Deposits/withdrawals: amount, time, optional note | Device | Balance, history, streaks | No | Until user deletes |
 | Challenges: type, settings, ticked steps | Device | Run the challenge | No | Until user deletes |
 | Split percentages | Device | Remember the user's split | No | Until user deletes |
-| Settings: currency, language, theme, motion, sound | Device | Preferences | No | Until user deletes |
+| Settings: currency, theme, motion, sound, Save Together display name | Device | Preferences | No | Until user deletes |
 | Cloud-backup recovery code | Device only | Encrypt/locate the cloud backup | Never (only a SHA-256 hash of it, as the lookup id) | Until backup is turned off |
 | Encrypted cloud backup (all of the above, AES-256-GCM) | Payments DB (`brimful_backups`, Supabase EU) | Restore on another device | Yes, only if the user turns it on; ciphertext only | Until turned off / deleted, or 400 days after last update (daily job) |
+| Save Together memberships: jar id, invite key, member id, member secret | Device (and backups) | Open and use shared jars | Key never; secret only as proof (server keeps its SHA-256) | Until you leave/forget the jar |
+| Shared jar contents: name, goal, preset, member names/colours, deposit amounts and notes (AES-256-GCM ciphertext) | Payments DB (`shared_jars`, `shared_members`, `shared_entries`, Supabase EU) | Show the jar live to its members | Yes, encrypted only | Until the owner deletes it, or 400 days without activity |
+| Shared jar metadata: member slots, who added which deposit, deposit counts, join/deposit times | Payments DB | Enforce 6-person cap, free limit, own-deposit removal | Yes | Same as above |
 | Licence key + status | Device and payments DB | Unlock/restore Plus | Yes, to the payments API (about daily) | While licence exists |
 | Payer name, transaction ID, method, amount, review status, 18+/guardian confirmation (yes/no) | Payments DB (`store_orders`, Supabase EU) | Match payment, refunds | Yes, only when buying | Licence life; then as tax rules need. Rejected: deleted 180 days after review |
 | Card purchase: Whop payment ID, amount, status | Payments DB | Unlock, refunds | Yes, from Whop's API | As above. Unpaid checkouts deleted after 3 days |

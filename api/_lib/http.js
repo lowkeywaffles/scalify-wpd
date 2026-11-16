@@ -37,7 +37,7 @@ export async function body(req) {
 }
 
 /** CORS for the public store API: only our own product sites may call it from a browser. */
-export function cors(req, res, methods) {
+export function cors(req, res, methods, headers = "Content-Type") {
   const allowed = (process.env.STORE_ALLOWED_ORIGINS || "https://brimful.vercel.app").split(",").map((s) => s.trim()).filter(Boolean);
   const origin = req.headers.origin;
   res.setHeader("Vary", "Origin");
@@ -45,7 +45,7 @@ export function cors(req, res, methods) {
   if (ok) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Methods", `${methods}, OPTIONS`);
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Allow-Headers", headers);
     res.setHeader("Access-Control-Max-Age", "600");
   }
   return ok;

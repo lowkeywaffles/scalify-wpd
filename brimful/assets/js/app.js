@@ -3,11 +3,11 @@ import * as S from "./lib/store.js";
 import { fmt, toMinor, toInput, quickAmounts, CURRENCIES, isCurrency, minorDigits } from "./lib/money.js";
 import { clink, chime, buzz, confetti, paintGuilloche, applyVars, esc } from "./lib/fx.js";
 import { fetchStatus } from "./lib/api.js";
-import { startI18n } from "./lib/i18n.js";
 import { challengesView, challengeView, splitView, settingsView, unlockView, installViews } from "./views.js";
+import { togetherView, sharedView, joinView, installTogether } from "./together.js";
 
 const $ = (sel, root = document) => root.querySelector(sel);
-const dateLocale = () => (document.documentElement.lang === "am" ? "am-ET" : undefined);
+const dateLocale = () => undefined;
 const view = $("#view"), dlg = $("#dlg"), toastEl = $("#toast");
 
 /* ---------- shared context handed to every screen ---------- */
@@ -111,15 +111,6 @@ function syncChrome() {
 }
 
 /* ---------- Jars (home) ---------- */
-function guessCurrency() {
-  try {
-    if (Intl.DateTimeFormat().resolvedOptions().timeZone === "Africa/Addis_Ababa") return "ETB";
-    const region = new Intl.Locale(navigator.language).maximize().region;
-    const map = { US: "USD", GB: "GBP", ET: "ETB", KE: "KES", NG: "NGN", ZA: "ZAR", GH: "GHS", UG: "UGX", TZ: "TZS", EG: "EGP", AE: "AED", SA: "SAR", IN: "INR", PK: "PKR", PH: "PHP", ID: "IDR", CA: "CAD", AU: "AUD", BR: "BRL", MX: "MXN", TR: "TRY", JP: "JPY" };
-    const euro = ["DE", "FR", "IT", "ES", "NL", "BE", "AT", "IE", "PT", "FI", "GR"];
-    return map[region] ?? (euro.includes(region) ? "EUR" : "USD");
-  } catch { return "USD"; }
-}
 const currencyOptions = (sel) => CURRENCIES.map((c) => `<option value="${c}"${c === sel ? " selected" : ""}>${c}</option>`).join("");
 
 function shelfView() {
@@ -173,7 +164,7 @@ function jarSheet(jar) {
     const name = String(fd.get("name") ?? "").trim();
     if (!name) return fieldError(form, "name", "Give your jar a name.");
     const target = toMinor(String(fd.get("target") ?? ""), app.cur());
-    if (!target) return fieldError(form, "target", "Enter a target above zero, like 15000.");
+    if (!target) return fieldError(form, "target", "Enter a target above zero, like 2000.");
     const patch = { name, target, deadline: String(fd.get("deadline") ?? ""), style: String(fd.get("style") ?? "brass") };
     if (jar) { app.commit(S.updateJar(app.state, jar.id, patch)); toast("Jar updated."); render(); }
     else { const r = S.addJar(app.state, patch); app.commit(r.state); go(`#/jar/${r.jar.id}`); }
@@ -182,7 +173,7 @@ function jarSheet(jar) {
 
 function upsell(title, text) {
   sheet(`<h2 id="dlg-title">${esc(title)}</h2><p>${esc(text)}</p>
-    <div class="row"><button type="button" class="btn ghost" data-close>Not now</button><a class="btn brass" href="#/unlock" data-close>See Brimful Plus</a></div>`);
+    <div class="row"><button type="button" class="btn ghost" data-close>Not now</button><a class="btn brass" href="#/unlock" data-close>Get Plus · $7 one-time</a></div>`);
 }
 
 /* ---------- Jar detail (keeps one WebGL jar alive while you add money) ---------- */
@@ -279,6 +270,7 @@ const actions = {
   share: async () => { const { shareSheet } = await import("./share.js"); shareSheet(app, app.state.jars.find((j) => j.id === currentJarId())); },
 };
 installViews(app, (more) => Object.assign(actions, more));
+installTogether(app, (more) => Object.assign(actions, more));
 
 document.addEventListener("click", (e) => {
   const el = e.target.closest("[data-act]");
@@ -316,6 +308,9 @@ function render() {
   else if (route === "split") { html = splitView(app); tab = "split"; }
   else if (route === "settings") { html = settingsView(app); tab = "settings"; }
   else if (route === "unlock") { html = unlockView(app); tab = "settings"; }
+  else if (route === "together") { html = togetherView(app); tab = "together"; }
+  else if (route === "shared") { html = sharedView(app, id); tab = "together"; }
+  else if (route === "join") { html = joinView(app); tab = "together"; }
   if (html === null) html = shelfView();
   view.innerHTML = `<div class="view">${html}</div>`;
   applyVars(view); paintGuilloche(view);
@@ -337,11 +332,10 @@ addEventListener("hashchange", render);
 /* ---------- start ---------- */
 if (!app.state.settings.onboarded) {
   const s = structuredClone(app.state);
-  if (!s.jars.length) s.settings.currency = guessCurrency();
+  if (!s.jars.length) s.settings.currency = "USD"; // dollars by default; people can relabel in Settings
   s.settings.onboarded = true;
   app.commit(s);
 }
-startI18n(app.state.settings.lang);
 syncChrome();
 const boot = () => render();
 if (window.gsap || document.readyState === "complete") boot(); else addEventListener("load", boot, { once: true });
