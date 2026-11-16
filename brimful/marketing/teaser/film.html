@@ -90,9 +90,17 @@ async function BUILD(){
     S.h2 = line(root,[{w:'filling.',accent:true}],{y:820,size:200}); fit(S.h2);
     S.sc = scribble(root, 470, {sw:9}); css(S.sc.svg,{left:'260px',top:'905px'});
     S.drop = h('div',{class:'prop coin'},root);
-    S.bar = h('div',{class:'abs',style:{width:'560px',height:'150px',background:'#050D0A',borderRadius:'14px'}},root);
+    // frosted glass pane that slides over the word (keeps the secret, but you can tell something's there)
+    S.bar = h('div',{class:'abs',style:{width:'660px',height:'250px',borderRadius:'38px',overflow:'hidden',
+      background:'linear-gradient(135deg,rgba(255,255,255,.26),rgba(255,255,255,.07) 45%,rgba(226,177,60,.10))',
+      backdropFilter:'blur(22px) saturate(1.5)',WebkitBackdropFilter:'blur(22px) saturate(1.5)',
+      border:'1.5px solid rgba(255,255,255,.38)',
+      boxShadow:'inset 0 1.5px 0 rgba(255,255,255,.65), inset 0 -18px 40px rgba(255,255,255,.06), 0 40px 70px -25px rgba(0,0,0,.65)'}},root);
+    S.sheen = h('div',{class:'abs',style:{width:'160px',height:'420px',top:'-80px',background:'linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.55),rgba(255,255,255,0))',filter:'blur(4px)'}},S.bar);
+    S.edge = h('div',{class:'abs',style:{left:'26px',top:'16px',width:'608px',height:'3px',borderRadius:'3px',background:'linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.9),rgba(255,255,255,0))'}},S.bar);
+    S.lockg = h('div',{class:'abs',style:{left:'292px',top:'82px',opacity:'.55'},html:'<svg width="76" height="86" viewBox="0 0 54 64"><path d="M14 30V20a13 13 0 0 1 26 0v10" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/><rect x="6" y="28" width="42" height="32" rx="9" fill="#FFFFFF"/></svg>'},S.bar);
     S.tag = h('div',{class:'abs chip ess',style:{background:'rgba(226,177,60,.14)',color:'var(--accent3)',border:'2px solid rgba(226,177,60,.5)'},html:'<span style="width:12px;height:12px;border-radius:50%;background:#E2B13C;display:inline-block"></span>SNEAK PEEK'},root);
-    cue(.05,'riser',.5); cue(.35,'whoosh'); cue(.45,'whoosh',.7); cue(1.0,'swoosh',.8); cue(1.5,'scribble'); cue(1.95,'pop',.8); cue(2.6,'glitch',.8); cue(3.3,'whoosh',.8);
+    cue(.05,'riser',.5); cue(.35,'whoosh'); cue(.45,'whoosh',.7); cue(1.0,'swoosh',.8); cue(1.5,'scribble'); cue(1.95,'pop',.8); cue(2.5,'swoosh',.8); cue(2.92,'shimmer',.7); cue(3.0,'pop',.5); cue(3.3,'whoosh',.8);
     burst({t:1.95,x:480,y:1090,kind:'spark',n:26,speed:520,size:9,life:.8,color:['#F4D98A','#E2B13C','#FFFFFF'],seed:11});
   }, lt=>{
     reveal(S.h1,lt,.3); reveal(S.h2,lt,.85,{dist:90,from:.7});
@@ -101,12 +109,16 @@ async function BUILD(){
     const d = P(lt,1.45,.5,ease.inCubic);
     S.drop.style.opacity = lt>1.4 && lt<2.05 ? 1 : 0;
     tf(S.drop,`translate(${435}px, ${lerp(120,1045,d)}px) rotate(${d*260}deg) scale(.8)`);
-    // the word gets redacted: a black bar sweeps over it with a glitch
-    const r = P(lt,2.5,.32,ease.outExpo), jitter = lt>2.5 && lt<2.95 ? Math.sin(lt*90)*8 : 0;
-    css(S.bar,{opacity: lt>2.48 ? 1 : 0, transform:`translate(${200+jitter}px, 735px) scaleX(${r})`, transformOrigin:'0 50%'});
+    // a pane of frosted glass glides in from the side and settles over the word
+    const g = P(lt,2.45,.6,t=>ease.spring(t,6,1.1)), gi = clamp(g);
+    css(S.bar,{opacity: clamp(P(lt,2.45,.18)), transform:`translate3d(${150+(1-g)*120}px, ${688+(1-gi)*30}px, 80px) perspective(1200px) rotateY(${(1-g)*-38}deg) rotateZ(${(1-g)*-4}deg) scale(${lerp(.86,1,gi)})`});
+    tf(S.sheen,`translate(${-220+P(lt,2.75,.7,ease.inOutCubic)*1000}px,0) rotate(20deg)`);
+    S.lockg.style.opacity = .55*P(lt,2.85,.3); tf(S.lockg,`scale(${lerp(.6,1,P(lt,2.85,.4,ease.outBack))})`);
+    // the word itself softens under the glass (backdrop blur alone can vary by device)
+    S.h2.box.style.filter = lt>2.48 ? `blur(${P(lt,2.48,.28)*10}px)` : 'none';
     S.tag.style.opacity = P(lt,2.75,.3);
     tf(S.tag,`translate(${480-S.tag.offsetWidth/2}px, ${1010+(1-P(lt,2.75,.45,ease.outBack))*40}px)`);
-    if (lt>3.25){ hideOut(S.h1,lt,3.25); hideOut(S.h2,lt,3.25); const q=P(lt,3.25,.3,ease.inCubic); S.bar.style.opacity=1-q; S.tag.style.opacity=1-q; }
+    if (lt>3.25){ hideOut(S.h1,lt,3.25); hideOut(S.h2,lt,3.25); const q=P(lt,3.25,.3,ease.inCubic); S.bar.style.opacity=(1-q)*S.bar.style.opacity; S.tag.style.opacity=1-q; }
   });
 
   /* ================= 2. VISIBLE  3.6 – 7.2 ================= */
