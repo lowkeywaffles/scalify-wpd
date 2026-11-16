@@ -7,7 +7,7 @@
 
 ## Voice-over
 - Voice "Brian" generated with ElevenLabs text-to-speech (https://elevenlabs.io), model eleven_multilingual_v2.
-  Lines: "Something is filling up..." / "Your goals. Finally visible." / "One envelope at a time." / "No account. No bank login." / "Almost full." / "Brimful. Watch your savings fill."
+  Narration (separate from the on-screen text): "It always starts with one coin." / "Shh... not yet." / "That phone. That trip. That someday. Watch it rise." / "Pick an envelope. Drop it in. Repeat." / "No sign-ups. Nothing to link. Just you." / "And then..." / "Brimful. Free to start." / "Your jar is waiting."
   Made on the ElevenLabs FREE plan: check ElevenLabs' current terms before commercial use. The free plan has required
   crediting ElevenLabs and has not included a commercial licence; a paid plan removes both limits.
   Until then, put this in the post caption/description: "Voice: ElevenLabs (elevenlabs.io)".
