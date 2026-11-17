@@ -259,5 +259,5 @@ dialog[open] .sheet{animation:sheet .5s var(--ease)}
 .topact{display:flex;align-items:center;gap:8px}
 .pill.install{cursor:pointer;color:var(--ink);white-space:nowrap}
 .is-app [data-install]{display:none!important}
-.pill.install svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pill.install svg{flex-shrink:0;width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .steps{display:grid;gap:10px;padding-left:1.4em;margin:4px 0 8px}
