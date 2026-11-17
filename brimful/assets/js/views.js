@@ -190,6 +190,9 @@ export function settingsView(app) {
     <section class="panel" aria-labelledby="s-plan"><h2 id="s-plan">${plus ? "Brimful Plus is active" : "You're on Free"}</h2>
       <p class="fine">${plus ? "Thank you for supporting Brimful. Keep your licence key somewhere safe so you can restore Plus on a new device." : l?.status === "pending" ? "We're checking your payment. Plus unlocks as soon as it's confirmed." : "Free includes 2 jars and 1 challenge at a time, with the brass coin colour."}</p>
       <a class="btn ${plus ? "ghost" : "brass"} small" href="#/unlock" data-vars="justify-self:start">${plus ? "Licence details" : l?.status === "pending" ? "Payment status" : "Get Plus · $7 one-time"}</a></section>
+    <section class="panel" aria-labelledby="s-app" data-install><h2 id="s-app">Get the app</h2>
+      <p class="fine">Add Brimful to your home screen so it opens like an app, full screen and offline. Free, no app store.</p>
+      <button class="btn ghost small" type="button" data-act="install" data-vars="justify-self:start">Add to home screen</button></section>
     <section class="panel" aria-labelledby="s-look"><h2 id="s-look">Look and feel</h2>
       <div class="setting"><div><span class="label" id="l-cur">Currency</span><p>Changing this relabels your amounts. It doesn't convert them.</p></div><select class="input" data-vars="width:auto" aria-labelledby="l-cur" data-change="currency">${CURRENCIES.map((c) => `<option${c === st.currency ? " selected" : ""}>${c}</option>`).join("")}</select></div>
       <div class="setting"><span class="label">Theme</span>${seg("theme", [["system", "Auto"], ["light", "Light"], ["dark", "Dark"]], st.theme)}</div>

@@ -5,6 +5,7 @@ import { clink, chime, buzz, confetti, paintGuilloche, applyVars, esc } from "./
 import { fetchStatus } from "./lib/api.js";
 import { challengesView, challengeView, splitView, settingsView, unlockView, installViews } from "./views.js";
 import { togetherView, sharedView, joinView, installTogether } from "./together.js";
+import { setupInstall } from "./install.js";
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const dateLocale = () => undefined;
@@ -271,6 +272,7 @@ const actions = {
 };
 installViews(app, (more) => Object.assign(actions, more));
 installTogether(app, (more) => Object.assign(actions, more));
+Object.assign(actions, setupInstall(app));
 
 document.addEventListener("click", (e) => {
   const el = e.target.closest("[data-act]");

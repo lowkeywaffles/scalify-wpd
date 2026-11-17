@@ -2,6 +2,7 @@
   "name": "Brimful: savings jars",
   "short_name": "Brimful",
   "description": "Fill savings jars and run savings challenges. Works offline, no account.",
+  "id": "/app",
   "start_url": "/app",
   "scope": "/",
   "display": "standalone",
