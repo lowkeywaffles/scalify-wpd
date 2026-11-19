@@ -1,0 +1,4 @@
+Music: original phonk-style track synthesised for this video (no samples).
+Sound effects (CC0, via the bundled sound-effects kit): "Whoosh" by qubodup, Kenney impact and interface sound packs (kenney.nl).
+Voice-over: ElevenLabs (voice "Brian").
+Phone: 3D model built in code, iPhone-15-style proportions, no Apple logo.

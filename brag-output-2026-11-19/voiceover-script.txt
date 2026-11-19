@@ -1,0 +1,5 @@
+HOOK (0-3.4s): "Your money's gone by Friday. Every. Single. Week."
+DROP (3.4s): "Not anymore. This is Brimful."
+BODY: "Name a jar. Drop the money in. Watch the coins stack up. Save with your friends."
+PROOF: "No account. No bank login. Free to start."
+OUTRO: "Link in the caption. Go save something."
