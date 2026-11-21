@@ -74,7 +74,7 @@ export function togetherView(app) {
   return `${hero}
     ${mine.length ? `<section aria-labelledby="tg-mine"><h2 id="tg-mine">Your shared jars</h2><div class="tg-list">${cards}</div></section>` : ""}
     <section class="panel" aria-labelledby="tg-join-h"><h2 id="tg-join-h">Got an invite link?</h2>
-      <form id="tg-paste" novalidate class="view"><div class="field"><label for="tg-link">Paste the link someone sent you</label><input id="tg-link" name="link" class="input" autocomplete="off" spellcheck="false" placeholder="https://brimful.vercel.app/app/#/join/…"><span class="err" data-err="link" role="alert"></span></div>
+      <form id="tg-paste" novalidate class="view"><div class="field"><label for="tg-link">Paste the link someone sent you</label><input id="tg-link" name="link" class="input" autocomplete="off" spellcheck="false" placeholder="https://brimful.tech/app/#/join/…"><span class="err" data-err="link" role="alert"></span></div>
       <button class="btn ghost" type="button" data-act="tg-open-link">Open invite</button></form></section>`;
 }
 

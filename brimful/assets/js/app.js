@@ -339,6 +339,13 @@ if (!app.state.settings.onboarded) {
   app.commit(s);
 }
 syncChrome();
+// Old address: for a few days brimful.vercel.app keeps working. Jars live in this browser's storage and don't follow a person to the new address.
+if (location.hostname === "brimful.vercel.app") {
+  const b = document.createElement("div"); b.className = "moved"; b.setAttribute("role", "region"); b.setAttribute("aria-label", "New address");
+  b.innerHTML = '<p><strong>Brimful has a new home: <a href="https://brimful.tech/app">brimful.tech</a>.</strong> Your jars are saved on this device and don\'t move by themselves. Before you switch, go to Settings → Download a backup, then restore it at brimful.tech. Plus owners can use "Restore Plus" with their key.</p><button type="button" class="btn ghost small" aria-label="Dismiss this message">Got it</button>';
+  b.querySelector("button").addEventListener("click", () => b.remove());
+  document.querySelector(".app")?.insertBefore(b, document.getElementById("view"));
+}
 const boot = () => render();
 if (window.gsap || document.readyState === "complete") boot(); else addEventListener("load", boot, { once: true });
 

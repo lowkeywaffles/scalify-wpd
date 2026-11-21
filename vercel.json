@@ -28,12 +28,12 @@
     },
     {
       "source": "/brimful",
-      "destination": "https://brimful.vercel.app",
+      "destination": "https://brimful.tech",
       "permanent": false
     },
     {
       "source": "/brimful/:path*",
-      "destination": "https://brimful.vercel.app",
+      "destination": "https://brimful.tech",
       "permanent": false
     },
     {

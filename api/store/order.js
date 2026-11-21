@@ -1,7 +1,7 @@
 // POST /api/store/:product/orders      — start a purchase (birr: "I paid", card: get a Whop checkout link)
 // GET  /api/store/:product/orders/:key — licence status for a key (the key is a random UUID only the buyer has)
 import { db } from "../_lib/db.js";
-import { body, cors, handler, ipOf, rateLimit, send, UUID } from "../_lib/http.js";
+import { allowedOrigins, body, cors, handler, ipOf, rateLimit, send, UUID } from "../_lib/http.js";
 import { announceNew } from "../_lib/notify.js";
 import { claimWhopPayment, recheckCardOrder } from "../_lib/orders.js";
 import { isStoreProduct, STORE_PRODUCTS } from "../_lib/products.js";
@@ -60,7 +60,7 @@ export default handler(["GET", "POST"], async (req, res) => {
     const ins = await db("store_orders", { method: "POST", body: { product, method, amount_usd: p.priceUsd(), age_confirmed: true }, prefer: "return=representation" });
     const order = ins.ok ? ins.data?.[0] : null;
     if (!order) return send(res, 500, { error: "Couldn't start the payment. Please try again." });
-    const co = await createCheckout(p.whopPlan(), { brimful_key: order.id }, `${p.returnUrl}?paid=1`);
+    const co = await createCheckout(p.whopPlan(), { brimful_key: order.id }, `${(allowedOrigins().includes(req.headers.origin) ? `${req.headers.origin}/app/#/unlock` : p.returnUrl)}?paid=1`);
     const url = co.data?.purchase_url;
     if (!co.ok || !co.data?.id || typeof url !== "string" || !url.startsWith("https://")) {
       await db(`store_orders?id=eq.${order.id}`, { method: "DELETE", prefer: "return=minimal" });

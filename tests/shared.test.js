@@ -18,7 +18,7 @@ globalThis.fetch = async (url, init = {}) => {
 };
 beforeEach(() => { calls = []; routes = []; });
 
-const BRIM = { origin: "https://brimful.vercel.app" };
+const BRIM = { origin: "https://brimful.tech" };
 const JAR = "11111111-1111-4111-8111-111111111111", ME = "22222222-2222-4222-8222-222222222222", OTHER = "33333333-3333-4333-8333-333333333333";
 const KEY = "3f0c2b1a-9d8e-4c7b-a6f5-0123456789ab", TOKEN = "t".repeat(43), C = "v1.AAAAAAAAAAAAAAAA.BBBBBBBBBBBBBBBBBBBB";
 const sha = (v) => createHash("sha256").update(v).digest("hex");

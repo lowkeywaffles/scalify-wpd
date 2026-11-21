@@ -12,7 +12,7 @@ export const STORE_PRODUCTS = {
     priceUsd: () => Math.round(num("STORE_BRIMFUL_PRICE_USD", 7, 1, 100) * 100) / 100,
     whopPlan: () => process.env.BRIMFUL_WHOP_PLAN_ID || "",
     whopProduct: () => process.env.BRIMFUL_WHOP_PRODUCT_ID || "",
-    returnUrl: "https://brimful.vercel.app/app/#/unlock",
+    returnUrl: "https://brimful.tech/app/#/unlock",
   },
 };
 export const isStoreProduct = (p) => typeof p === "string" && Object.hasOwn(STORE_PRODUCTS, p);
@@ -26,4 +26,4 @@ export const METHOD_LABEL = { telebirr: "Telebirr", boa: "Bank of Abyssinia", wh
 // QuoteRevive's FIRST6 offer: spots are shared between Whop checkout and birr payments.
 export const FIRST6 = { code: "FIRST6", whopPromoId: "promo_IOC4zrQD2TMN" };
 
-export const SITE = "https://scalify-wpd.vercel.app";
+export const SITE = "https://www.scalifywpd.tech";

@@ -1,5 +1,5 @@
 // Brimful service worker: makes the app open offline. Pages are fetched fresh when online; assets are cached.
-const VERSION = "brimful-v6";
+const VERSION = "brimful-v7";
 const CORE = ["/app", "/assets/css/base.css", "/assets/css/app.css", "/assets/js/theme.js", "/assets/js/app.js", "/assets/js/views.js", "/assets/js/share.js",
   "/assets/js/lib/store.js", "/assets/js/lib/money.js", "/assets/js/lib/challenges.js", "/assets/js/lib/fx.js", "/assets/js/lib/api.js", "/assets/js/lib/cloud.js", "/assets/js/lib/together.js", "/assets/js/together.js", "/assets/js/install.js", "/assets/js/lib/jar3d.js", "/assets/js/lib/styles.js",
   "/assets/vendor/gsap.min.js", "/assets/vendor/three.bundle.js", "/assets/img/icon.svg",

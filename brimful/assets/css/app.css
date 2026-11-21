@@ -261,3 +261,4 @@ dialog[open] .sheet{animation:sheet .5s var(--ease)}
 .is-app [data-install]{display:none!important}
 .pill.install svg{flex-shrink:0;width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .steps{display:grid;gap:10px;padding-left:1.4em;margin:4px 0 8px}
+.moved{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;background:var(--brass-soft);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:6px 0 10px}.moved p{margin:0;font-size:14px;line-height:1.4}.moved a{color:var(--jade);font-weight:700}.moved .btn{flex-shrink:0}

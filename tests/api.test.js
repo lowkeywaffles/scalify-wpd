@@ -31,7 +31,7 @@ function res() {
   return { statusCode: 200, headers: h, body: "", setHeader(k, v) { h[k.toLowerCase()] = v; }, end(b) { this.body = b; this.json = b ? JSON.parse(b) : null; } };
 }
 const run = async (mod, r) => { const out = res(); await (await import(mod)).default(r, out); return out; };
-const BRIM = { origin: "https://brimful.vercel.app" };
+const BRIM = { origin: "https://brimful.tech" };
 const SELF = { origin: "https://scalify-wpd.vercel.app" };
 const KEY = "3f0c2b1a-9d8e-4c7b-a6f5-0123456789ab";
 const SB = /yardudilkrhhhhtvgyuh\.supabase\.co\/rest\/v1\//;
@@ -42,7 +42,7 @@ test("product info is public and shows card price when Whop is set up", async ()
   assert.equal(out.statusCode, 200);
   assert.equal(out.json.price_etb, 500);
   assert.deepEqual(out.json.card, { price_usd: 7, provider: "Whop" });
-  assert.equal(out.headers["access-control-allow-origin"], "https://brimful.vercel.app");
+  assert.equal(out.headers["access-control-allow-origin"], "https://brimful.tech");
   assert.equal((await run("../api/store/product.js", req({ query: { product: "nope" } }))).statusCode, 404);
 });
 
@@ -238,4 +238,13 @@ test("Whop store purchase: a receipt number gives exactly one licence key", asyn
   out = await run("../api/store/order.js", req({ method: "POST", query: { product: "brimful" }, headers: BRIM, body: { method: "whop_claim", payment_id: "pay_store1" } }));
   assert.equal(out.json.key, KEY, "claiming again returns the same key, never a second one");
   assert.ok(!calls.some((c) => c.method === "POST" && /store_orders/.test(c.url)));
+});
+
+test("CORS allows the new and old Brimful addresses and nothing else", async () => {
+  for (const origin of ["https://brimful.tech", "https://www.brimful.tech", "https://brimful.vercel.app"]) {
+    const out = await run("../api/store/product.js", req({ query: { product: "brimful" }, headers: { origin } }));
+    assert.equal(out.headers["access-control-allow-origin"], origin);
+  }
+  const bad = await run("../api/store/product.js", req({ query: { product: "brimful" }, headers: { origin: "https://evil.example" } }));
+  assert.equal(bad.headers["access-control-allow-origin"], undefined);
 });

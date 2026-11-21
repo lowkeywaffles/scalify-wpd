@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /app
-Sitemap: https://brimful.vercel.app/sitemap.xml
+Sitemap: https://brimful.tech/sitemap.xml

@@ -85,7 +85,7 @@ PAGES = {
 <tr><td><code>brimful-v…</code> (the number changes with each app version)</td><td>Cache storage (service worker)</td><td>Copies of the app's own files so it opens without internet</td><td>Until a new version replaces it, or you clear site data</td><td>Only this site, on this device</td></tr>
 </tbody></table></div>
 <h2>How to clear it</h2>
-<p>In the app: Settings → "Delete everything on this device". Or in your browser: Settings → Site data → brimful.vercel.app → Clear.</p>
+<p>In the app: Settings → "Delete everything on this device". Or in your browser: Settings → Site data → brimful.tech → Clear.</p>
 <h2>If this changes</h2>
 <p>If we ever add anything that isn't strictly necessary (for example usage statistics), we will ask for your consent first, with "No" as easy as "Yes", and update this page.</p>
 """),
@@ -107,7 +107,7 @@ HEAD = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title} · Brimful</title>
 <meta name="description" content="{title} for Brimful, the savings jar tracker by SCALIFY WPD.">
-<link rel="canonical" href="https://brimful.vercel.app/legal/{slug}">
+<link rel="canonical" href="https://brimful.tech/legal/{slug}">
 <link rel="icon" href="/assets/img/icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/assets/css/base.css">
 <link rel="stylesheet" href="/assets/css/landing.css">

@@ -45,7 +45,7 @@ async function draw(canvas, app, jar, showAmount) {
   g.font = '500 44px "Instrument", sans-serif'; g.fillStyle = "#C6D3CB";
   g.fillText(p >= 1 ? "Brimful. Goal reached." : "of the way there", jx, 1150);
   if (showAmount) { g.font = '500 40px "JBMono", monospace'; g.fillText(`${app.money(S.balance(jar), { short: true })} of ${app.money(jar.target, { short: true })}`, jx, 1215); }
-  g.font = '500 30px "Instrument", sans-serif'; g.fillStyle = "#7F958A"; g.fillText("brimful.vercel.app", jx, 1295);
+  g.font = '500 30px "Instrument", sans-serif'; g.fillStyle = "#7F958A"; g.fillText("brimful.tech", jx, 1295);
 }
 
 export function shareSheet(app, jar) {
