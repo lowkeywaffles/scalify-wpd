@@ -2,13 +2,13 @@
 """Builds the static legal pages from the text below so they share one layout. Run: python3 tools/build-legal.py"""
 import pathlib
 UPDATED = "15 November 2026"
-DRAFT = '<p class="draft"><strong>Plain-language draft.</strong> We wrote this to be honest and readable, but it has not yet been reviewed by a lawyer. If anything is unclear, email skelifywpd@gmail.com.</p>'
+DRAFT = '<p class="draft"><strong>Plain-language draft.</strong> We wrote this to be honest and readable, but it has not yet been reviewed by a lawyer. If anything is unclear, email contact@scalifywpd.tech.</p>'
 PAGES = {
 "privacy": ("Privacy Policy", """
 <h2>The short version</h2>
 <p>Brimful is built so that we know almost nothing about you. Your jars, amounts, notes and history are stored <strong>on your own device</strong>. They are never sent to us in a form we can read: if you turn on the optional cloud backup, your device locks (encrypts) the copy with your recovery code before it is uploaded, and we can't open it. There are no accounts, no analytics, no advertising and no tracking.</p>
 <h2>Who we are</h2>
-<p>Brimful is made and run by SCALIFY WPD, a small team based in Bole, Addis Ababa, Ethiopia (operated by an individual; not yet a registered company). Contact: skelifywpd@gmail.com. We are the "controller" of the small amount of personal data described below.</p>
+<p>Brimful is made and run by SCALIFY WPD, a small team based in Bole, Addis Ababa, Ethiopia (operated by an individual; not yet a registered company). Contact: contact@scalifywpd.tech. We are the "controller" of the small amount of personal data described below.</p>
 <h2>What stays on your device</h2>
 <p>Jar names, targets, dates, deposits and withdrawals, notes, challenges, your split percentages and your settings (currency, theme, motion, sound) are saved in your browser's local storage. If you turn on cloud backup, your recovery code is saved there too, so the app can keep the backup up to date. If you use Save Together, the invite keys and your member secret for each shared jar are saved there as well. We cannot see, copy or recover any of this. If you clear your browser data or lose the device, it is gone unless you downloaded a backup file or turned on cloud backup and kept your recovery code.</p>
 <h2>What we receive, and why</h2>
@@ -58,13 +58,13 @@ PAGES = {
 <h2>9. Changes and law</h2>
 <p>We may update these terms; the date above will change and important changes will be announced in the app. These terms are governed by the laws of Ethiopia. If you live elsewhere, you keep any protections your local consumer law gives you.</p>
 <h2>10. Contact</h2>
-<p>SCALIFY WPD, Bole, Addis Ababa, Ethiopia. skelifywpd@gmail.com</p>
+<p>SCALIFY WPD, Bole, Addis Ababa, Ethiopia. contact@scalifywpd.tech</p>
 """),
 "refund": ("Refund Policy", """
 <h2>14 days, full refund</h2>
 <p>If Brimful Plus isn't for you, ask for a refund within <strong>14 days</strong> of paying. You don't need to give a reason.</p>
 <h2>How to ask</h2>
-<p>Email <strong>skelifywpd@gmail.com</strong> with your licence key (Settings → Licence details), your transaction ID, or your Whop receipt. A parent or guardian can ask on a child's behalf.</p>
+<p>Email <strong>contact@scalifywpd.tech</strong> with your licence key (Settings → Licence details), your transaction ID, or your Whop receipt. A parent or guardian can ask on a child's behalf.</p>
 <h2>How you get the money back</h2>
 <p><strong>Birr payments:</strong> we send the <strong>full amount you paid</strong> back to the same Telebirr number or bank account within 5 business days of your request. If Telebirr or the bank charges a fee for sending the refund, we pay it.</p>
 <p><strong>Card payments:</strong> we refund the full amount through Whop to the card you used, within 5 business days of your request. Your bank then usually takes 5 to 10 business days to show it.</p>
@@ -97,7 +97,7 @@ PAGES = {
 <h2>Known limits</h2>
 <ul><li>We test with automated tools, by keyboard, and on a slowed-down phone profile; we have not yet tested with a screen reader on a real phone (TalkBack or VoiceOver).</li><li>The app is in English only for now.</li></ul>
 <h2>Tell us</h2>
-<p>If something gets in your way, email <strong>skelifywpd@gmail.com</strong> and tell us what you were trying to do and on which device. We aim to reply within 5 business days.</p>
+<p>If something gets in your way, email <strong>contact@scalifywpd.tech</strong> and tell us what you were trying to do and on which device. We aim to reply within 5 business days.</p>
 """),
 }
 HEAD = """<!doctype html>
@@ -122,7 +122,7 @@ HEAD = """<!doctype html>
 {draft}
 {body}
 </main>
-<footer class="foot"><div class="wrap"><nav aria-label="Legal"><a href="/legal/privacy">Privacy</a><a href="/legal/terms">Terms</a><a href="/legal/refund">Refunds</a><a href="/legal/cookies">Storage &amp; cookies</a><a href="/legal/accessibility">Accessibility</a></nav><p class="fine">SCALIFY WPD, Bole, Addis Ababa, Ethiopia · skelifywpd@gmail.com</p></div></footer>
+<footer class="foot"><div class="wrap"><nav aria-label="Legal"><a href="/legal/privacy">Privacy</a><a href="/legal/terms">Terms</a><a href="/legal/refund">Refunds</a><a href="/legal/cookies">Storage &amp; cookies</a><a href="/legal/accessibility">Accessibility</a></nav><p class="fine">SCALIFY WPD, Bole, Addis Ababa, Ethiopia · contact@scalifywpd.tech</p></div></footer>
 </body>
 </html>
 """

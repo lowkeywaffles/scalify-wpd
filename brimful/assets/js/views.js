@@ -207,7 +207,7 @@ export function settingsView(app) {
     <section class="panel" aria-labelledby="s-about"><h2 id="s-about">About</h2>
       <p class="fine">Brimful is a tracker. It doesn't hold, move or invest money, and nothing here is financial advice. Made by SCALIFY WPD, Addis Ababa.</p>
       <nav class="legal" aria-label="Legal"><a href="/legal/privacy">Privacy</a><a href="/legal/terms">Terms</a><a href="/legal/refund">Refunds</a><a href="/legal/cookies">Storage &amp; cookies</a><a href="/legal/accessibility">Accessibility</a></nav>
-      <p class="fine">Version 1.0 · Help: skelifywpd@gmail.com</p></section>`;
+      <p class="fine">Version 1.0 · Help: contact@scalifywpd.tech</p></section>`;
 }
 
 /* ---------- Unlock (Brimful Plus) ---------- */
@@ -219,7 +219,7 @@ export function unlockView(app) {
   const keyBox = l ? `<div class="field"><span class="label">Your licence key</span><div class="key" id="lic-key">${esc(l.key)}</div><button class="btn ghost small" type="button" data-act="copy-key" data-vars="justify-self:start">Copy key</button><span class="hint">Save this somewhere safe. It restores Plus on another device or after clearing your browser. Cloud backup (in Settings) keeps it for you too.</span></div>` : "";
   if (status === "active") return `<a class="back" href="#/settings">← Settings</a><h1 tabindex="-1">Brimful Plus</h1>
     <div class="plus-hero"><svg class="rosette" data-guilloche="9,4,6,4" aria-hidden="true"></svg><h2>Plus is active</h2>${perks}</div>
-    <section class="panel">${keyBox}<p class="fine">Refunds: within 14 days of paying, email skelifywpd@gmail.com with this key. See the <a href="/legal/refund">refund policy</a>.</p></section>`;
+    <section class="panel">${keyBox}<p class="fine">Refunds: within 14 days of paying, email contact@scalifywpd.tech with this key. See the <a href="/legal/refund">refund policy</a>.</p></section>`;
   if (status === "pending") {
     const card = l.method === "whop";
     return `<a class="back" href="#/settings">← Settings</a><h1 tabindex="-1">${card ? "Finishing your card payment" : "Checking your payment"}</h1>
@@ -231,7 +231,7 @@ export function unlockView(app) {
   return `<a class="back" href="#/settings">← Settings</a><h1 tabindex="-1">Brimful Plus</h1>
     <div class="plus-hero"><svg class="rosette" data-guilloche="9,4,6,4" aria-hidden="true"></svg>
       <span class="price num" id="price">…</span><h2>Pay once. Keep it.</h2>${perks}</div>
-    ${status === "rejected" ? `<p class="note bad">We couldn't confirm your last payment${l.note ? `: ${esc(l.note)}` : "."} You can send the details again below, or email skelifywpd@gmail.com.</p>` : ""}
+    ${status === "rejected" ? `<p class="note bad">We couldn't confirm your last payment${l.note ? `: ${esc(l.note)}` : "."} You can send the details again below, or email contact@scalifywpd.tech.</p>` : ""}
     ${status === "refunded" ? `<p class="note warn">Your earlier purchase was refunded, so this device is back on Free. Your jars are all still here.</p>` : ""}
     <section class="panel" id="paypanel" aria-labelledby="pay-h"><h2 id="pay-h">How to pay</h2><p class="fine" id="pay-load">Loading payment details…</p></section>
     <section class="panel" aria-labelledby="res-h"><h2 id="res-h">Already bought it?</h2>
@@ -442,7 +442,7 @@ export function installViews(app, register) {
       if (method === "whop" && /^https:\/\/([a-z0-9-]+\.)*whop\.com\//.test(r.body.checkout_url || "")) { location.assign(r.body.checkout_url); return; }
       app.render();
     },
-    "cancel-card": () => app.sheet(`<h2 id="dlg-title">Choose another way to pay?</h2><p>Only do this if you didn't finish paying on Whop. If you did pay, press Check now instead, or email skelifywpd@gmail.com with your licence key.</p><div class="row"><button type="button" class="btn ghost" data-close>Go back</button><button class="btn">Choose again</button></div>`,
+    "cancel-card": () => app.sheet(`<h2 id="dlg-title">Choose another way to pay?</h2><p>Only do this if you didn't finish paying on Whop. If you did pay, press Check now instead, or email contact@scalifywpd.tech with your licence key.</p><div class="row"><button type="button" class="btn ghost" data-close>Go back</button><button class="btn">Choose again</button></div>`,
       () => { const s = structuredClone(app.state); s.license = null; app.commit(s); app.render(); }),
     "check-pay": () => checkLicence(app, false),
 

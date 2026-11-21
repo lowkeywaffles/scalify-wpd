@@ -33,7 +33,7 @@ We help small businesses show up online and work smarter:
 4. **Launch:** we publish, hand over, and show you how to manage it.
 
 **Contact**
-- Email: skelifywpd@gmail.com
+- Email: contact@scalifywpd.tech
 - WhatsApp / phone: +251 969 803 580
 - TikTok & Instagram: @scalifywpd
 - All products: https://scalify-wpd.vercel.app/products
