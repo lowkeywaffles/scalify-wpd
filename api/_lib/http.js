@@ -1,10 +1,10 @@
 // Small helpers shared by the Scalify API functions. No dependencies.
 
 export function send(res, status, body, headers = {}) {
-  for (const [k, v] of Object.entries(headers)) res.setHeader(k, v);
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("X-Content-Type-Options", "nosniff");
+  for (const [k, v] of Object.entries(headers)) res.setHeader(k, v); // callers may override the defaults above (e.g. caching)
   res.statusCode = status;
   res.end(status === 204 ? "" : JSON.stringify(body ?? {}));
 }

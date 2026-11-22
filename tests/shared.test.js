@@ -124,3 +124,16 @@ test("live sync returns only ciphertext and changes since the cursor", async () 
   assert.equal(out.json.entries[0].data, C);
   assert.match(calls.find((c) => /shared_entries\?select=id,member_id/.test(c.url)).url, /changed_at=gt\./);
 });
+
+test("any member can change their own name (profile), and only their own", async () => {
+  jarExists(); meIs(false);
+  on("PATCH", /shared_members\?id=eq\./, { status: 204 });
+  on("PATCH", /shared_jars\?id=eq\./, { status: 204 });
+  let out = await run(req({ method: "PATCH", query: { id: JAR }, body: { profile: C }, headers: asMe }));
+  assert.equal(out.statusCode, 200);
+  const p = calls.find((c) => c.method === "PATCH" && /shared_members/.test(c.url));
+  assert.match(p.url, new RegExp(`id=eq\\.${ME}$`), "updates the caller's own row");
+  assert.deepEqual(p.body, { profile: C });
+  out = await run(req({ method: "PATCH", query: { id: JAR }, body: { profile: "not cipher" }, headers: asMe }));
+  assert.equal(out.statusCode, 400);
+});

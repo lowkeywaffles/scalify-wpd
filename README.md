@@ -31,6 +31,7 @@ You add these yourself as **Sensitive** variables (never paste them into a chat)
 | `SUPABASE_SERVICE_ROLE_KEY` | Same value as in the QuoteRevive project (or Supabase → Project Settings → API keys → secret key) |
 | `WHOP_API_KEY` | Same value as in the QuoteRevive project |
 | `TELEGRAM_BOT_TOKEN` | Telegram → @BotFather → /newbot. Then open /admin → Telegram alerts → Link Telegram |
+| `INSTAGRAM_TOKEN` | Optional, for the "Latest on Instagram" homepage section. Meta app → Use cases → Instagram API → API setup with Unified login → Generate access tokens (starts with `EAA`). Check its expiry under the configuration's Preview and replace it before then. Without it the section stays hidden |
 
 Optional: `CRON_SECRET` (protects the daily cleanup job), `STORE_BRIMFUL_PRICE_ETB` (default 500), `STORE_BRIMFUL_PRICE_USD` (default 7; also change the Whop plan).
 

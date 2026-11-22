@@ -1,0 +1,51 @@
+[
+ {
+  "line": "Bet you never scroll to the bottom of a website...",
+  "start": 0.05,
+  "dur": 2.16,
+  "window": 2.2,
+  "speed": 1.2
+ },
+ {
+  "line": "so we hid something there.",
+  "start": 2.3,
+  "dur": 1.23,
+  "window": 1.45,
+  "speed": 1.1
+ },
+ {
+  "line": "Keep watching. Almost there...",
+  "start": 4.0,
+  "dur": 1.61,
+  "window": 3.3,
+  "speed": 1.1
+ },
+ {
+  "line": "Plot twist: it's our Instagram.",
+  "start": 7.9,
+  "dur": 1.73,
+  "window": 1.8,
+  "speed": 1.1
+ },
+ {
+  "line": "No Meta trackers. It loads straight from our own site.",
+  "start": 9.75,
+  "dur": 2.65,
+  "window": 2.7,
+  "speed": 1.2
+ },
+ {
+  "line": "Oh, and... light or dark. Your call.",
+  "start": 12.55,
+  "dur": 2.04,
+  "window": 2.65,
+  "speed": 1.1
+ },
+ {
+  "line": "Want this on your site? DM us.",
+  "start": 15.45,
+  "dur": 1.84,
+  "window": 2.75,
+  "speed": 1.1
+ }
+]

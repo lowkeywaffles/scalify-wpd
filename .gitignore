@@ -3,3 +3,9 @@ node_modules/
 .env
 brag-output/work/
 brag-output-*/work/
+marketing/reels/*/music.mp3
+marketing/reels/*/audio.wav
+marketing/reels/*/video_noaudio.mp4
+marketing/reels/*/stills/
+marketing/reels/*/render.log
+marketing/reels/*/vo.wav

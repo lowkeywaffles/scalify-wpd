@@ -1,0 +1,171 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+/* SCALIFY WPD reel: "Your website should show your latest posts" (1080x1920, 18.5 s). Rendered with the Brimful teaser engine. */
+:root{--bg:#0E0F12;--ink:#F4F3EE;--muted:#A8ADB7;--accent:#C6FF3D;--line:#2A2E37}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:'Inter Display',Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+#bg{position:absolute;inset:0;background-image:linear-gradient(rgba(244,243,238,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(244,243,238,.05) 1px,transparent 1px);background-size:60px 60px}
+.glow{position:absolute;left:0;top:0;border-radius:50%;filter:blur(110px)}
+#cam{position:absolute;inset:0}
+#world,#props{position:absolute;inset:0}
+.scene{position:absolute;inset:0}
+#fx{position:absolute;inset:0;pointer-events:none}
+.kline{position:absolute;display:flex;justify-content:center;align-items:baseline;gap:.26em;font-weight:800;letter-spacing:-.035em;line-height:1.08;white-space:nowrap}
+.kw{display:inline-block;transform-origin:50% 80%}
+.accent{color:var(--accent)} .muted{color:var(--muted);font-weight:600}
+#cursor{position:absolute;inset:0;pointer-events:none}
+.ptr{position:absolute;left:-6px;top:-4px;transform-origin:6px 4px;filter:drop-shadow(0 10px 10px rgba(0,0,0,.45))}
+.tail{position:absolute;left:0;top:0;overflow:visible}
+.ripple{position:absolute;left:0;top:0;width:120px;height:120px;border-radius:50%;border:4px solid var(--accent);opacity:0}
+#guides{display:none;position:absolute;left:120px;top:270px;width:720px;height:978px;outline:3px dashed #00C2FF;z-index:99}
+.guides #guides{display:block}
+.abs{position:absolute;left:0;top:0}
+.phone{position:absolute;left:0;top:0;width:592px;height:1244px;border-radius:72px;padding:16px;background:#1B1D22;border:2px solid #3A3D45;box-shadow:0 80px 120px -40px rgba(0,0,0,.8),0 0 0 6px rgba(198,255,61,.08);transform-origin:296px 0}
+.screen{position:relative;width:560px;height:1212px;border-radius:56px;overflow:hidden;background:#0E0F12}
+.screen img{position:absolute;left:0;top:0;width:560px;display:block}
+.chip{font:700 34px/1 'Inter Display',Inter,sans-serif;letter-spacing:.02em;border-radius:99px;padding:22px 34px;display:inline-flex;align-items:center;gap:14px;background:var(--accent);color:#0E0F12;white-space:nowrap}
+</style></head><body>
+<div id="stage"><div id="bg"></div><div id="cam"><div id="props"></div><div id="world"></div></div>
+<canvas id="fx" width="1080" height="1920"></canvas><div id="guides"></div></div>
+<script src="../../../brimful/marketing/teaser/engine.js"></script>
+<script>
+const K = 560 / 780;                       // screenshot px (390 css @2x) -> film px
+const SCROLL = (8685.48 - 114.19 - 8) * 2 * K; // scroll so "Latest on Instagram" sits under the header
+const PH = { x: 184, y: 480 };             // phone top-left
+const TOGGLE = { x: PH.x + 18 + 696 * K, y: PH.y + 18 + 64 * K }; // theme button inside the screen
+
+async function BUILD(){
+  const {P,env,ease,line,fit,reveal,hideOut,scene,cue,burst,CUR,h,css,tf,clamp,lerp} = E;
+  const S = {};
+  const img = async (src, parent) => { const i = h('img', {src}, parent); await i.decode(); return i; };
+  const T = { phoneIn: 3.75, scroll: 4.45, land: 7.45, twist: 8.05, out: 15.3 };
+
+  /* background glows */
+  const bg = document.getElementById('bg');
+  const g1 = h('div',{class:'glow',style:{width:'820px',height:'820px',background:'rgba(198,255,61,.16)'}},bg);
+  const g2 = h('div',{class:'glow',style:{width:'700px',height:'700px',background:'rgba(11,95,255,.14)'}},bg);
+  E.FILM.update.push(t => {
+    tf(g1,`translate(${-160+Math.sin(t*.5)*120}px, ${-140+Math.cos(t*.4)*120}px)`);
+    tf(g2,`translate(${520+Math.cos(t*.45)*120}px, ${1180+Math.sin(t*.6)*140}px)`);
+  });
+
+  /* the phone: real screenshots of scalify's site (dark, then light) */
+  const props = document.getElementById('props');
+  S.phone = h('div',{class:'phone'},props);
+  const scr = h('div',{class:'screen'},S.phone);
+  S.full = await img('shots/dark-full.png', scr);
+  S.ig = await img('shots/dark-ig.png', scr);
+  S.hdr = await img('shots/dark-header.png', scr); // stays sharp above the blurred feed
+  S.light = await img('shots/light-ig.png', scr);
+  // frosted cover over the feed until the twist
+  S.cover = h('div',{class:'abs',style:{left:'0',top:'150px',width:'560px',height:'1062px',background:'linear-gradient(160deg,rgba(244,243,238,.16),rgba(244,243,238,.04) 50%,rgba(198,255,61,.10))',borderTop:'2px solid rgba(255,255,255,.35)',display:'grid',placeItems:'center'}},scr);
+  h('div',{style:{font:'800 150px/1 "Inter Display",sans-serif',color:'rgba(244,243,238,.85)'},text:'?'},S.cover);
+  E.FILM.update.push(t => {
+    const inP = P(t,T.phoneIn,.8,x=>ease.spring(x,6,1.1)), out = P(t,T.out,.55,ease.inCubic);
+    const zoom = lerp(1, 1.08, P(t,9.2,.7,ease.inOutCubic)) - .08*P(t,12.1,.6,ease.inOutCubic);
+    S.phone.style.opacity = clamp(P(t,T.phoneIn,.2)) * (1-out);
+    tf(S.phone,`translate(${PH.x}px, ${PH.y + (1-inP)*520 + out*380 + Math.sin(t*1.1)*6}px) rotate(${(1-inP)*6 + Math.sin(t*.7)*.4}deg) scale(${zoom})`);
+    tf(S.full,`translateY(${-P(t,T.scroll,3.0,ease.inOutCubic)*SCROLL}px)`);
+    const atIg = t >= T.land - .1;
+    S.full.style.display = atIg ? 'none' : 'block';
+    S.ig.style.display = atIg ? 'block' : 'none';
+    // the feed stays blurred under the cover until the twist, then sharpens as the cover slides away
+    const rv = P(t,T.twist,.55,ease.inOutCubic);
+    S.ig.style.filter = rv < 1 ? `blur(${(1-rv)*22}px)` : 'none';
+    S.cover.style.opacity = clamp(P(t,T.land-.25,.3)) * (1-rv);
+    tf(S.cover,`translateY(${rv*1100}px)`);
+    S.light.style.opacity = P(t,13.72,.3,ease.inOutCubic);
+  });
+
+  /* 1. HOOK 0 – 3.75: open a question */
+  scene('hook',0,3.75,root=>{
+    S.h1 = line(root,[{w:'Bet',cls:'muted'},{w:'you',cls:'muted'},{w:'never',cls:'muted'},{w:'scroll',cls:'muted'}],{y:600,size:100}); fit(S.h1);
+    S.h2 = line(root,['to','the',{w:'bottom',accent:true}],{y:740,size:124}); fit(S.h2);
+    S.h3 = line(root,['of','a','website…'],{y:880,size:110}); fit(S.h3);
+    S.h4 = line(root,[{w:'…so',cls:'muted'},{w:'we',cls:'muted'},{w:'hid',cls:'muted'}],{y:680,size:104}); fit(S.h4);
+    S.h5 = line(root,['something',{w:'there.',accent:true}],{y:830,size:118}); fit(S.h5);
+    S.eyes = h('div',{class:'abs ess',style:{fontSize:'120px',lineHeight:'1'},text:'👀'},root);
+    cue(.1,'whoosh'); cue(1.0,'pop'); cue(2.3,'whoosh'); cue(3.1,'pop');
+  }, lt=>{
+    reveal(S.h1,lt,.1); reveal(S.h2,lt,.5,{dist:90}); reveal(S.h3,lt,.95);
+    if (lt>2.0){ hideOut(S.h1,lt,2.0); hideOut(S.h2,lt,2.0); hideOut(S.h3,lt,2.0); }
+    const on2 = lt>2.25; S.h4.box.style.display = S.h5.box.style.display = on2 ? 'flex' : 'none';
+    reveal(S.h4,lt,2.25); reveal(S.h5,lt,2.6,{dist:90});
+    const e = P(lt,3.0,.5,x=>ease.spring(x,6,1.3));
+    S.eyes.style.opacity = clamp(P(lt,3.0,.15)) * (1-P(lt,3.45,.25));
+    tf(S.eyes,`translate(420px, ${940+(1-clamp(e))*50}px) scale(${Math.max(.001,e)})`);
+    if (lt>3.45){ hideOut(S.h4,lt,3.45); hideOut(S.h5,lt,3.45); }
+  });
+
+  /* 2. SCROLL 3.75 – 7.75: the phone races down the real site, a depth counter ticks up */
+  scene('scroll',3.75,7.75,root=>{
+    S.s1 = line(root,['Keep',{w:'watching.',accent:true}],{y:362,size:80}); fit(S.s1);
+    S.depth = h('div',{class:'abs ess',style:{font:'700 30px/1 ui-monospace,"DejaVu Sans Mono",monospace',color:'#C6FF3D',background:'rgba(198,255,61,.12)',border:'2px solid rgba(198,255,61,.45)',borderRadius:'99px',padding:'10px 20px',whiteSpace:'nowrap'}},root);
+    cue(4.45,'whoosh'); cue(5.5,'tick'); cue(6.5,'tick');
+  }, (lt,t)=>{
+    reveal(S.s1,lt,.15);
+    const px = Math.round(P(t,T.scroll,3.0,ease.inOutCubic) * 8563);
+    S.depth.textContent = `↓ ${px.toLocaleString('en')} px scrolled`;
+    S.depth.style.opacity = clamp(P(lt,.5,.3));
+    tf(S.depth,`translate(${480 - S.depth.offsetWidth/2}px, 418px)`);
+    if (lt>3.55){ hideOut(S.s1,lt,3.55); S.depth.style.opacity = 1-P(lt,3.55,.25); }
+  });
+
+  /* 3. TWIST 7.75 – 9.6 */
+  scene('twist',7.75,9.6,root=>{
+    S.w1 = line(root,[{w:'Plot',cls:'muted'},{w:'twist:',cls:'muted'}],{y:330,size:72}); fit(S.w1);
+    S.w2 = line(root,["it's",'our',{w:'Instagram.',accent:true}],{y:420,size:84}); fit(S.w2);
+    cue(8.05,'impact'); cue(8.1,'shimmer');
+    burst({t:8.1,x:480,y:780,kind:'spark',n:34,speed:640,size:9,life:.9,color:['#C6FF3D','#FFFFFF','#7FB0FF'],seed:5});
+  }, lt=>{
+    reveal(S.w1,lt,.0,{dist:40}); reveal(S.w2,lt,.35,{dist:80});
+    if (lt>1.55){ hideOut(S.w1,lt,1.55); hideOut(S.w2,lt,1.55); }
+  });
+
+  /* 4. PRIVATE 9.6 – 12.5 */
+  scene('private',9.6,12.5,root=>{
+    S.p1 = line(root,['No','Meta',{w:'trackers.',accent:true}],{y:380,size:84}); fit(S.p1);
+    S.p2 = line(root,['Loads','from','your',{w:'own',accent:true},{w:'site.',accent:true}],{y:380,size:84}); fit(S.p2);
+    cue(9.7,'whoosh'); cue(11.1,'whoosh');
+  }, lt=>{
+    reveal(S.p1,lt,.1); if (lt>1.25) hideOut(S.p1,lt,1.25);
+    S.p2.box.style.display = lt>1.5 ? 'flex' : 'none'; reveal(S.p2,lt,1.5);
+    if (lt>2.6) hideOut(S.p2,lt,2.6);
+  });
+
+  /* 5. THEME 12.5 – 15.3 */
+  scene('theme',12.5,15.3,root=>{
+    S.t0 = line(root,[{w:'Oh,',cls:'muted'},{w:'and…',cls:'muted'}],{y:380,size:84}); fit(S.t0);
+    S.t1 = line(root,['Light','or',{w:'dark.',accent:true}],{y:380,size:92}); fit(S.t1);
+    cue(13.72,'click');
+  }, lt=>{
+    reveal(S.t0,lt,.05); if (lt>.95) hideOut(S.t0,lt,.95);
+    S.t1.box.style.display = lt>1.2 ? 'flex' : 'none'; reveal(S.t1,lt,1.2);
+    if (lt>2.5) hideOut(S.t1,lt,2.5);
+  });
+
+  /* 6. END 15.3 – 18.5 */
+  scene('end',15.3,18.5,root=>{
+    S.logo = h('div',{class:'abs ess',html:'<svg width="200" height="200" viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#C6FF3D"/><path d="M32 15H20a5 5 0 0 0 0 10h8a5 5 0 0 1 0 10H16" fill="none" stroke="#0E0F12" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>'},root);
+    S.e1 = line(root,['Want','this','on'],{y:790,size:104}); fit(S.e1);
+    S.e2 = line(root,['your',{w:'site?',accent:true}],{y:920,size:118}); fit(S.e2);
+    S.cta = h('div',{class:'abs chip ess',text:'DM @scalifywpd'},root);
+    cue(15.4,'swoosh'); cue(16.5,'pop');
+  }, lt=>{
+    const l = P(lt,.1,.7,x=>ease.spring(x,6,1.2));
+    S.logo.style.opacity = clamp(P(lt,.1,.2)); tf(S.logo,`translate(380px, ${470+(1-clamp(l))*60}px) scale(${Math.max(.001,l)})`);
+    reveal(S.e1,lt,.45); reveal(S.e2,lt,.75,{dist:90});
+    const c = P(lt,1.2,.6,x=>ease.spring(x,6,1.2));
+    S.cta.style.opacity = clamp(P(lt,1.2,.2));
+    tf(S.cta,`translate(${480 - S.cta.offsetWidth/2}px, 1040px) scale(${Math.max(.001,c)})`);
+  });
+
+  /* pointer taps the light/dark button */
+  CUR.keys = [{t:12.9,x:820,y:1100},{t:13.65,x:TOGGLE.x,y:TOGGLE.y,bend:.2},{t:14.3,x:TOGGLE.x,y:TOGGLE.y},{t:15.0,x:1120,y:900,bend:-.15}];
+  CUR.taps = [13.7];
+  CUR.vis = [[12.9,15.0]];
+  CUR.tailColor = '#C6FF3D';
+  E.init();
+}
+Promise.all(['800 100px "Inter Display"','600 100px "Inter Display"'].map(f=>document.fonts.load(f))).then(async()=>{await BUILD();window.READY=true;seek(0);});
+</script></body></html>

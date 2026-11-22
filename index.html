@@ -275,6 +275,11 @@ main{position:relative;z-index:1}
   .ccs .cc-capstage{height:150px;margin-top:0}
   .ccs .cc-caps strong{font-size:21px}
 }
+.ig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;list-style:none;margin:24px 0 0;padding:0}
+.ig-grid a{display:block;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1px solid var(--card-line);background:var(--card)}
+.ig-grid img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s}
+.ig-grid a:hover img{transform:scale(1.04)}
+@media (prefers-reduced-motion:reduce){.ig-grid img{transition:none}.ig-grid a:hover img{transform:none}}
 </style>
 </head>
 <body>
@@ -424,6 +429,12 @@ SCALIFY <small>WPD</small></a>
 <p class="sub">SCALIFY WPD (Web Production &amp; Design) is a team of web designers, developers and media creators. We’re a team of 3 founders based in Bole, Addis Ababa, Ethiopia. Our team includes a cybersecurity specialist, so security is part of how we build from day one.</p>
 </div></section>
 
+<section id="instagram" aria-labelledby="ig-h" hidden><div class="wrap">
+<h2 id="ig-h">Latest on Instagram</h2>
+<p class="sub">Recent posts from <a href="https://www.instagram.com/scalifywpd" rel="noopener noreferrer">@scalifywpd</a>. Each post opens on Instagram.</p>
+<ul class="ig-grid"></ul>
+</div></section>
+
 <section id="contact" class="alt-bg contact"><div class="wrap">
 <h2>Let’s talk</h2>
 <p class="sub">Email us a short description of your project, or call us. We reply to enquiries by email.</p>
@@ -435,17 +446,18 @@ SCALIFY <small>WPD</small></a>
 
 <section id="legal"><div class="wrap">
 <h2>Legal</h2>
-<p class="note">Plain-language policies for this site. Highlighted items are details we must confirm. Last updated: <span class="tbd">4 November 2026</span>.</p>
+<p class="note">Plain-language policies for this site. Highlighted items are details we must confirm. Last updated: <span class="tbd">22 November 2026</span>.</p>
 <details><summary>Privacy policy</summary><div>
 <h3>Who we are</h3><p>SCALIFY WPD, Bole, Addis Ababa, Ethiopia, contact@scalifywpd.tech, 0969803580.</p>
 <h3>What this website collects</h3><p>This website has no forms, accounts, analytics, advertising or tracking tools, and it loads no third-party scripts or fonts. (Our animations use the GSAP library, which we host on this site ourselves, so your browser does not contact any other company for it.) We do not collect personal data through the site itself. Like any website, the hosting provider may log technical data such as IP address and browser type for security and operations.</p>
+<h3>Our Instagram posts</h3><p>The homepage shows our latest public Instagram posts. Our server fetches them from Meta (the company behind Instagram) using our own account’s access, and the pictures are shown from this website, so your browser does not contact Instagram and we send Meta no information about you. If you click a post, you leave this site for Instagram, where Meta’s own privacy policy applies.</p>
 <h3>If you email or call us</h3><p>We receive what you send (for example your name, email address and project details). We use it only to reply, prepare a quote and deliver work you ask for. Legal basis: your request and our contract with you. We keep it for <span class="tbd">12 months after our last contact</span>, and do not sell it or share it except with service providers needed to do the work or where law requires.</p>
 <h3>Your rights</h3><p>You can ask to see, correct or delete your data, or object to our use of it, by emailing us. You may also complain to the data-protection authority that applies to you.</p>
 </div></details>
 <details><summary>Terms and conditions</summary><div>
 <h3>Using this site</h3><p>This site gives general information about our services. It is not a binding offer. Work starts only after we both accept a written quote or contract.</p>
 <h3>Prices</h3><p>No prices are listed here. Every quote states the full price, what is included and any third-party costs (such as domains or hosting) before you agree. We do not add charges that are not in the quote. We accept payment by Telebirr or bank transfer.</p>
-<h3>Ownership</h3><p>The content and design of this site belong to SCALIFY WPD. Ownership of delivered work is set out in each project contract. <span class="tbd">Ownership transfers to you once the project is paid in full.</span></p>
+<h3>Ownership</h3><p>The content and design of this site belong to SCALIFY WPD. Ownership of delivered work is set out in each project contract. <span class="tbd">Ownership transfers to you once the project is paid in full.</span> Instagram is a trademark of Meta Platforms, Inc. We are not affiliated with or endorsed by Meta.</p>
 <h3>Liability and law</h3><p>We do our best to keep this site accurate but do not guarantee it is error-free. Nothing here limits rights you have under law. Governing law and courts: the laws of Ethiopia.</p>
 </div></details>
 <details><summary>Cookie policy</summary><div>
@@ -667,6 +679,24 @@ addEventListener('scroll',kick,{passive:true});kick();
 // pointer tilt on the product card (desktop only)
 var pr=d.querySelector('.product');
 if(pr&&matchMedia('(pointer:fine)').matches){pr.addEventListener('pointermove',function(e){var b=pr.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;pr.style.transform='perspective(900px) rotateY('+(x*8)+'deg) rotateX('+(-y*8)+'deg)'});pr.addEventListener('pointerleave',function(){pr.style.transform=''})}
+})();
+</script>
+<script>
+(function(){
+var s=document.getElementById('instagram'),ul=s.querySelector('.ig-grid');
+fetch('/api/instagram').then(function(r){return r.ok?r.json():null}).then(function(d){
+if(!d||!d.posts||!d.posts.length)return;
+d.posts.forEach(function(p){
+var li=document.createElement('li'),a=document.createElement('a'),img=document.createElement('img'),t=new Date(p.time);
+var when=isNaN(t)?'':t.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+', ';
+a.href=p.permalink;a.rel='noopener noreferrer';
+img.src=p.image;img.loading='lazy';img.decoding='async';img.width=300;img.height=400;
+img.alt=(p.type==='video'?'Video: ':'')+(p.caption||'Instagram post')+' ('+when+'opens on Instagram)';
+img.onerror=function(){li.remove();if(!ul.children.length)s.hidden=true;};
+a.appendChild(img);li.appendChild(a);ul.appendChild(li);
+});
+s.hidden=false;
+}).catch(function(){});
 })();
 </script>
 </body>

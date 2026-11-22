@@ -248,3 +248,32 @@ test("CORS allows the new and old Brimful addresses and nothing else", async () 
   const bad = await run("../api/store/product.js", req({ query: { product: "brimful" }, headers: { origin: "https://evil.example" } }));
   assert.equal(bad.headers["access-control-allow-origin"], undefined);
 });
+
+/* ---------- instagram ---------- */
+test("instagram: hidden without a token, then serves only our own posts and their pictures", async () => {
+  delete process.env.INSTAGRAM_TOKEN;
+  assert.equal((await run("../api/instagram.js", req())).statusCode, 503);
+  process.env.INSTAGRAM_TOKEN = "EAA_test";
+  on("GET", /graph\.facebook\.com\/v27\.0\/17841454007613579\/media/, { json: { data: [
+    { id: "111", media_type: "VIDEO", caption: "First line\nsecond", permalink: "https://www.instagram.com/reel/A/", timestamp: "2026-11-22T08:52:13+0000", thumbnail_url: "https://x.cdninstagram.com/a.jpg" },
+    { id: "222", media_type: "IMAGE", permalink: "https://www.instagram.com/p/B/", media_url: "https://x.cdninstagram.com/b.svg" },
+    { id: "333", media_type: "IMAGE", permalink: "https://evil.example/", media_url: "https://x.cdninstagram.com/c.jpg" },
+    { id: "18181438912435598", media_type: "IMAGE", permalink: "https://www.instagram.com/p/C/", media_url: "https://x.cdninstagram.com/d.jpg" },
+  ] } });
+  on("GET", /a\.jpg$/, { json: "jpegbytes", headers: { "content-type": "image/jpeg" } });
+  on("GET", /b\.svg$/, { json: "<svg/>", headers: { "content-type": "image/svg+xml" } });
+  let out = await run("../api/instagram.js", req());
+  assert.equal(out.statusCode, 200);
+  assert.equal(calls[0].headers.Authorization, "Bearer EAA_test");
+  assert.match(out.headers["cache-control"], /^public/);
+  assert.deepEqual(out.json.posts.map((p) => p.id), ["111", "222"], "bad permalink and hidden post dropped");
+  assert.equal(out.json.posts[0].caption, "First line");
+  assert.equal(out.json.posts[0].image, "/api/instagram?img=111");
+  assert.ok(!JSON.stringify(out.json).includes("cdninstagram"), "visitors never get Meta URLs");
+  out = await run("../api/instagram.js", req({ query: { img: "111" } }));
+  assert.equal(out.statusCode, 200);
+  assert.equal(out.headers["content-type"], "image/jpeg");
+  assert.equal((await run("../api/instagram.js", req({ query: { img: "222" } }))).statusCode, 404, "svg refused");
+  assert.equal((await run("../api/instagram.js", req({ query: { img: "999" } }))).statusCode, 404, "not one of our posts");
+  assert.equal(calls.filter((c) => c.url.includes("graph.facebook.com")).length, 1, "list cached");
+});
