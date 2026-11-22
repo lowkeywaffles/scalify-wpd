@@ -189,7 +189,7 @@ export function settingsView(app) {
   return `<h1 tabindex="-1">Settings</h1>
     <section class="panel" aria-labelledby="s-plan"><h2 id="s-plan">${plus ? "Brimful Plus is active" : "You're on Free"}</h2>
       <p class="fine">${plus ? "Thank you for supporting Brimful. Keep your licence key somewhere safe so you can restore Plus on a new device." : l?.status === "pending" ? "We're checking your payment. Plus unlocks as soon as it's confirmed." : "Free includes 2 jars and 1 challenge at a time, with the brass coin colour."}</p>
-      <a class="btn ${plus ? "ghost" : "brass"} small" href="#/unlock" data-vars="justify-self:start">${plus ? "Licence details" : l?.status === "pending" ? "Payment status" : "Get Plus · $7 one-time"}</a></section>
+      <div class="row"><a class="btn ${plus ? "ghost" : "brass"} small" href="#/unlock">${plus ? "Licence details" : l?.status === "pending" ? "Payment status" : "Get Plus · $7 one-time"}</a>${plus ? "" : `<button class="btn ghost small" type="button" data-act="plus-code">Have a Plus code?</button>`}</div></section>
     <section class="panel" aria-labelledby="s-app" data-install><h2 id="s-app">Get the app</h2>
       <p class="fine">Add Brimful to your home screen so it opens like an app, full screen and offline. Free, no app store.</p>
       <button class="btn ghost small" type="button" data-act="install" data-vars="justify-self:start">Add to home screen</button></section>
@@ -234,7 +234,7 @@ export function unlockView(app) {
     ${status === "rejected" ? `<p class="note bad">We couldn't confirm your last payment${l.note ? `: ${esc(l.note)}` : "."} You can send the details again below, or email contact@scalifywpd.tech.</p>` : ""}
     ${status === "refunded" ? `<p class="note warn">Your earlier purchase was refunded, so this device is back on Free. Your jars are all still here.</p>` : ""}
     <section class="panel" id="paypanel" aria-labelledby="pay-h"><h2 id="pay-h">How to pay</h2><p class="fine" id="pay-load">Loading payment details…</p></section>
-    <section class="panel" aria-labelledby="res-h"><h2 id="res-h">Already bought it?</h2>
+    <section class="panel" aria-labelledby="res-h"><h2 id="res-h">Already bought it, or have a Plus code?</h2>
       <form id="restore" novalidate class="view"><div class="field"><label for="r-key">Licence key or Whop receipt number</label><input id="r-key" name="key" class="input num" autocomplete="off" spellcheck="false" placeholder="xxxxxxxx-xxxx-… or pay_…" aria-describedby="r-hint"><span class="hint" id="r-hint">Bought Plus on Whop's website? Paste the receipt number from Whop's email (it starts with pay_).</span><span class="err" data-err="key" role="alert"></span></div>
       <button class="btn ghost" type="button" data-act="restore">Restore Plus</button></form></section>
     <p class="fine">Brimful is free to use without Plus, and your existing jars are never locked. <a href="/legal/terms">Terms</a> · <a href="/legal/refund">14-day refund</a> · <a href="/legal/privacy">Privacy</a></p>`;
@@ -495,25 +495,31 @@ export function installViews(app, register) {
         app.toast(`Restored ${next.jars.length} jar${next.jars.length === 1 ? "" : "s"}. Cloud backup stays on with this code.`);
         app.go("#/");
       }),
-    restore: async () => {
-      const form = $("#restore"), raw = form.elements.key.value.trim();
+    restore: () => redeem($("#restore")),
+    "plus-code": () => app.sheet(`<h2 id="dlg-title">Enter your Plus code</h2><p>Got a Plus code, or bought Plus on Whop's website? Paste it here to unlock Plus on this device.</p>
+      <div class="field"><label for="pc-key">Plus code or Whop receipt number</label><input id="pc-key" name="key" class="input num" autocomplete="off" spellcheck="false" placeholder="xxxxxxxx-xxxx-… or pay_…"><span class="err" data-err="key" role="alert"></span></div>
+      <div class="row"><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn brass">Unlock Plus</button></div>`, (fd, form) => redeem(form)),
+  });
+  // Checks a licence key (or a Whop receipt number) and saves Plus on this device. Returns false to keep a sheet open on errors.
+  async function redeem(form) {
+      const raw = form.elements.key.value.trim();
       let r, key;
       if (/^pay_/i.test(raw)) {
         r = await createOrder({ method: "whop_claim", payment_id: "pay_" + raw.slice(4) });
-        if (!r.ok) return app.fieldError(form, "key", r.body.error ?? "Couldn't check right now.");
+        if (!r.ok) { app.fieldError(form, "key", r.body.error ?? "Couldn't check right now."); return false; }
         key = r.body.key;
       } else {
         key = raw.toLowerCase();
-        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(key)) return app.fieldError(form, "key", "Paste your licence key (36 characters with dashes) or your Whop receipt number (starts with pay_).");
+        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(key)) { app.fieldError(form, "key", "Paste your Plus code or licence key (36 characters with dashes), or your Whop receipt number (starts with pay_)."); return false; }
         r = await fetchStatus(key);
-        if (!r.ok) return app.fieldError(form, "key", r.status === 404 ? "We can't find that key. Check it and try again." : r.body.error ?? "Couldn't check right now.");
+        if (!r.ok) { app.fieldError(form, "key", r.status === 404 ? "We can't find that code. Check it and try again." : r.body.error ?? "Couldn't check right now."); return false; }
       }
       const s = structuredClone(app.state);
       s.license = { key, status: r.body.status, note: r.body.note ?? "", checkedAt: Date.now() };
       if (r.body.method) s.license.method = r.body.method;
       app.commit(s);
-      if (r.body.status === "active") { confetti({ count: 200 }); app.toast("Brimful Plus restored."); }
+      if (r.body.status === "active") { confetti({ count: 200 }); app.toast("Brimful Plus is unlocked."); }
       app.render();
-    },
-  });
+      return true;
+  }
 }
