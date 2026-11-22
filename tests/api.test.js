@@ -249,6 +249,7 @@ test("instagram: hidden without a token, then serves only our own posts and thei
     { id: "111", media_type: "VIDEO", caption: "First line\nsecond", permalink: "https://www.instagram.com/reel/A/", timestamp: "2026-11-22T08:52:13+0000", thumbnail_url: "https://x.cdninstagram.com/a.jpg" },
     { id: "222", media_type: "IMAGE", permalink: "https://www.instagram.com/p/B/", media_url: "https://x.cdninstagram.com/b.svg" },
     { id: "333", media_type: "IMAGE", permalink: "https://evil.example/", media_url: "https://x.cdninstagram.com/c.jpg" },
+    { id: "18181438912435598", media_type: "IMAGE", permalink: "https://www.instagram.com/p/C/", media_url: "https://x.cdninstagram.com/d.jpg" },
   ] } });
   on("GET", /a\.jpg$/, { json: "jpegbytes", headers: { "content-type": "image/jpeg" } });
   on("GET", /b\.svg$/, { json: "<svg/>", headers: { "content-type": "image/svg+xml" } });
@@ -256,7 +257,7 @@ test("instagram: hidden without a token, then serves only our own posts and thei
   assert.equal(out.statusCode, 200);
   assert.equal(calls[0].headers.Authorization, "Bearer EAA_test");
   assert.match(out.headers["cache-control"], /^public/);
-  assert.deepEqual(out.json.posts.map((p) => p.id), ["111", "222"], "bad permalink dropped");
+  assert.deepEqual(out.json.posts.map((p) => p.id), ["111", "222"], "bad permalink and hidden post dropped");
   assert.equal(out.json.posts[0].caption, "First line");
   assert.equal(out.json.posts[0].image, "/api/instagram?img=111");
   assert.ok(!JSON.stringify(out.json).includes("cdninstagram"), "visitors never get Meta URLs");

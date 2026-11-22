@@ -4,7 +4,11 @@
 import { ConfigError, fetchT, handler, ipOf, rateLimit, send } from "./_lib/http.js";
 
 const ACCOUNT = "17841454007613579"; // @scalifywpd's Instagram account ID (public, not a secret)
-const API = `https://graph.facebook.com/v27.0/${ACCOUNT}/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp&limit=6`;
+const API = `https://graph.facebook.com/v27.0/${ACCOUNT}/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp&limit=12`;
+// Posts we don't show on the site, e.g. ones advertising an offer that has ended.
+const HIDDEN = new Set([
+  "18181438912435598", "18119767756995083", "18371947531247952", "17953821189085632", // FIRST6 50% off, ended 18 Nov 2026
+]);
 const CDN = /^https:\/\/[a-z0-9.-]+\.(cdninstagram\.com|fbcdn\.net)\//;
 const IMAGE = /^image\/(jpeg|png|webp|gif)$/; // never svg: it can carry script
 let cache = { at: 0, posts: null };
@@ -24,7 +28,8 @@ async function latest() {
       time: String(p.timestamp || ""),
       src: p.media_type === "VIDEO" ? p.thumbnail_url : p.media_url,
     }))
-    .filter((p) => /^\d{1,30}$/.test(p.id) && p.permalink.startsWith("https://www.instagram.com/") && CDN.test(String(p.src)));
+    .filter((p) => !HIDDEN.has(p.id) && /^\d{1,30}$/.test(p.id) && p.permalink.startsWith("https://www.instagram.com/") && CDN.test(String(p.src)))
+    .slice(0, 6);
   cache = { at: Date.now(), posts };
   return posts;
 }
