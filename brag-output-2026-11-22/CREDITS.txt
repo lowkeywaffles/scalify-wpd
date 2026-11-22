@@ -1,0 +1,4 @@
+Music (with-music version): "Tonight" by Michael Ramir C., Mixkit #841, Mixkit Stock Music Free License (social media use allowed; don't register it with Content ID).
+Voice-over and the falling-scream, coin-crash and whoosh sound effects: generated with ElevenLabs.
+Other sound effects: CC0 kit (whoosh by qubodup, pop by ethernel0, tick by Squirrel_404, soft_impact3 by peoplearehappy, via Freesound).
+App footage: the real Brimful web app with sample data. Phone: 3D model built in code (iPhone-15-style proportions, no Apple logo).
