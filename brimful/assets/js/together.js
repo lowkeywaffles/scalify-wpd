@@ -115,6 +115,7 @@ function renderShared(app, id) {
       <ul class="tg-people">${active.map((x) => { const amt = by.get(x.id) ?? 0, share = total ? amt / total : 0; return `<li><span class="tg-av" data-vars="--c:${x.color}" aria-hidden="true">${esc(initials(x.name))}</span>
         <div class="tg-pinfo"><b>${esc(x.id === m.member ? `${x.name} (you)` : x.name)}${x.owner ? ` <small>made this jar</small>` : ""}</b><span class="tg-bar"><i data-vars="--p:${share.toFixed(3)};--c:${x.color}"></i></span></div>
         <span class="num">${fmt(amt, cur, { short: true })}<small>${Math.round(share * 100)}%</small></span>
+        ${x.id === m.member ? `<button class="iconbtn" data-act="tg-rename" aria-label="Change your name in this jar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg></button>` : ""}
         ${meOwner && x.id !== m.member ? `<button class="iconbtn" data-act="tg-kick" data-id="${x.id}" aria-label="Remove ${esc(x.name)} from this jar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>` : ""}</li>`; }).join("")}</ul></section>
     <section class="panel" aria-labelledby="tg-feed"><h2 id="tg-feed">Activity</h2>${feed ? `<ul class="tg-feed">${feed}</ul>` : `<p class="fine">No deposits yet. Be the first coin in.</p>`}</section>
     <div class="row">${meOwner ? `<button class="btn ghost small" data-act="tg-edit">Edit jar</button><button class="btn danger small" data-act="tg-delete">Delete jar</button>` : `<button class="btn danger small" data-act="tg-leave">Leave jar</button>`}</div>
@@ -303,6 +304,22 @@ export function installTogether(app, register) {
         const m = membership(app, liveId), next = { ...meta, name, target }, r = await api.editMeta(m, await seal(m.key, next));
         if (!r.ok) { app.toast(r.body.error ?? "Couldn't save."); return false; }
         c.meta = next; renderShared(app, liveId); app.toast("Saved. Everyone sees the change.");
+      });
+    },
+    "tg-rename": () => {
+      const c = cache.get(liveId), m = membership(app, liveId), mine = c?.members.get(m.member);
+      if (!mine) return;
+      app.sheet(`<h2 id="dlg-title">Your name in this jar</h2>
+        <div class="field"><label for="tg-rn">Your name (only people in this jar see it)</label><input id="tg-rn" name="name" class="input" maxlength="30" autocomplete="nickname" value="${esc(mine.name)}"><span class="err" data-err="name" role="alert"></span></div>
+        <div class="row"><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn brass">Save</button></div>`,
+      async (fd, form) => {
+        const name = String(fd.get("name") ?? "").trim().slice(0, 30);
+        if (!name) return app.fieldError(form, "name", "Add your name so the others know who's saving.");
+        const r = await api.editProfile(m, await seal(m.key, { name, color: mine.color }));
+        if (!r.ok) { app.toast(r.body.error ?? "Couldn't save."); return false; }
+        mine.name = name;
+        const s = structuredClone(app.state); s.settings.tgName = name; app.commit(s);
+        renderShared(app, liveId); app.toast("Saved. Everyone sees your new name.");
       });
     },
     "tg-forget": (el) => { forget(app, el.dataset.id); app.go("#/together"); },
