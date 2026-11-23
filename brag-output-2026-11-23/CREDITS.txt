@@ -1,0 +1,5 @@
+Music (with-music version): "Coffee or Tea" by Michael Ramir C., Mixkit #1168, Mixkit Stock Music Free License.
+Voice-over: ElevenLabs (voice "Brian").
+Characters (Maya, Leo): AI-generated with Higgsfield (gpt_image_2_6 photos, Grok Imagine Video 1.5 Lite clips). Fictional people.
+App screens: the real Brimful web app with sample data (the sample shared jar was deleted afterwards).
+Sound effects: CC0 kit (pop by ethernel0, whoosh by qubodup, tick by Squirrel_404, click by adh.dreaming, soft_impact3 by peoplearehappy).
