@@ -6,7 +6,7 @@ self-promotion rules first: be open that you made it, and don't ask friends to u
 
 Links:
 - npm: https://www.npmjs.com/package/private-instagram-feed
-- code: https://github.com/lowkeywaffles/scalify-wpd/tree/main/packages/private-instagram-feed
+- code: https://github.com/lowkeywaffles/private-instagram-feed
 - live example: https://scalify-wpd.vercel.app/#instagram
 
 ---
@@ -61,10 +61,5 @@ Links:
 
 ---
 
-## GitHub issues to open (makes it easy for others to contribute)
-Label each one `good first issue`:
-1. Add an Astro example to the README
-2. Add a SvelteKit example to the README
-3. Option to include all carousel images, not just the first
-4. TypeScript type definitions (`index.d.ts`)
-5. Example CSS themes for `<instagram-feed>`
+## Contributor issues
+Open at https://github.com/lowkeywaffles/private-instagram-feed/labels/good%20first%20issue (Astro, SvelteKit, TypeScript types, carousel images, CSS themes).
