@@ -137,3 +137,13 @@ test("any member can change their own name (profile), and only their own", async
   out = await run(req({ method: "PATCH", query: { id: JAR }, body: { profile: "not cipher" }, headers: asMe }));
   assert.equal(out.statusCode, 400);
 });
+
+test("Brimful's own addresses may call the API from a browser; others may not", async () => {
+  jarExists(); meIs(false);
+  for (const origin of ["https://www.brimful.tech", "https://brimful.tech", "https://brimful.vercel.app"]) {
+    const out = await run(req({ method: "OPTIONS", query: { id: JAR }, headers: { origin } }));
+    assert.equal(out.headers["access-control-allow-origin"], origin, origin);
+  }
+  const out = await run(req({ method: "OPTIONS", query: { id: JAR }, headers: { origin: "https://evil.example" } }));
+  assert.equal(out.headers["access-control-allow-origin"], undefined);
+});

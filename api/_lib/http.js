@@ -38,7 +38,7 @@ export async function body(req) {
 
 /** CORS for the public store API: only our own product sites may call it from a browser. */
 export function cors(req, res, methods, headers = "Content-Type") {
-  const allowed = (process.env.STORE_ALLOWED_ORIGINS || "https://brimful.vercel.app").split(",").map((s) => s.trim()).filter(Boolean);
+  const allowed = (process.env.STORE_ALLOWED_ORIGINS || "https://www.brimful.tech,https://brimful.tech,https://brimful.vercel.app").split(",").map((s) => s.trim()).filter(Boolean);
   const origin = req.headers.origin;
   res.setHeader("Vary", "Origin");
   const ok = Boolean(origin && allowed.includes(origin));
