@@ -12,7 +12,7 @@ export const STORE_PRODUCTS = {
     priceUsd: () => Math.round(num("STORE_BRIMFUL_PRICE_USD", 7, 1, 100) * 100) / 100,
     whopPlan: () => process.env.BRIMFUL_WHOP_PLAN_ID || "",
     whopProduct: () => process.env.BRIMFUL_WHOP_PRODUCT_ID || "",
-    returnUrl: "https://brimful.tech/app/#/unlock",
+    returnUrl: "https://www.brimful.tech/app/#/unlock",
   },
 };
 export const isStoreProduct = (p) => typeof p === "string" && Object.hasOwn(STORE_PRODUCTS, p);
