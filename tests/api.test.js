@@ -24,7 +24,7 @@ globalThis.fetch = async (url, init = {}) => {
 beforeEach(() => { calls = []; routes = []; });
 
 function req({ method = "GET", query = {}, body, headers = {} } = {}) {
-  return { method, query, body, url: "/api/x", headers: { host: "scalify-wpd.vercel.app", "x-forwarded-for": `10.0.0.${Math.floor(Math.random() * 250)}`, ...headers } };
+  return { method, query, body, url: "/api/x" + (Object.keys(query).length ? `?${new URLSearchParams(query)}` : ""), headers: { host: "scalify-wpd.vercel.app", "x-forwarded-for": `10.0.0.${Math.floor(Math.random() * 250)}`, ...headers } };
 }
 function res() {
   const h = {};
@@ -258,8 +258,8 @@ test("instagram: hidden without a token, then serves only our own posts and thei
   assert.equal(calls[0].headers.Authorization, "Bearer EAA_test");
   assert.match(out.headers["cache-control"], /^public/);
   assert.deepEqual(out.json.posts.map((p) => p.id), ["111", "222"], "bad permalink and hidden post dropped");
-  assert.equal(out.json.posts[0].caption, "First line");
-  assert.equal(out.json.posts[0].image, "/api/instagram?img=111");
+  assert.equal(out.json.posts[0].caption, "First line\nsecond"); // the page shows only the first line
+  assert.equal(out.json.posts[0].image, "/api/x?img=111"); // built from the request path (/api/instagram in production)
   assert.ok(!JSON.stringify(out.json).includes("cdninstagram"), "visitors never get Meta URLs");
   out = await run("../api/instagram.js", req({ query: { img: "111" } }));
   assert.equal(out.statusCode, 200);
