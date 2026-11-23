@@ -691,7 +691,7 @@ var li=document.createElement('li'),a=document.createElement('a'),img=document.c
 var when=isNaN(t)?'':t.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+', ';
 a.href=p.permalink;a.rel='noopener noreferrer';
 img.src=p.image;img.loading='lazy';img.decoding='async';img.width=300;img.height=400;
-img.alt=(p.type==='video'?'Video: ':'')+(p.caption||'Instagram post')+' ('+when+'opens on Instagram)';
+img.alt=(p.type==='video'?'Video: ':'')+(p.caption.split('\n')[0].trim().slice(0,120)||'Instagram post')+' ('+when+'opens on Instagram)';
 img.onerror=function(){li.remove();if(!ul.children.length)s.hidden=true;};
 a.appendChild(img);li.appendChild(a);ul.appendChild(li);
 });
