@@ -1,0 +1,19 @@
+{
+  "name": "private-instagram-feed",
+  "version": "0.1.0",
+  "description": "Show your latest Instagram posts on your website without your visitors' browsers contacting Meta: no embeds, no trackers, no cookie banner needed. Zero dependencies.",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./element": "./element.js"
+  },
+  "files": ["index.js", "element.js", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "scripts": { "test": "node --test test/*.test.js" },
+  "keywords": ["instagram", "instagram-feed", "privacy", "gdpr", "no-tracking", "instagram-api", "reels", "web-component", "vercel", "nextjs", "cloudflare-workers"],
+  "license": "MIT",
+  "author": "SCALIFY WPD",
+  "repository": { "type": "git", "url": "git+https://github.com/lowkeywaffles/scalify-wpd.git", "directory": "packages/private-instagram-feed" },
+  "bugs": { "url": "https://github.com/lowkeywaffles/scalify-wpd/issues" },
+  "homepage": "https://github.com/lowkeywaffles/scalify-wpd/tree/main/packages/private-instagram-feed#readme"
+}
