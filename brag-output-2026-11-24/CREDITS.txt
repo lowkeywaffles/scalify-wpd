@@ -1,0 +1,6 @@
+Music (with-music version): "Tonight" by Michael Ramir C., Mixkit #841, Mixkit Stock Music Free License.
+Voice-over: ElevenLabs (voice "Brian").
+Piggy-bank smash and coin-pile clips: AI-generated with Higgsfield (Grok Imagine Video 1.5 Lite). No real person shown.
+Smash sound: generated with ElevenLabs sound generation.
+App screens: the real Brimful web app with sample data.
+Other sound effects: CC0 kit (tick by Squirrel_404, whoosh by qubodup, pop by ethernel0, click by adh.dreaming, soft_impact3 by peoplearehappy).
