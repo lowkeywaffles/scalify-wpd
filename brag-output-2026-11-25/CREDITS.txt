@@ -1,0 +1,4 @@
+Voice-over: ElevenLabs (voice "Brian"). No music, no sound effects.
+Motion: kinetic-launch-film engine (HTML/CSS, rendered frame by frame in headless Chrome).
+UI: redrawn from the real Brimful app (New jar sheet labels, quick-add amounts +$10/+$50/+$100 for a $1,500 target, 25/50/75/100% milestones, Save Together Plus line). Sample data only.
+Fonts: Bricolage Grotesque, Instrument Serif, Geist Mono (SIL Open Font License).
