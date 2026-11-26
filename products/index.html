@@ -4,16 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Products · SCALIFY WPD</title>
-<meta name="description" content="Products designed, built and run by SCALIFY WPD: QuoteRevive (win back unanswered quotes), Brimful (savings jars and shared jars), the Zero to Three toolkit for video editors, Scope Shield (paid revision limits for freelancers), and something new on the way.">
+<meta name="description" content="Products designed, built and run by SCALIFY WPD: QuoteRevive (win back unanswered quotes), Brimful (savings jars and shared jars), the Zero to Three toolkit for video editors, and something new on the way.">
 <meta property="og:title" content="SCALIFY WPD · Products">
-<meta property="og:description" content="Tools we design, build and run ourselves: QuoteRevive, Brimful, Scope Shield, and something new on the way.">
+<meta property="og:description" content="Tools we design, build and run ourselves: QuoteRevive, Brimful, and something new on the way.">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <script>
 try { const t = localStorage.getItem('scalify-theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch {}
-// Motion: the choice made with the homepage's Animations button wins; otherwise follow the OS "reduce motion" setting.
-let motion = null;
-try { motion = localStorage.getItem('scalify-motion'); } catch {}
-document.documentElement.classList.add(motion === 'on' || (motion !== 'off' && !matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'mo' : 'rm');
 </script>
 <style>
 :root{--bg:#F4F3EE;--ink:#0E0F12;--muted:#4A4F59;--line:#C9C7BD;--card:#FFFFFF;--accent:#C6FF3D;--on-accent:#0E0F12;--btn-bg:#0E0F12;--btn-fg:#C6FF3D;--focus:#0B5FFF;--grid:rgba(14,15,18,.07);color-scheme:light}
@@ -87,19 +83,15 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-betw
 @keyframes rise{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
 @keyframes sheen{0%,55%{translate:-120% 0}100%{translate:520% 0}}
 @keyframes bob{0%,100%{translate:0 0}50%{translate:0 -12px}}
-.mo .intro>*{animation:rise .9s both cubic-bezier(.2,.7,.2,1)}.mo .intro>*:nth-child(2){animation-delay:.1s}.mo .intro>*:nth-child(3){animation-delay:.2s}.mo .mystery .glass::after{animation:sheen 4.8s ease-in-out infinite}.mo .mystery .blob{animation:bob 7s ease-in-out infinite}.mo .mystery .b2{animation-delay:-2s}.mo .mystery .b3{animation-delay:-4s}.mo.js3d .reveal{opacity:0;rotate:x 22deg;translate:0 50px;transform-origin:50% 100%;transition:opacity .9s,rotate .9s cubic-bezier(.2,.7,.2,1),translate .9s cubic-bezier(.2,.7,.2,1)}.mo.js3d .reveal.in{opacity:1;rotate:x 0deg;translate:0 0}.mo .grid{perspective:1300px}
-
-/* stacking product cards: each one slides over the last while the one behind sinks back (big screens, motion on) */
-@media (min-width:760px) and (min-height:620px){
-  .mo .grid.stack{display:block;perspective:none}
-  .mo .stack .pcard{position:sticky;top:calc(96px + var(--i) * 18px);flex-direction:row;height:min(62vh,430px);margin-bottom:24vh;transform-origin:50% 0;will-change:scale,filter;box-shadow:0 -14px 40px -24px rgba(0,0,0,.45)}
-  .mo .stack .pcard:last-child{margin-bottom:6vh}
-  .mo .stack .pcard .media{aspect-ratio:auto;flex:0 0 52%;height:100%}
-  .mo .stack .pcard .body{padding:30px 32px;justify-content:center}
-  .mo .stack .pcard h2{font-size:clamp(30px,3.4vw,42px)}
+@media (prefers-reduced-motion:no-preference){
+  .intro>*{animation:rise .9s both cubic-bezier(.2,.7,.2,1)}.intro>*:nth-child(2){animation-delay:.1s}.intro>*:nth-child(3){animation-delay:.2s}
+  .mystery .glass::after{animation:sheen 4.8s ease-in-out infinite}
+  .mystery .blob{animation:bob 7s ease-in-out infinite}.mystery .b2{animation-delay:-2s}.mystery .b3{animation-delay:-4s}
+  .js3d .reveal{opacity:0;rotate:x 22deg;translate:0 50px;transform-origin:50% 100%;transition:opacity .9s,rotate .9s cubic-bezier(.2,.7,.2,1),translate .9s cubic-bezier(.2,.7,.2,1)}
+  .js3d .reveal.in{opacity:1;rotate:x 0deg;translate:0 0}
+  .grid{perspective:1300px}
 }
-
-.rm .btn,.rm .card{transition:none}.rm .btn:hover,.rm .card:hover{transform:none}
+@media (prefers-reduced-motion:reduce){.btn,.card{transition:none}.btn:hover,.card:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -150,16 +142,6 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-betw
           <p class="go"><a href="https://whop.com/zero-to-three/" rel="noopener">Get it on Whop →</a></p>
         </div>
       </article>
-      <article class="pcard reveal" aria-labelledby="s-h">
-        <div class="media"><span class="status">NEW</span>
-          <img src="/products/img/scope-shield.webp" width="960" height="540" loading="lazy" alt="Scope Shield: dark banner reading 'Stop doing free revisions' beside an orange shield with a check mark and a revision list showing a +$40 extra round."></div>
-        <div class="body">
-          <h2 id="s-h">Scope Shield</h2>
-          <p>Revision limits for freelance video editors and designers: set the included rounds, share one client link, and every extra round becomes a charge the client approves before you start it.</p>
-          <p class="meta"><strong>Free for 2 projects</strong> · Pro $9/month · cancel anytime</p>
-          <p class="go"><a href="https://scopeshieldai.vercel.app/?ref=scalify-products" rel="noopener">Start free →</a></p>
-        </div>
-      </article>
       <article class="pcard reveal" aria-labelledby="n-h">
         <div class="media mystery" role="img" aria-label="Coming soon: a blurred preview behind frosted glass with a question mark.">
           <span class="status wait">COMING SOON</span>
@@ -185,22 +167,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-betw
 <script>
 (function(){
 document.getElementById('yr').textContent = new Date().getFullYear();
-var d = document;
-if (!d.documentElement.classList.contains('mo') || !('IntersectionObserver' in window)) return;
-d.documentElement.classList.add('js3d');
-var grid = d.querySelector('.grid'), cards = [].slice.call(grid.querySelectorAll('.pcard')), big = matchMedia('(min-width:760px) and (min-height:620px)');
-big.addEventListener('change', function(){ location.reload(); });
-if (big.matches) {
-  grid.classList.add('stack');
-  cards.forEach(function(c, i){ c.classList.remove('reveal'); c.style.setProperty('--i', i); });
-  var busy = false;
-  var stack = function(){ busy = false;
-    for (var i = 0; i < cards.length - 1; i++) {
-      var top = parseFloat(getComputedStyle(cards[i]).top), p = Math.max(0, Math.min(1, 1 - (cards[i + 1].getBoundingClientRect().top - top) / (innerHeight * .75)));
-      cards[i].style.scale = (1 - p * .08).toFixed(4); cards[i].style.filter = p > .001 ? 'brightness(' + (1 - p * .35).toFixed(3) + ')' : '';
-    } };
-  addEventListener('scroll', function(){ if (!busy) { busy = true; requestAnimationFrame(stack); } }, { passive: true }); stack();
-}
+if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+var d = document; d.documentElement.classList.add('js3d');
 var io = new IntersectionObserver(function(es){ es.forEach(function(x){ if (x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }); }, { threshold: .12 });
 d.querySelectorAll('.reveal').forEach(function(e){ io.observe(e); });
 // cards lean toward the pointer (mouse only)
