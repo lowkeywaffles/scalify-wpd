@@ -1,0 +1,5 @@
+Voice-over: ElevenLabs (voice "Brian"). No music, no sound effects.
+Motion: kinetic-launch-film engine (HTML/CSS rendered frame by frame in headless Chrome). Safe-zone audit passed at 30 fps.
+UI and copy: redrawn from the live Scope Shield site (scopeshieldai.vercel.app): the Northwind Coffee sample project, its four revision rows, $40 extras, $80 extra billed, the client message, and the Free/Pro pricing.
+The "Set the limit" and "Share one link" cards illustrate the steps described on the site; they are not screenshots of the app.
+Fonts: Funnel Display, Geist Mono (SIL Open Font License).
