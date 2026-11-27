@@ -23,7 +23,7 @@
 1. Google Account → Security → turn on **2-Step Verification**.
 2. Google Account → search **App passwords** → create one named "QuoteRevive" → copy the 16-character password.
 3. Supabase → Authentication → **Emails** → **SMTP Settings** → Enable custom SMTP:
-   - Sender email: your Gmail address · Sender name: QuoteRevive
+   - Sender email: your Gmail address · Sender name: Scalify WPD
    - Host: `smtp.gmail.com` · Port: `465` · Username: your Gmail address · Password: the app password
 4. Save, then tell Claude — it will install the branded templates (`supabase/email-templates/`) and raise the email rate limit.
 Gmail allows roughly 500 emails/day. Move to Resend + your own domain before scaling.
